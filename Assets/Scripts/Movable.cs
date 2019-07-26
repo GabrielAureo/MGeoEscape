@@ -2,36 +2,42 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections.Generic;
 using System.Collections;
-
+using Vuforia;
+[RequireComponent(typeof(Rigidbody))]
 public class Movable : ARInteractable
 {
     private Transform originalParent;
+    private Quaternion originalRotation;
+    private Vector3 originalPosition;
+    private Rigidbody rb;
     Coroutine followRoutine;
     void Start(){
         originalParent = transform.parent;
+        originalRotation = transform.localRotation;
+        originalPosition = transform.localPosition;
+        rb = GetComponent<Rigidbody>();
     }
-    public override void onHold(Touch touch)
+    public override void onHold(ARTouchController controller)
     {
         transform.parent = null;
-        followRoutine = StartCoroutine(followTouch(touch));
+        //transform.rotation = Quaternion.identity;
+        rb.isKinematic = false;
+        controller.FollowTouch(rb);
+        
     }
 
-    public override void onRelease(Touch touch)
+    public override void onRelease(ARTouchController controller)
     {
         transform.parent = originalParent;
-        if(followRoutine != null) StopCoroutine(followRoutine);
+        transform.localRotation = originalRotation;
+        transform.localPosition = originalPosition;
+        rb.isKinematic = true;
+        controller.ReleaseFollow();
     }
 
-    public override void onTap(Touch touch)
+    public override void onTap(ARTouchController controller)
     {
         
     }
-
-    private IEnumerator followTouch(Touch touch){
-        while(true){        
-            transform.position = Vector3.Lerp(transform.position, Camera.main.ScreenToWorldPoint(touch.position), .2f);
-            yield return null;
-        }
-        
-    }
+ 
 }
