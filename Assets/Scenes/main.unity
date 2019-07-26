@@ -1420,6 +1420,11 @@ PrefabInstance:
       propertyPath: m_Spring.damper
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 8383475171401586968, guid: 521c901808274a6489ec6c2ea81b5ffe,
+        type: 3}
+      propertyPath: holdThreshold
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 521c901808274a6489ec6c2ea81b5ffe, type: 3}
 --- !u!1001 &8410940959766772308
