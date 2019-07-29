@@ -21,51 +21,67 @@ public class ARTouchController : MonoBehaviour{
     void Update()
     {
         #if UNITY_ANDROID
-            TouchControl();
+            if(Input.touchCount > 0){
+                var ray = CameraRay(Input.touches[0].position);
+                InputStateMachine(ray);
+
+                if(Input.touches[0].phase == TouchPhase.Ended){
+                    Release();
+                }
+            }
         #endif
 
         #if UNITY_EDITOR
         var input = Input.GetMouseButton(0);
         if(input){
-            var wrldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1.35f));
-            transform.position = new Vector3(wrldPos.x, wrldPos.y,transform.position.z);
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if(currentStatus == Status.NO_TOUCH){
-                timer = 0.0f;
-                ChangeStatus(Status.WAITING);
-                if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
-                    currentInteractable = hit.transform.GetComponent<Socket>().currentObject;
-                    
-                }
-            }
-            if(currentStatus == Status.HOLDING){
-                Debug.DrawRay(ray.origin, ray.direction, Color.green);
-                if(currentInteractable is Movable && Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
-                    var socket = hit.transform.GetComponent<Socket>();
-                    if(socket){
-                        socket.TryTarget((Movable)currentInteractable);
-                        lastSocket = socket;
-                    }
-                }else if(lastSocket){
-                        lastSocket.Untarget();
-                        lastSocket = null;
-                }
-            }
-
-            if(currentStatus == Status.WAITING){
-                timer+=Time.deltaTime;
-                if(timer >= holdThreshold){
-                    ChangeStatus(Status.HOLDING);
-                    currentInteractable?.onHold(this);
-                }
-            }
+           Ray ray = CameraRay(Input.mousePosition);
+           InputStateMachine(ray);           
         }
-
         if(Input.GetMouseButtonUp(0)){
             Release();
         }
         #endif
+    }
+
+    private void InputStateMachine(Ray ray){
+        RaycastHit hit;
+        if(currentStatus == Status.NO_TOUCH){
+            timer = 0.0f;
+            ChangeStatus(Status.WAITING);
+            if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
+                currentInteractable = hit.transform.GetComponent<Socket>().currentObject;
+                
+            }
+        }
+        if(currentStatus == Status.HOLDING){
+            Debug.DrawRay(ray.origin, ray.direction, Color.green);
+            if(currentInteractable is Movable && Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
+                var socket = hit.transform.GetComponent<Socket>();
+                if(socket){
+                    socket.TryTarget((Movable)currentInteractable);
+                    lastSocket = socket;
+                }
+            }else if(lastSocket){
+                    lastSocket.Untarget();
+                    lastSocket = null;
+            }
+        }
+
+        if(currentStatus == Status.WAITING){
+            timer+=Time.deltaTime;
+            if(timer >= holdThreshold){
+                ChangeStatus(Status.HOLDING);
+                currentInteractable?.onHold(this);
+            }
+        }
+    }
+
+    private Ray CameraRay(Vector2 inputPosition){
+        var wrldPos = Camera.main.ScreenToWorldPoint(new Vector3(inputPosition.x, inputPosition.y, 1.35f));
+        transform.position = new Vector3(wrldPos.x, wrldPos.y,transform.position.z);
+        Ray ray = Camera.main.ScreenPointToRay(inputPosition);
+        return ray;
+        
     }
 
     private void Release(){
