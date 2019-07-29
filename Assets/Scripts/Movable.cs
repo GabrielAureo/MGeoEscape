@@ -3,6 +3,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using System.Collections;
 using Vuforia;
+
 [RequireComponent(typeof(Rigidbody))]
 public class Movable : ARInteractable
 {
@@ -10,17 +11,24 @@ public class Movable : ARInteractable
     private Quaternion originalRotation;
     private Vector3 originalPosition;
     private Rigidbody rb;
-    Coroutine followRoutine;
+    private Material material;
     TrackableBehaviour trackableBehaviour;
+    [HideInInspector]
+    public Mesh mesh;
+
     void Start(){
         originalParent = transform.parent;
         originalRotation = transform.localRotation;
         originalPosition = transform.localPosition;
         rb = GetComponent<Rigidbody>();
+        mesh = GetComponent<MeshFilter>().sharedMesh;
+        material = GetComponent<MeshRenderer>().material;
         trackableBehaviour = GetComponentInParent<TrackableBehaviour>();
     }
     public override void onHold(ARTouchController controller)
     {
+        print("holding");
+        material.DOFade(0.5f,"_BaseColor", .2f);
         transform.parent = null;
         //transform.rotation = Quaternion.identity;
         transform.rotation = originalRotation;
@@ -30,11 +38,12 @@ public class Movable : ARInteractable
 
     public override void onRelease(ARTouchController controller)
     {
+        material.DOFade(1f,"_BaseColor", .2f);
         transform.parent = originalParent;
         transform.localRotation = originalRotation;
         transform.localPosition = originalPosition;
         rb.isKinematic = true;
-        if(trackableBehaviour.CurrentStatus == TrackableBehaviour.Status.NO_POSE){
+        if(trackableBehaviour?.CurrentStatus == TrackableBehaviour.Status.NO_POSE){
             DisableObject();
         }
         controller.ReleaseFollow();

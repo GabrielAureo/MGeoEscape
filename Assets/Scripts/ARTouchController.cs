@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.Collections;
 
 public class ARTouchController : MonoBehaviour{
-
+    public enum Status {HOLDING, WAITING, NO_TOUCH}
+    public Status currentStatus;
+    Status lastStatus;
     float timer;
     public float holdThreshold = 0.2f;
     bool holding;
     HingeJoint hinge;
     ARInteractable currentInteractable;
     public Touch currentTouch;
+    Socket lastSocket;
 
     void Awake(){
         hinge = GetComponent<HingeJoint>();
+        currentStatus = Status.NO_TOUCH;
     }
     void Update()
     {
@@ -24,31 +28,66 @@ public class ARTouchController : MonoBehaviour{
         var input = Input.GetMouseButton(0);
         if(input){
             var wrldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1.35f));
-            print(Input.mousePosition);
             transform.position = new Vector3(wrldPos.x, wrldPos.y,transform.position.z);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-             if(!currentInteractable && Physics.Raycast(ray, out hit, Mathf.Infinity)){
-                currentInteractable = hit.transform.gameObject.GetComponent<ARInteractable>();
+            if(currentStatus == Status.NO_TOUCH){
                 timer = 0.0f;
-                holding = false;
+                ChangeStatus(Status.WAITING);
+                if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
+                    currentInteractable = hit.transform.GetComponent<Socket>().currentObject;
+                    
+                }
             }
-            timer += Time.deltaTime;
-             if(!holding && timer >= holdThreshold){
-                print("vai");
-                currentInteractable?.onHold(this);
-                holding = true;
+            if(currentStatus == Status.HOLDING){
+                Debug.DrawRay(ray.origin, ray.direction, Color.green);
+                if(currentInteractable is Movable && Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
+                    var socket = hit.transform.GetComponent<Socket>();
+                    if(socket){
+                        socket.TryTarget((Movable)currentInteractable);
+                        lastSocket = socket;
+                    }
+                }else if(lastSocket){
+                        lastSocket.Untarget();
+                        lastSocket = null;
+                }
+            }
+
+            if(currentStatus == Status.WAITING){
+                timer+=Time.deltaTime;
+                if(timer >= holdThreshold){
+                    ChangeStatus(Status.HOLDING);
+                    currentInteractable?.onHold(this);
+                }
             }
         }
+
         if(Input.GetMouseButtonUp(0)){
-            holding = false;
-            if(timer < holdThreshold){
-                currentInteractable?.onTap(this);
-            }
-            currentInteractable?.onRelease(this);
-            currentInteractable = null;
+            Release();
         }
         #endif
+    }
+
+    private void Release(){
+        if(currentStatus == Status.WAITING){
+                currentInteractable?.onTap(this);
+            }
+        currentInteractable?.onRelease(this);
+        if(currentInteractable is Movable && lastSocket){
+            var placed = lastSocket.TryPlaceObject((Movable)currentInteractable);
+            if(!placed){
+                //TODO
+            }
+            lastSocket.Untarget();
+            lastSocket = null;
+        }
+        currentInteractable = null;
+        ChangeStatus(Status.NO_TOUCH);
+    }
+
+    private void ChangeStatus(Status newStatus){
+        lastStatus = currentStatus;
+        currentStatus = newStatus;
     }
 
     private void TouchControl(){
