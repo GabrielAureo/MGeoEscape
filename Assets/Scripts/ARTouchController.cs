@@ -8,9 +8,10 @@ public class ARTouchController : MonoBehaviour{
     Status lastStatus;
     float timer;
     public float holdThreshold = 0.2f;
-    bool holding;
     HingeJoint hinge;
-    ARInteractable currentInteractable;
+    ARInteractable selectedInteractable;
+    ARInteractable lookingInteractable;
+    Movable currentMovable;
     public Touch currentTouch;
     Socket lastSocket;
 
@@ -18,11 +19,17 @@ public class ARTouchController : MonoBehaviour{
         hinge = GetComponent<HingeJoint>();
         currentStatus = Status.NO_TOUCH;
     }
+    public ARInteractable GetCurrentObject(){
+        if(currentStatus == Status.HOLDING){
+            return selectedInteractable;
+        }
+        return null;
+    }
     void Update()
     {
+        Ray ray = CameraRay();
         #if UNITY_ANDROID
             if(Input.touchCount > 0){
-                var ray = CameraRay(Input.touches[0].position);
                 InputStateMachine(ray);
 
                 if(Input.touches[0].phase == TouchPhase.Ended){
@@ -34,7 +41,7 @@ public class ARTouchController : MonoBehaviour{
         #if UNITY_EDITOR
         var input = Input.GetMouseButton(0);
         if(input){
-           Ray ray = CameraRay(Input.mousePosition);
+          
            InputStateMachine(ray);           
         }
         if(Input.GetMouseButtonUp(0)){
@@ -49,16 +56,16 @@ public class ARTouchController : MonoBehaviour{
             timer = 0.0f;
             ChangeStatus(Status.WAITING);
             if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
-                currentInteractable = hit.transform.GetComponent<Socket>().currentObject;
+                selectedInteractable = hit.transform.GetComponent<Socket>();
                 
             }
         }
         if(currentStatus == Status.HOLDING){
             Debug.DrawRay(ray.origin, ray.direction, Color.green);
-            if(currentInteractable is Movable && Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
+            if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
                 var socket = hit.transform.GetComponent<Socket>();
                 if(socket){
-                    socket.TryTarget((Movable)currentInteractable);
+                    socket.TryTarget((Movable)selectedInteractable);
                     lastSocket = socket;
                 }
             }else if(lastSocket){
@@ -71,12 +78,19 @@ public class ARTouchController : MonoBehaviour{
             timer+=Time.deltaTime;
             if(timer >= holdThreshold){
                 ChangeStatus(Status.HOLDING);
-                currentInteractable?.onHold(this);
+                selectedInteractable?.onHold(this);
             }
         }
     }
 
-    private Ray CameraRay(Vector2 inputPosition){
+    private Ray CameraRay(){
+        Vector2 inputPosition;
+        #if UNITY_EDITOR
+        inputPosition = Input.mousePosition;
+        #elif UNITY_ANDROID
+        inputPosition = Input.touches[0].position;
+        #endif
+
         var wrldPos = Camera.main.ScreenToWorldPoint(new Vector3(inputPosition.x, inputPosition.y, 1.35f));
         transform.position = new Vector3(wrldPos.x, wrldPos.y,transform.position.z);
         Ray ray = Camera.main.ScreenPointToRay(inputPosition);
@@ -84,20 +98,23 @@ public class ARTouchController : MonoBehaviour{
         
     }
 
-    private void Release(){
+    private void Release(Ray ray){
         if(currentStatus == Status.WAITING){
-                currentInteractable?.onTap(this);
+                selectedInteractable?.onTap(this);
             }
-        currentInteractable?.onRelease(this);
-        if(currentInteractable is Movable && lastSocket){
-            var placed = lastSocket.TryPlaceObject((Movable)currentInteractable);
-            if(!placed){
-                //TODO
-            }
-            lastSocket.Untarget();
-            lastSocket = null;
+        selectedInteractable?.onRelease(this);
+        // if(selectedInteractable is Movable && lastSocket){
+        //     var placed = lastSocket.TryPlaceObject((Movable)selectedInteractable);
+        //     if(!placed){
+        //         //TODO
+        //     }
+        //     lastSocket.Untarget();
+        //     lastSocket = null;
+        // }
+        if(currentMovable){
+            Ray ray = CameraRay();
         }
-        currentInteractable = null;
+        selectedInteractable = null;
         ChangeStatus(Status.NO_TOUCH);
     }
 
@@ -106,45 +123,14 @@ public class ARTouchController : MonoBehaviour{
         currentStatus = newStatus;
     }
 
-    private void TouchControl(){
-        if(Input.touchCount > 0){
-            print("s");
-            var input = Input.touches[0];
-            currentTouch = input;
-            var wrldPos = Camera.main.ScreenToWorldPoint(input.position);
-            transform.position = new Vector3(wrldPos.x, wrldPos.y,transform.position.z);
-            if(input.phase == TouchPhase.Began){
-                Ray ray = Camera.main.ScreenPointToRay(input.position);
-                RaycastHit hit;
-                if(Physics.Raycast(ray, out hit, Mathf.Infinity)){
-                    currentInteractable = hit.transform.gameObject.GetComponent<ARInteractable>();
-                    // if(interactable)
-                    //     StartCoroutine(HoldCheck(input, interactable));
-                    timer = 0.0f;
-                    holding = false;
-                }                
-            }            
-            timer += Time.deltaTime;
-            if(!holding && timer >= holdThreshold){
-                print("vai");
-                currentInteractable?.onHold(this);
-                holding = true;
-            }else if(input.phase == TouchPhase.Ended){
-                currentInteractable?.onTap(this);
-            }
-
-            if(input.phase == TouchPhase.Ended){
-                currentInteractable?.onRelease(this);
-                currentInteractable = null;
-            }
-
-        }
-    }
-    public void FollowTouch(Rigidbody objBody){
-        hinge.connectedBody = objBody;
+   
+    public void HoldMovable(Movable movable){
+        currentMovable = movable;
+        hinge.connectedBody = movable.rb;
     }
 
-    public void ReleaseFollow(){
+    public void ReleaseMovable(){
+        currentMovable = null;
         hinge.connectedBody = null;
     }
 

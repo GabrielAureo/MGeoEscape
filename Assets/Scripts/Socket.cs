@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
-public class Socket : MonoBehaviour
+public class Socket : ARInteractable
 {
     [SerializeField] private MeshRenderer previewRenderer;
     [SerializeField] private MeshFilter previewFilter;
@@ -63,9 +62,32 @@ public class Socket : MonoBehaviour
     private void UnsetObject(){
         currentObject = null;
     }
-    // Update is called once per frame
-    void Update()
+
+    public override void onTap(ARTouchController controller)
     {
         
+    }
+
+    public override void onHold(ARTouchController controller)
+    {
+        currentObject.onHold();
+        currentObject.rb.isKinematic = false;
+        controller.FollowTouch(currentObject.rb); 
+    }
+
+    public override void onRelease(ARTouchController controller)
+    {
+        var currentInteractable = controller.GetCurrentObject();
+        if(currentInteractable is Socket && currentInteractable != this){
+            ((Socket)currentInteractable).TryPlaceObject(currentObject);
+        }
+        currentObject.onRelease();
+        currentObject.rb.isKinematic = true;
+        controller.ReleaseFollow();
+    }
+
+    public override void onTarget(ARTouchController controller)
+    {
+        throw new System.NotImplementedException();
     }
 }

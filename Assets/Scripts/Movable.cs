@@ -5,12 +5,12 @@ using System.Collections;
 using Vuforia;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Movable : ARInteractable
+public class Movable : MonoBehaviour
 {
     private Transform originalParent;
     private Quaternion originalRotation;
     private Vector3 originalPosition;
-    private Rigidbody rb;
+    [HideInInspector] public Rigidbody rb;
     private Material material;
     TrackableBehaviour trackableBehaviour;
     [HideInInspector]
@@ -25,28 +25,27 @@ public class Movable : ARInteractable
         material = GetComponent<MeshRenderer>().material;
         trackableBehaviour = GetComponentInParent<TrackableBehaviour>();
     }
-    public override void onHold(ARTouchController controller)
-    {
+
+    public void onHold(){
         print("holding");
         material.DOFade(0.5f,"_BaseColor", .2f);
-        transform.parent = null;
-        //transform.rotation = Quaternion.identity;
-        transform.rotation = originalRotation;
-        rb.isKinematic = false;
-        controller.FollowTouch(rb);        
+        // transform.parent = null;
+        // //transform.rotation = Quaternion.identity;
+        // transform.rotation = originalRotation;
+        
     }
 
-    public override void onRelease(ARTouchController controller)
+    public void onRelease()
     {
         material.DOFade(1f,"_BaseColor", .2f);
-        transform.parent = originalParent;
-        transform.localRotation = originalRotation;
-        transform.localPosition = originalPosition;
+        // transform.parent = originalParent;
+        // transform.localRotation = originalRotation;
+        // transform.localPosition = originalPosition;
         rb.isKinematic = true;
         if(trackableBehaviour?.CurrentStatus == TrackableBehaviour.Status.NO_POSE){
             DisableObject();
         }
-        controller.ReleaseFollow();
+        
     }
 
     private void DisableObject(){
@@ -62,9 +61,5 @@ public class Movable : ARInteractable
             component.enabled = false;
     }
 
-    public override void onTap(ARTouchController controller)
-    {
-        
-    }
  
 }
