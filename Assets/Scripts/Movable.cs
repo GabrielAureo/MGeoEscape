@@ -3,6 +3,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using System.Collections;
 using Vuforia;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Movable : MonoBehaviour
@@ -15,6 +16,7 @@ public class Movable : MonoBehaviour
     TrackableBehaviour trackableBehaviour;
     [HideInInspector]
     public Mesh mesh;
+    public UnityAction<ARInteractable> releaseAction;
 
     void Start(){
         originalParent = transform.parent;
@@ -35,7 +37,7 @@ public class Movable : MonoBehaviour
         
     }
 
-    public void onRelease()
+    public void onRelease(ARInteractable dropInteractable)
     {
         material.DOFade(1f,"_BaseColor", .2f);
         // transform.parent = originalParent;
@@ -45,6 +47,7 @@ public class Movable : MonoBehaviour
         if(trackableBehaviour?.CurrentStatus == TrackableBehaviour.Status.NO_POSE){
             DisableObject();
         }
+        releaseAction(dropInteractable);
         
     }
 

@@ -65,5 +65,5 @@ MonoBehaviour:
     autoStartTracker: 0
   webcam:
     deviceNameSetInEditor: DroidCam Source 3
-    turnOffWebCam: 0
+    turnOffWebCam: 1
     renderTextureLayer: 30

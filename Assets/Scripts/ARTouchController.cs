@@ -33,7 +33,7 @@ public class ARTouchController : MonoBehaviour{
                 InputStateMachine(ray);
 
                 if(Input.touches[0].phase == TouchPhase.Ended){
-                    Release();
+                    Release(ray);
                 }
             }
         #endif
@@ -45,7 +45,7 @@ public class ARTouchController : MonoBehaviour{
            InputStateMachine(ray);           
         }
         if(Input.GetMouseButtonUp(0)){
-            Release();
+            Release(ray);
         }
         #endif
     }
@@ -64,8 +64,8 @@ public class ARTouchController : MonoBehaviour{
             Debug.DrawRay(ray.origin, ray.direction, Color.green);
             if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
                 var socket = hit.transform.GetComponent<Socket>();
-                if(socket){
-                    socket.TryTarget((Movable)selectedInteractable);
+                if(socket && currentMovable){
+                    socket.TryTarget(currentMovable);
                     lastSocket = socket;
                 }
             }else if(lastSocket){
@@ -99,6 +99,8 @@ public class ARTouchController : MonoBehaviour{
     }
 
     private void Release(Ray ray){
+        RaycastHit hit;
+        //ARInteractable looking = null;
         if(currentStatus == Status.WAITING){
                 selectedInteractable?.onTap(this);
             }
@@ -112,7 +114,14 @@ public class ARTouchController : MonoBehaviour{
         //     lastSocket = null;
         // }
         if(currentMovable){
-            Ray ray = CameraRay();
+            if(Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Sockets"))){
+                Socket looking = hit.transform.GetComponent<Socket>();
+                looking.TryPlaceObject(currentMovable);
+                currentMovable.onRelease(looking);
+            }
+           
+            ReleaseMovable();            
+            
         }
         selectedInteractable = null;
         ChangeStatus(Status.NO_TOUCH);

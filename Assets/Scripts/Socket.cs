@@ -6,7 +6,7 @@ public class Socket : ARInteractable
 {
     [SerializeField] private MeshRenderer previewRenderer;
     [SerializeField] private MeshFilter previewFilter;
-    [HideInInspector] public Movable currentObject;
+    public Movable currentObject;
     private Mesh lastMesh;
     public Transform bottomAnchor;
 
@@ -57,6 +57,11 @@ public class Socket : ARInteractable
         obj.transform.parent = transform;
         obj.transform.localPosition = Vector3.zero; // change this to offset
         currentObject = obj;
+        obj.releaseAction = x => {
+            if(x != null){
+                currentObject = null;
+            }
+        };
     }
 
     private void UnsetObject(){
@@ -72,18 +77,18 @@ public class Socket : ARInteractable
     {
         currentObject.onHold();
         currentObject.rb.isKinematic = false;
-        controller.FollowTouch(currentObject.rb); 
+        controller.HoldMovable(currentObject); 
     }
 
     public override void onRelease(ARTouchController controller)
     {
-        var currentInteractable = controller.GetCurrentObject();
-        if(currentInteractable is Socket && currentInteractable != this){
-            ((Socket)currentInteractable).TryPlaceObject(currentObject);
-        }
-        currentObject.onRelease();
+        // var currentInteractable = controller.GetCurrentObject();
+        // if(currentInteractable is Socket && currentInteractable != this){
+        //     ((Socket)currentInteractable).TryPlaceObject(currentObject);
+        // }
+        //currentObject.onRelease();
         currentObject.rb.isKinematic = true;
-        controller.ReleaseFollow();
+        
     }
 
     public override void onTarget(ARTouchController controller)
