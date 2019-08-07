@@ -16,7 +16,7 @@ public class Movable : MonoBehaviour
     TrackableBehaviour trackableBehaviour;
     [HideInInspector]
     public Mesh mesh;
-    public UnityAction<ARInteractable> releaseAction;
+    public UnityAction<ARInteractable, ARInteractable> releaseAction;
 
     void Start(){
         originalParent = transform.parent;
@@ -47,7 +47,7 @@ public class Movable : MonoBehaviour
         if(trackableBehaviour?.CurrentStatus == TrackableBehaviour.Status.NO_POSE){
             DisableObject();
         }
-        releaseAction(dropInteractable);
+        //releaseAction(dropInteractable);
         
     }
 

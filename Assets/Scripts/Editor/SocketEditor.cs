@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Reflection;
 
-//[CustomEditor(typeof(Socket))]
+[CustomEditor(typeof(Socket))]
 public class SocketEditor: Editor{
     SerializedProperty currentObject;
     Socket targetSocket;
@@ -39,10 +39,10 @@ public class SocketEditor: Editor{
     }
 
     private void CheckChildren(){
-        // var childMovable = targetSocket.transform.GetComponentInChildren<Movable>();
-        // if(childMovable == null && targetSocket.currentObject != null){
-        //     UnsetObject(targetSocket);
-        // }
+        var childMovable = targetSocket.transform.GetComponentInChildren<Movable>();
+        if(childMovable == null && targetSocket.currentObject != null){
+            UnsetObject(targetSocket);
+        }
     }
 
     private void SetObject(Movable movable){

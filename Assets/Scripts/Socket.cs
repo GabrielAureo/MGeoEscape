@@ -17,6 +17,8 @@ public class Socket : ARInteractable
         previewRenderer = GetComponentInChildren<MeshRenderer>();
         previewFilter = GetComponentInChildren<MeshFilter>();
         previewRenderer.enabled = false;
+        var movable = GetComponentInChildren<Movable>();
+        if(movable) SetObject(movable);
     }
 
     public bool TryTarget(Movable obj){
@@ -25,8 +27,6 @@ public class Socket : ARInteractable
         if(obj.mesh != lastMesh){
             lastMesh = obj.mesh;
             previewFilter.mesh = obj.mesh;
-            //previewRenderer.transform.localPosition = localPosition;
-            //previewRenderer.transform.localPosition = Vector3.forward * GetMeshOffset(obj.mesh);
             previewRenderer.transform.localRotation = Quaternion.identity;
         }
         previewRenderer.enabled = true;
@@ -54,18 +54,20 @@ public class Socket : ARInteractable
     }
 
     private void SetObject(Movable obj){
+        print(obj.name + " set to socket " + this.name);
         obj.transform.parent = transform;
         obj.transform.localPosition = Vector3.zero; // change this to offset
         currentObject = obj;
-        obj.releaseAction = x => {
-            if(x != null){
-                currentObject = null;
-            }
-        };
+        obj.releaseAction = UnsetObject;
+        print(obj.releaseAction.Method.Name);
     }
 
-    private void UnsetObject(){
-        currentObject = null;
+    private void UnsetObject(ARInteractable oldInteractable, ARInteractable newInteractable){
+        print(newInteractable);
+        print(oldInteractable);
+        if(newInteractable != null && newInteractable != oldInteractable){
+            this.currentObject = null;
+        }
     }
 
     public override void onTap(ARTouchController controller)
@@ -75,24 +77,23 @@ public class Socket : ARInteractable
 
     public override void onHold(ARTouchController controller)
     {
+        if(currentObject == null) return;
         currentObject.onHold();
         currentObject.rb.isKinematic = false;
-        controller.HoldMovable(currentObject); 
+        controller.HoldMovable(currentObject);
+        currentObject = null;
     }
 
     public override void onRelease(ARTouchController controller)
     {
-        // var currentInteractable = controller.GetCurrentObject();
-        // if(currentInteractable is Socket && currentInteractable != this){
-        //     ((Socket)currentInteractable).TryPlaceObject(currentObject);
-        // }
-        //currentObject.onRelease();
-        currentObject.rb.isKinematic = true;
         
     }
 
-    public override void onTarget(ARTouchController controller)
+    public override void onTarget(ARTouchController controller, Movable movable)
     {
-        throw new System.NotImplementedException();
+        TryTarget(movable);
+    }
+    public override void onUntarget(ARTouchController controller, Movable movable){
+        Untarget();
     }
 }

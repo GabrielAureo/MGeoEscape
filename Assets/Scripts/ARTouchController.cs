@@ -10,10 +10,8 @@ public class ARTouchController : MonoBehaviour{
     public float holdThreshold = 0.2f;
     HingeJoint hinge;
     ARInteractable selectedInteractable;
-    ARInteractable lookingInteractable;
     Movable currentMovable;
-    public Touch currentTouch;
-    Socket lastSocket;
+    ARInteractable targetInteractable;
 
     void Awake(){
         hinge = GetComponent<HingeJoint>();
@@ -54,23 +52,25 @@ public class ARTouchController : MonoBehaviour{
         RaycastHit hit;
         if(currentStatus == Status.NO_TOUCH){
             timer = 0.0f;
-            ChangeStatus(Status.WAITING);
             if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
                 selectedInteractable = hit.transform.GetComponent<Socket>();
-                
             }
+            ChangeStatus(Status.WAITING);
         }
         if(currentStatus == Status.HOLDING){
+            if(lastStatus == Status.WAITING){
+                selectedInteractable?.onHold(this);
+                ChangeStatus(Status.HOLDING);                
+            }
             Debug.DrawRay(ray.origin, ray.direction, Color.green);
-            if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
-                var socket = hit.transform.GetComponent<Socket>();
-                if(socket && currentMovable){
-                    socket.TryTarget(currentMovable);
-                    lastSocket = socket;
+            
+            if(currentMovable){
+                if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
+                    targetInteractable = hit.transform.GetComponent<ARInteractable>();
+                    targetInteractable?.onTarget(this, currentMovable);
+                }else{
+                    targetInteractable?.onUntarget(this,currentMovable);
                 }
-            }else if(lastSocket){
-                    lastSocket.Untarget();
-                    lastSocket = null;
             }
         }
 
@@ -78,7 +78,6 @@ public class ARTouchController : MonoBehaviour{
             timer+=Time.deltaTime;
             if(timer >= holdThreshold){
                 ChangeStatus(Status.HOLDING);
-                selectedInteractable?.onHold(this);
             }
         }
     }
@@ -100,27 +99,22 @@ public class ARTouchController : MonoBehaviour{
 
     private void Release(Ray ray){
         RaycastHit hit;
-        //ARInteractable looking = null;
+        if(lastStatus == Status.HOLDING){
+            targetInteractable?.onUntarget(this,currentMovable);
+        }
+
         if(currentStatus == Status.WAITING){
-                selectedInteractable?.onTap(this);
-            }
+            selectedInteractable?.onTap(this);
+        }
         selectedInteractable?.onRelease(this);
-        // if(selectedInteractable is Movable && lastSocket){
-        //     var placed = lastSocket.TryPlaceObject((Movable)selectedInteractable);
-        //     if(!placed){
-        //         //TODO
-        //     }
-        //     lastSocket.Untarget();
-        //     lastSocket = null;
-        // }
+
         if(currentMovable){
+            Socket target = (Socket) selectedInteractable;
             if(Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Sockets"))){
-                Socket looking = hit.transform.GetComponent<Socket>();
-                looking.TryPlaceObject(currentMovable);
-                currentMovable.onRelease(looking);
+                target = hit.transform.GetComponent<Socket>();
             }
            
-            ReleaseMovable();            
+            ReleaseMovable(target);            
             
         }
         selectedInteractable = null;
@@ -136,9 +130,12 @@ public class ARTouchController : MonoBehaviour{
     public void HoldMovable(Movable movable){
         currentMovable = movable;
         hinge.connectedBody = movable.rb;
+        movable.transform.parent = null;
     }
 
-    public void ReleaseMovable(){
+    public void ReleaseMovable(Socket target){
+        currentMovable.rb.isKinematic = true;
+        target.TryPlaceObject(currentMovable);
         currentMovable = null;
         hinge.connectedBody = null;
     }
