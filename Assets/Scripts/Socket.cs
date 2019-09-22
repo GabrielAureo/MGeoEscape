@@ -57,6 +57,7 @@ public class Socket : ARInteractable
         print(obj.name + " set to socket " + this.name);
         obj.transform.parent = transform;
         obj.transform.localPosition = Vector3.zero; // change this to offset
+        obj.transform.localRotation = Quaternion.identity;
         currentObject = obj;
         obj.releaseAction = UnsetObject;
         print(obj.releaseAction.Method.Name);

@@ -10,6 +10,7 @@ public class ARTouchController : MonoBehaviour{
     public float holdThreshold = 0.2f;
     HingeJoint hinge;
     ARInteractable selectedInteractable;
+    Socket lastSocket;
     Movable currentMovable;
     ARInteractable targetInteractable;
 
@@ -53,7 +54,10 @@ public class ARTouchController : MonoBehaviour{
         if(currentStatus == Status.NO_TOUCH){
             timer = 0.0f;
             if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
-                selectedInteractable = hit.transform.GetComponent<Socket>();
+                selectedInteractable = hit.transform.GetComponent<ARInteractable>();
+                if(selectedInteractable is Socket){
+                    lastSocket = (Socket)selectedInteractable;
+                }
             }
             ChangeStatus(Status.WAITING);
         }
@@ -135,7 +139,11 @@ public class ARTouchController : MonoBehaviour{
 
     public void ReleaseMovable(Socket target){
         currentMovable.rb.isKinematic = true;
-        target.TryPlaceObject(currentMovable);
+        var placed = target.TryPlaceObject(currentMovable);
+        if(!placed){
+            lastSocket.TryPlaceObject(currentMovable);
+        }
+        lastSocket = null;
         currentMovable = null;
         hinge.connectedBody = null;
     }

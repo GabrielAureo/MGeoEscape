@@ -22,23 +22,17 @@ public class SocketEditor: Editor{
             foreach(Socket socket in sockets){
                 if(socket != targetSocket && socket.currentObject == movable){
                     UnsetObject(socket);
-                    // Undo.RecordObject(socket, "Unset Movable from old object");
-                    // MethodInfo unset = socket.GetType().GetMethod("UnsetObject", BindingFlags.NonPublic | BindingFlags.Instance);
-                    // unset.Invoke(socket, new object[]{});
-                    // EditorUtility.SetDirty(socket);
                     
                 }
             }
             SetObject(movable);
-            // Undo.RecordObject(target,"Assign Movable");
-            // MethodInfo method = targetSocket.GetType().GetMethod("SetObject", BindingFlags.NonPublic | BindingFlags.Instance);
-            // method.Invoke(targetSocket, new object[]{movable});
         }
         
         DrawDefaultInspector();
     }
 
     private void CheckChildren(){
+        if(Application.isPlaying) return;
         var childMovable = targetSocket.transform.GetComponentInChildren<Movable>();
         if(childMovable == null && targetSocket.currentObject != null){
             UnsetObject(targetSocket);
