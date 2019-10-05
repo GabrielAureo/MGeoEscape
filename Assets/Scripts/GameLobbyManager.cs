@@ -2,6 +2,8 @@ using UnityEngine;
 using Mirror;
 
 public class GameLobbyManager: NetworkLobbyManager{
+
+    public static LobbyPlayer localLobbyPlayer;
     public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
     {
         PlayerController player = gamePlayer.GetComponent<PlayerController>();

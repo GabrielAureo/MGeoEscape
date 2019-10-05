@@ -201,8 +201,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90.245}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000030518, y: -0.000024416}
-  m_SizeDelta: {x: 555.8, y: 143.4}
+  m_AnchoredPosition: {x: 0.10048, y: 20.1}
+  m_SizeDelta: {x: 438.59, y: 110.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &190230946
 MonoBehaviour:
@@ -424,8 +424,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000060797, y: 248.8}
-  m_SizeDelta: {x: 679, y: 186.2}
+  m_AnchoredPosition: {x: -0.034997, y: 196}
+  m_SizeDelta: {x: 479.93, y: 131.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &394773273
 MonoBehaviour:
@@ -475,8 +475,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 72.8
-  m_fontSizeBase: 72.8
+  m_fontSize: 59.66
+  m_fontSizeBase: 59.66
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -492,7 +492,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
+  m_firstOverflowCharacterIndex: 17
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -675,6 +675,7 @@ GameObject:
   - component: {fileID: 493553324}
   - component: {fileID: 493553328}
   - component: {fileID: 493553329}
+  - component: {fileID: 493553330}
   m_Layer: 5
   m_Name: Character Selection
   m_TagString: Untagged
@@ -788,7 +789,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd9fd31d70c64424080463a7c4deba39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lobbyManager: {fileID: 0}
+  syncMode: 0
+  syncInterval: 0
+  _buttons: 
+  buttons:
+  - {fileID: 2144529221}
+  - {fileID: 806782007}
+  - {fileID: 1687977030}
+--- !u!114 &493553330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493553323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverOnly: 0
+  localPlayerAuthority: 0
+  m_AssetId: 
+  m_SceneId: 2841886490
 --- !u!1 &621659735
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,7 +897,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 108.35
+  m_fontSize: 66.1
   m_fontSizeBase: 63.1
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -980,7 +1003,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.5000076}
+  m_AnchoredPosition: {x: 0, y: -0.50001144}
   m_SizeDelta: {x: -20, y: -13}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &664484967
@@ -1007,6 +1030,7 @@ GameObject:
   - component: {fileID: 806782009}
   - component: {fileID: 806782008}
   - component: {fileID: 806782007}
+  - component: {fileID: 806782010}
   m_Layer: 5
   m_Name: Geologist
   m_TagString: Untagged
@@ -1031,8 +1055,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 85}
-  m_SizeDelta: {x: 160, y: 567.3}
+  m_AnchoredPosition: {x: -1.0000124, y: 50.99999}
+  m_SizeDelta: {x: 111.9, y: 396.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &806782007
 MonoBehaviour:
@@ -1054,10 +1078,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.41616234, g: 0.42657632, b: 0.5283019, a: 1}
-    m_HighlightedColor: {r: 0.54427737, g: 0.56518996, b: 0.764151, a: 1}
-    m_PressedColor: {r: 0.23829654, g: 0.2678191, b: 0.4245283, a: 1}
-    m_SelectedColor: {r: 0.18115878, g: 0.27996007, b: 0.5566038, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1076,7 +1100,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 806782008}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 493553329}
+        m_MethodName: CmdSelectCharacter
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: Geologist
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &806782008
@@ -1092,7 +1127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.3179784, g: 0.3018423, b: 0.4811321, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1116,6 +1151,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 806782005}
   m_CullTransparentMesh: 0
+--- !u!114 &806782010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806782005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverOnly: 0
+  localPlayerAuthority: 1
+  m_AssetId: 
+  m_SceneId: 1510258389
 --- !u!1 &818675274
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,8 +1201,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90.245}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.000024416}
-  m_SizeDelta: {x: 555.8, y: 143.4}
+  m_AnchoredPosition: {x: 0.23492, y: 12.943}
+  m_SizeDelta: {x: 422.32, y: 110.54}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &818675276
 MonoBehaviour:
@@ -1355,7 +1406,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 906603761}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 137911587}
+        m_MethodName: ConfirmName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &906603761
@@ -1419,6 +1481,8 @@ GameObject:
   - component: {fileID: 950639390}
   - component: {fileID: 950639389}
   - component: {fileID: 950639388}
+  - component: {fileID: 950639391}
+  - component: {fileID: 950639392}
   m_Layer: 0
   m_Name: LobbyManager
   m_TagString: Untagged
@@ -1536,7 +1600,7 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs: []
-  showLobbyGUI: 1
+  showLobbyGUI: 0
   minPlayers: 1
   lobbyPlayerPrefab: {fileID: 7571584967546881626, guid: ee119e7fac2df2d44ba7e8921cee1efb,
     type: 3}
@@ -1544,6 +1608,38 @@ MonoBehaviour:
   GameplayScene: Main
   lobbySlots: []
   allPlayersReady: 0
+--- !u!114 &950639391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950639386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4ca160b86af38148b3e6b4ed0b9eac7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_serverPort: 18418
+  simulateResponding: 0
+  gameServerPortNumber: 7777
+--- !u!114 &950639392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950639386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 454f7089d11135a4eb748146a4785148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offsetX: 5
+  offsetY: 150
+  width: 500
+  height: 400
+  refreshInterval: 3
 --- !u!1 &1460821720
 GameObject:
   m_ObjectHideFlags: 0
@@ -1735,8 +1831,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90.245}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.7, y: -0.1}
-  m_SizeDelta: {x: 555.8, y: 143.4}
+  m_AnchoredPosition: {x: -0.018601, y: 13.302}
+  m_SizeDelta: {x: 423.06, y: 110.04}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1664685347
 MonoBehaviour:
@@ -1870,6 +1966,7 @@ GameObject:
   - component: {fileID: 1687977032}
   - component: {fileID: 1687977031}
   - component: {fileID: 1687977030}
+  - component: {fileID: 1687977033}
   m_Layer: 5
   m_Name: Archeologist
   m_TagString: Untagged
@@ -1894,8 +1991,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 250, y: 85}
-  m_SizeDelta: {x: 160, y: 567.3}
+  m_AnchoredPosition: {x: 158, y: 51}
+  m_SizeDelta: {x: 111.9, y: 396.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1687977030
 MonoBehaviour:
@@ -1917,10 +2014,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.3584906, g: 0.28915986, b: 0.28915986, a: 1}
-    m_HighlightedColor: {r: 0.4433962, g: 0.25725347, b: 0.25725347, a: 1}
-    m_PressedColor: {r: 0.46226418, g: 0.15917587, b: 0.15917587, a: 1}
-    m_SelectedColor: {r: 0.6886792, g: 0.07471521, b: 0.07471521, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1939,7 +2036,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1687977031}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 493553329}
+        m_MethodName: CmdSelectCharacter
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: Archeologist
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1687977031
@@ -1955,7 +2063,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.4716981, g: 0.30927375, b: 0.30927375, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1979,6 +2087,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687977028}
   m_CullTransparentMesh: 0
+--- !u!114 &1687977033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687977028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverOnly: 0
+  localPlayerAuthority: 1
+  m_AssetId: 
+  m_SceneId: 3748980941
 --- !u!1 &1806117350
 GameObject:
   m_ObjectHideFlags: 0
@@ -2015,7 +2139,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.18349926, g: 0.20754719, b: 0.17524031, a: 0}
+  m_BackGroundColor: {r: 0.7169812, g: 0.6368902, b: 0.4836241, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -2098,8 +2222,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000076294, y: 36}
-  m_SizeDelta: {x: 715, y: 134.1}
+  m_AnchoredPosition: {x: -0.035001, y: 43.425}
+  m_SizeDelta: {x: 463.1, y: 86.849}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2122267682
 MonoBehaviour:
@@ -2273,6 +2397,7 @@ GameObject:
   - component: {fileID: 2144529223}
   - component: {fileID: 2144529222}
   - component: {fileID: 2144529221}
+  - component: {fileID: 2144529224}
   m_Layer: 5
   m_Name: Detective
   m_TagString: Untagged
@@ -2297,8 +2422,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -250, y: 85}
-  m_SizeDelta: {x: 160, y: 567.3}
+  m_AnchoredPosition: {x: -158, y: 50.99999}
+  m_SizeDelta: {x: 111.9, y: 396.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2144529221
 MonoBehaviour:
@@ -2320,10 +2445,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.33759233, g: 0.38679248, b: 0.31928626, a: 1}
-    m_HighlightedColor: {r: 0.4830456, g: 0.6132076, b: 0.4901148, a: 1}
-    m_PressedColor: {r: 0.25244117, g: 0.5188679, b: 0.20803666, a: 1}
-    m_SelectedColor: {r: 0.22243801, g: 0.6132076, b: 0.1533019, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -2344,14 +2469,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 493553329}
-        m_MethodName: SelectCharacter
+        m_MethodName: CmdSelectCharacter
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Detective
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -2369,7 +2494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.38198173, g: 0.5188679, b: 0.3255162, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2393,3 +2518,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144529219}
   m_CullTransparentMesh: 0
+--- !u!114 &2144529224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144529219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverOnly: 0
+  localPlayerAuthority: 1
+  m_AssetId: 
+  m_SceneId: 1574538325

@@ -22,8 +22,11 @@ public class ConnectScreen : MonoBehaviour
     {
         reveal = false;
         selectionScreen.alpha = 0;
+        selectionScreen.interactable = false;
         EventSystem.current.SetSelectedGameObject(inputField.gameObject);
-        //inputField.OnPointerClick (null);
+        var submit = new TMP_InputField.SubmitEvent();
+        submit.AddListener(ConfirmName);
+        inputField.onSubmit = submit;
     }
 
     // Update is called once per frame
@@ -46,6 +49,32 @@ public class ConnectScreen : MonoBehaviour
         }else if(input == "" && reveal){
             reveal = false;
             RevealButton();
+        }
+    }
+
+    public void ConfirmName(string name){
+        nameScreen.DOFade(0f, .2f).onComplete += ()=> nameScreen.interactable = false;
+        selectionScreen.DOFade(1f, .2f).onComplete += ()=> selectionScreen.interactable = true;
+        Connect();
+    }
+
+    void Connect(){
+        #if UNITY_EDITOR
+        NetworkManager.singleton.StartHost();
+        #else
+        NetworkDiscovery.onReceivedServerResponse += (info)=>{
+            NetworkManager.singleton.networkAddress = info.EndPoint.Address.ToString();
+            NetworkManager.singleton.StartClient();
+            StopCoroutine(RefreshLAN());
+        };
+        StartCoroutine(RefreshLAN());
+        #endif
+        
+    }
+    IEnumerator RefreshLAN(){
+        while(true){
+            NetworkDiscovery.SendBroadcast();
+            yield return new WaitForSeconds(1f);
         }
     }
 }
