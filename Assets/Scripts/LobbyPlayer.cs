@@ -2,23 +2,45 @@ using UnityEngine;
 using Mirror;
 
 public class LobbyPlayer: NetworkLobbyPlayer{
-    public string m_Name;
+    [SyncVar(hook = "RenameGameObject")]
+    public string playerName;
     public Character character;
+
 
     public override void OnStartLocalPlayer(){
         GameLobbyManager.localLobbyPlayer = this;
     }
 
     [Command]
+    public void CmdChangeName(string name){
+        playerName = name;
+    }
+
+    void RenameGameObject(string name){
+        gameObject.name = "Player " + name;
+    }
+
+
+    [Command]
     public void CmdSelectCharacter(GameObject charSelectObj, int character){
         CharacterSelection characterSelection = charSelectObj.GetComponent<CharacterSelection>();
         if(characterSelection._buttons[character]) return;
-        print(characterSelection._buttons.Count);
         characterSelection._buttons[character] = true;
         var btnID = characterSelection.buttons[character].GetComponent<NetworkIdentity>();
+        characterSelection.playerDictionary[(Character)character] = this; 
         btnID.AssignClientAuthority(connectionToClient);
-        characterSelection.RpcFillCharacter(character);
+        print(connectionToClient.playerController.name);
+        //RpcFillCharacter(charSelectObj, character);
         btnID.RemoveClientAuthority(connectionToClient);
+        foreach(var kvp in characterSelection.playerDictionary){
+            Debug.Log(kvp.Key + ", " + kvp.Value);
+        }
+    }
+
+    [Command]
+    public void CmdUnselectCharacter(){
+        
+
     }
 
     [ClientRpc]

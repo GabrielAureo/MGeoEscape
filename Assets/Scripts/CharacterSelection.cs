@@ -7,9 +7,16 @@ public class CharacterSelection : NetworkBehaviour{
     Character chosenCharacter;
     public List<bool> _buttons;
     [SerializeField] public List<Button> buttons;
+    public Dictionary<Character, LobbyPlayer> playerDictionary;
     
     public override void OnStartServer(){
         base.OnStartServer();
+
+        playerDictionary = new Dictionary<Character, LobbyPlayer>(){
+            {Character.Archeologist, null},
+            {Character.Detective, null},
+            {Character.Geologist, null}
+        };
         _buttons = new List<bool>();
         for(int i = 0; i < 3; i++){
             _buttons.Add(false);
@@ -28,13 +35,13 @@ public class CharacterSelection : NetworkBehaviour{
         GameLobbyManager.localLobbyPlayer.CmdSelectCharacter(gameObject, character);
     }
 
-    [ClientRpc]
+    /*[ClientRpc]
     public void RpcFillCharacter(int character){
         print("vrau");
         buttons[character].interactable = false;
-    }
+    }*/
 }
-public enum Character { Detective, Archeologist, Geologist}
+public enum Character {Detective = 0,  Geologist = 1, Archeologist = 2}
 
 
 

@@ -36,7 +36,7 @@ namespace Mirror
 
         [FormerlySerializedAs("m_LobbyPlayerPrefab")]
         [SerializeField]
-        NetworkLobbyPlayer lobbyPlayerPrefab;
+        protected NetworkLobbyPlayer lobbyPlayerPrefab;
 
         /// <summary>
         /// The scene to use for the lobby. This is similar to the offlineScene of the NetworkManager.

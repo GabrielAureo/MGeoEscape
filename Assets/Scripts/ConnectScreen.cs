@@ -7,12 +7,14 @@ using TMPro;
 using Mirror;
 using DG.Tweening;
 
-public class ConnectScreen : MonoBehaviour
+public class ConnectScreen : NetworkBehaviour
 {
     [SerializeField] CanvasGroup nameScreen;
     [SerializeField] CanvasGroup selectionScreen;
     [SerializeField] TMP_InputField inputField;
     [SerializeField] Button acceptButton;
+
+    [HideInInspector] string playerName;
 
     Tweener fade;
     bool reveal;
@@ -55,26 +57,7 @@ public class ConnectScreen : MonoBehaviour
     public void ConfirmName(string name){
         nameScreen.DOFade(0f, .2f).onComplete += ()=> nameScreen.interactable = false;
         selectionScreen.DOFade(1f, .2f).onComplete += ()=> selectionScreen.interactable = true;
-        Connect();
-    }
-
-    void Connect(){
-        #if UNITY_EDITOR
-        NetworkManager.singleton.StartHost();
-        #else
-        NetworkDiscovery.onReceivedServerResponse += (info)=>{
-            NetworkManager.singleton.networkAddress = info.EndPoint.Address.ToString();
-            NetworkManager.singleton.StartClient();
-            StopCoroutine(RefreshLAN());
-        };
-        StartCoroutine(RefreshLAN());
-        #endif
-        
-    }
-    IEnumerator RefreshLAN(){
-        while(true){
-            NetworkDiscovery.SendBroadcast();
-            yield return new WaitForSeconds(1f);
-        }
+        //GameLobbyManager.playerName = inputField.text;
+        GameLobbyManager.localLobbyPlayer.CmdChangeName(inputField.text);
     }
 }

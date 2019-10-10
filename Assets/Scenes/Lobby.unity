@@ -129,30 +129,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 137911588}
-  - component: {fileID: 137911587}
+  - component: {fileID: 137911589}
   m_Layer: 0
-  m_Name: Connect Screen
+  m_Name: Connection Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &137911587
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137911586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bc2f528256415047afc0ba2e749a84e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nameScreen: {fileID: 407836445}
-  selectionScreen: {fileID: 493553328}
-  inputField: {fileID: 2122267682}
-  acceptButton: {fileID: 906603760}
 --- !u!4 &137911588
 Transform:
   m_ObjectHideFlags: 0
@@ -167,6 +151,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &137911589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137911586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f83b266f6a07ed4cb9357c67d90e1f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &190230944
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,6 +556,8 @@ GameObject:
   - component: {fileID: 407836442}
   - component: {fileID: 407836441}
   - component: {fileID: 407836445}
+  - component: {fileID: 407836447}
+  - component: {fileID: 407836446}
   m_Layer: 5
   m_Name: Name Canvas
   m_TagString: Untagged
@@ -661,6 +659,40 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &407836446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407836440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bc2f528256415047afc0ba2e749a84e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  nameScreen: {fileID: 407836445}
+  selectionScreen: {fileID: 493553328}
+  inputField: {fileID: 2122267682}
+  acceptButton: {fileID: 906603760}
+--- !u!114 &407836447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407836440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverOnly: 0
+  localPlayerAuthority: 0
+  m_AssetId: 
+  m_SceneId: 3365781870
 --- !u!1 &493553323
 GameObject:
   m_ObjectHideFlags: 0
@@ -1407,7 +1439,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 137911587}
+      - m_Target: {fileID: 0}
         m_MethodName: ConfirmName
         m_Mode: 5
         m_Arguments:
@@ -1608,6 +1640,7 @@ MonoBehaviour:
   GameplayScene: Main
   lobbySlots: []
   allPlayersReady: 0
+  m_characterSelection: {fileID: 493553329}
 --- !u!114 &950639391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2315,7 +2348,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 137911587}
+      - m_Target: {fileID: 0}
         m_MethodName: CheckInput
         m_Mode: 0
         m_Arguments:
