@@ -24,13 +24,22 @@ public class LobbyPlayer: NetworkLobbyPlayer{
     [Command]
     public void CmdSelectCharacter(GameObject charSelectObj, int character){
         CharacterSelection characterSelection = charSelectObj.GetComponent<CharacterSelection>();
-        if(characterSelection._buttons[character]) return;
+        if(characterSelection._buttons[character]) return; //jogador tentou selecionar posição já escolhida
+
         characterSelection._buttons[character] = true;
+
+
         var btnID = characterSelection.buttons[character].GetComponent<NetworkIdentity>();
         characterSelection.playerDictionary[(Character)character] = this; 
         btnID.AssignClientAuthority(connectionToClient);
         print(connectionToClient.playerController.name);
-        //RpcFillCharacter(charSelectObj, character);
+
+        if(characterSelection.playerDictionary[(Character)character] == this){
+
+        }
+
+
+        RpcFillCharacter(charSelectObj, character);
         btnID.RemoveClientAuthority(connectionToClient);
         foreach(var kvp in characterSelection.playerDictionary){
             Debug.Log(kvp.Key + ", " + kvp.Value);
@@ -46,7 +55,8 @@ public class LobbyPlayer: NetworkLobbyPlayer{
     [ClientRpc]
     public void RpcFillCharacter(GameObject charSelectObj, int character){
         CharacterSelection characterSelection = charSelectObj.GetComponent<CharacterSelection>();
-        characterSelection.buttons[character].interactable = false;
+        if(!isLocalPlayer) characterSelection.buttons[character].interactable = false;
+        
     }
 
 }
