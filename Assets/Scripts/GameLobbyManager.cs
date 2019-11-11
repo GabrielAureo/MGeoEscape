@@ -14,7 +14,11 @@ public class GameLobbyManager: NetworkLobbyManager{
     public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
     {
         PlayerController player = gamePlayer.GetComponent<PlayerController>();
-        player.character = lobbyPlayer.GetComponent<LobbyPlayer>().character;
+        var character = lobbyPlayer.GetComponent<LobbyPlayer>().cur_character;
+        if(character != null){
+            player.character = character.GetValueOrDefault();
+        }   
+        
         return true;
     }
 

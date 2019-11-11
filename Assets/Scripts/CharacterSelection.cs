@@ -5,13 +5,16 @@ using System.Collections.Generic;
 
 public class CharacterSelection : NetworkBehaviour{
     Character chosenCharacter;
-    public List<bool> _buttons;
-    [SerializeField] public List<Button> buttons;
+    [SerializeField] Button detectiveButton;
+    [SerializeField] Button geologistButton;
+    [SerializeField] Button archeologistButton;
+    [HideInInspector] public List<bool> _buttons;
+    //[HideInInspector] public List<Button> buttons;
     public Dictionary<Character, LobbyPlayer> playerDictionary;
     
     public override void OnStartServer(){
         base.OnStartServer();
-
+        
         playerDictionary = new Dictionary<Character, LobbyPlayer>(){
             {Character.Archeologist, null},
             {Character.Detective, null},
@@ -22,16 +25,32 @@ public class CharacterSelection : NetworkBehaviour{
             _buttons.Add(false);
         }
     }
-    
+
+    public override void OnStartClient(){
+        base.OnStartLocalPlayer();
+        Debug.Log("set Charselection to manager");
+        GameLobbyManager.characterSelection = this;
+    }
+    public Button getCharacterButton(Character character){
+        switch(character){
+            case Character.Geologist:
+                return geologistButton;
+            case Character.Archeologist:
+                return archeologistButton;
+            case Character.Detective:
+                return detectiveButton;
+            default:
+                Debug.LogError("Personagem inválido");
+                return null;
+        }
+    }
+
+    public Button getCharacterButton(int characterIndex){
+        var character = (Character)characterIndex;
+        return getCharacterButton(character);
+    }
     //[Command]
     public void CmdSelectCharacter(int character){
-        /*if(_buttons[character]) return;
-        print(_buttons.Count);
-        _buttons[character] = true;
-        var btnID = buttons[character].GetComponent<NetworkIdentity>();
-        btnID.AssignClientAuthority(connectionToClient);
-        RpcFillCharacter(character);
-        btnID.RemoveClientAuthority(connectionToClient);*/
         GameLobbyManager.localLobbyPlayer.CmdSelectCharacter(gameObject, character);
     }
 

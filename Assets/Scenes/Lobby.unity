@@ -823,11 +823,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0
+  detectiveButton: {fileID: 2144529221}
+  geologistButton: {fileID: 806782007}
+  archeologistButton: {fileID: 1687977030}
   _buttons: 
-  buttons:
-  - {fileID: 2144529221}
-  - {fileID: 806782007}
-  - {fileID: 1687977030}
 --- !u!114 &493553330
 MonoBehaviour:
   m_ObjectHideFlags: 0
