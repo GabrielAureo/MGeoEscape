@@ -10,18 +10,17 @@ public class LobbyPlayer: NetworkLobbyPlayer{
 
     public override void OnStartLocalPlayer(){
         GameLobbyManager.localLobbyPlayer = this;
-        NetworkClient.RegisterHandler<LobbyUIMessage>((x,y) => HandleUI(x,y));
+        //NetworkClient.RegisterHandler<LobbyUIMessage>((x,y) => HandleUI(x,y));
     }
 
     public override void OnStartClient(){
         
     }
 
-    void HandleUI(NetworkConnection conn, LobbyUIMessage msg){
-        if(conn == connectionToClient) return;
-
-
-        print("Message received from " + conn.playerController.name + ", " + msg);
+    [TargetRpc]
+    void TargetHandleUI(NetworkConnection target, int character, bool fill){
+        Debug.Log("Rpc received by " + connectionToClient);
+        GameLobbyManager.characterSelection.getCharacterButton(character).enabled = fill;
     }
 
     [Command]
@@ -42,18 +41,20 @@ public class LobbyPlayer: NetworkLobbyPlayer{
 
         // characterSelection._buttons[character] = true;
 
-        print(this.netIdentity.name);
+        //print(this.netIdentity.name);
         
 
         if(query == this){
             UpdateDictionary(character, null);
             cur_character = null;
+            UpdateUI(character, true, connectionToClient);
+
         }else if(query == null){
             if(cur_character != null){
                 UpdateDictionary((int)cur_character, null);
             }
             UpdateDictionary(character, this);
-            UpdateUI(character, true);
+            UpdateUI(character, false, connectionToClient);
             cur_character = (Character)character;
         }else{
             
@@ -63,22 +64,29 @@ public class LobbyPlayer: NetworkLobbyPlayer{
         // var btnID = characterSelection.buttons[character].GetComponent<NetworkIdentity>();
         // characterSelection.playerDictionary[(Character)character] = this; 
         // btnID.AssignClientAuthority(connectionToClient);
-        print(connectionToClient.playerController.name);
+        //print(connectionToClient.playerController.name);
         // RpcFillCharacter(charSelectObj, character);
         // btnID.RemoveClientAuthority(connectionToClient);
-        foreach(var kvp in GameLobbyManager.characterSelection.playerDictionary){
+        /*foreach(var kvp in GameLobbyManager.characterSelection.playerDictionary){
             Debug.Log(kvp.Key + ", " + kvp.Value);
-        }
+        }*/
     }
 
-    void UpdateUI(int character, bool fill){
-        var msg = new LobbyUIMessage();
+    
+    void UpdateUI(int character, bool fill, NetworkConnection sender){
+        /*var msg = new LobbyUIMessage();
         msg.fill = fill;
         msg.character = character;
-        NetworkServer.SendToAll<LobbyUIMessage>(msg);
+        NetworkServer.SendToAll<LobbyUIMessage>(msg);*/
+
+        foreach(var kvp in NetworkServer.connections){
+            if(kvp.Value == sender) continue;
+            TargetHandleUI(kvp.Value, character, fill);
+        }
+
     }
 
-
+    
 
     void UpdateDictionary(int charIndex, LobbyPlayer value){
         var btnID = GameLobbyManager.characterSelection.getCharacterButton(charIndex).GetComponent<NetworkIdentity>();

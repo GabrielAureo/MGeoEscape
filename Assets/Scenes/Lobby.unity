@@ -220,7 +220,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: "ARQUE\xD3LOGO"
+  m_text: "PALENT\xD3LOGO"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 9c2695265f78b3e49a0571ab0f707db4, type: 2}
@@ -289,7 +289,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 190230946}
-    characterCount: 10
+    characterCount: 11
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -412,7 +412,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 394773271}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -15}
+  m_LocalPosition: {x: 0, y: 0, z: -16.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 407836444}
@@ -420,8 +420,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.034997, y: 196}
-  m_SizeDelta: {x: 479.93, y: 131.6}
+  m_AnchoredPosition: {x: 7, y: 72}
+  m_SizeDelta: {x: 267.3, y: 73.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &394773273
 MonoBehaviour:
@@ -471,8 +471,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 59.66
-  m_fontSizeBase: 59.66
+  m_fontSize: 33.17
+  m_fontSizeBase: 33.17
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -928,7 +928,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 66.1
+  m_fontSize: 46.45
   m_fontSizeBase: 63.1
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -945,7 +945,7 @@ MonoBehaviour:
   m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
+  m_firstOverflowCharacterIndex: 0
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -1086,8 +1086,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.0000124, y: 50.99999}
-  m_SizeDelta: {x: 111.9, y: 396.9}
+  m_AnchoredPosition: {x: -0.69999313, y: 4.5}
+  m_SizeDelta: {x: 66.6, y: 469.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &806782007
 MonoBehaviour:
@@ -2000,7 +2000,7 @@ GameObject:
   - component: {fileID: 1687977030}
   - component: {fileID: 1687977033}
   m_Layer: 5
-  m_Name: Archeologist
+  m_Name: "Palent\xF3logo"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2023,8 +2023,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 158, y: 51}
-  m_SizeDelta: {x: 111.9, y: 396.9}
+  m_AnchoredPosition: {x: 94, y: 4.5}
+  m_SizeDelta: {x: 66.6, y: 469.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1687977030
 MonoBehaviour:
@@ -2245,7 +2245,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2122267680}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -22}
+  m_LocalPosition: {x: 0, y: 0, z: -20.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 664484966}
@@ -2254,8 +2254,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.035001, y: 43.425}
-  m_SizeDelta: {x: 463.1, y: 86.849}
+  m_AnchoredPosition: {x: 7, y: -13.000015}
+  m_SizeDelta: {x: 257.9, y: 48.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2122267682
 MonoBehaviour:
@@ -2454,8 +2454,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -158, y: 50.99999}
-  m_SizeDelta: {x: 111.9, y: 396.9}
+  m_AnchoredPosition: {x: -94.2, y: 4.5}
+  m_SizeDelta: {x: 66.6, y: 469.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2144529221
 MonoBehaviour:
