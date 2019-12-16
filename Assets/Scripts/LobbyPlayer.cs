@@ -20,7 +20,10 @@ public class LobbyPlayer: NetworkLobbyPlayer{
     [TargetRpc]
     void TargetHandleUI(NetworkConnection target, int character, bool fill){
         Debug.Log("Rpc received by " + connectionToClient);
-        GameLobbyManager.characterSelection.getCharacterButton(character).enabled = fill;
+        var btn = GameLobbyManager.characterSelection.getCharacterButton(character);
+        print(btn);
+        print(fill);
+        btn.interactable = fill;
     }
 
     [Command]
@@ -44,14 +47,15 @@ public class LobbyPlayer: NetworkLobbyPlayer{
         //print(this.netIdentity.name);
         
 
-        if(query == this){
+        if(query == this){ //jogador descelecionou seu personagem
             UpdateDictionary(character, null);
             cur_character = null;
             UpdateUI(character, true, connectionToClient);
 
-        }else if(query == null){
-            if(cur_character != null){
+        }else if(query == null){  //jogador sselecionou posição vazia
+            if(cur_character != null){ //jogador já tem personagem selecionado, que é liberado
                 UpdateDictionary((int)cur_character, null);
+                UpdateUI((int)cur_character, true, connectionToClient);
             }
             UpdateDictionary(character, this);
             UpdateUI(character, false, connectionToClient);
@@ -81,6 +85,7 @@ public class LobbyPlayer: NetworkLobbyPlayer{
 
         foreach(var kvp in NetworkServer.connections){
             if(kvp.Value == sender) continue;
+            print(kvp.Value);
             TargetHandleUI(kvp.Value, character, fill);
         }
 
