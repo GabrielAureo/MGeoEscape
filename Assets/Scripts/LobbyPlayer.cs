@@ -94,8 +94,10 @@ public class LobbyPlayer: NetworkLobbyPlayer{
     
 
     void UpdateDictionary(int charIndex, LobbyPlayer value){
-        var btnID = GameLobbyManager.characterSelection.getCharacterButton(charIndex).GetComponent<NetworkIdentity>();
+        //var btnID = GameLobbyManager.characterSelection.getCharacterButton(charIndex).GetComponent<NetworkIdentity>();
         GameLobbyManager.characterSelection.playerDictionary[(Character)charIndex] = value; 
+        var btn = GameLobbyManager.characterSelection.getCharacterButton(charIndex);
+        btn.Select();
         /*btnID.AssignClientAuthority(connectionToClient);
         RpcFillCharacter(charIndex);
         btnID.RemoveClientAuthority(connectionToClient);*/
