@@ -4,26 +4,30 @@ using Mirror;
 public class LobbyPlayer: NetworkLobbyPlayer{
     [SyncVar(hook = "RenameGameObject")]
     public string playerName;
-    public Character? cur_character;
-
-
 
     public override void OnStartLocalPlayer(){
         GameLobbyManager.localLobbyPlayer = this;
-        //NetworkClient.RegisterHandler<LobbyUIMessage>((x,y) => HandleUI(x,y));
     }
 
     public override void OnStartClient(){
         
     }
 
+    private void SetupUI(){
+        foreach(var kvp in GameLobbyManager.characterSelection.playerDictionary){
+            if(kvp.Value != null){
+                var btn = GameLobbyManager.characterSelection.getCharacterButton(kvp.Key);
+                btn.Toggle(false);
+            }
+        }
+    }
+
     [TargetRpc]
     void TargetHandleUI(NetworkConnection target, int character, bool fill){
         Debug.Log("Rpc received by " + connectionToClient);
         var btn = GameLobbyManager.characterSelection.getCharacterButton(character);
-        print(btn);
         print(fill);
-        btn.interactable = fill;
+        btn.Toggle(fill);
     }
 
     [Command]
@@ -37,76 +41,76 @@ public class LobbyPlayer: NetworkLobbyPlayer{
 
 
     [Command]
-    public void CmdSelectCharacter(GameObject charSelectObj, int character){
-        //if(characterSelection == null) characterSelection = charSelectObj.GetComponent<CharacterSelection>();
+    public void CmdSelectCharacter(int character){
         var query = GameLobbyManager.characterSelection.playerDictionary[(Character)character];
-        // if(characterSelection._buttons[character]) return; //jogador tentou selecionar posição já escolhida
-
-        // characterSelection._buttons[character] = true;
-
-        //print(this.netIdentity.name);
-        
+        print(query);
 
         if(query == this){ //jogador descelecionou seu personagem
-            UpdateDictionary(character, null);
-            cur_character = null;
-            UpdateUI(character, true, connectionToClient);
-
+            //HandleSelection(character, null, query);
+            DeselectCharacter(character);
         }else if(query == null){  //jogador sselecionou posição vazia
-            if(cur_character != null){ //jogador já tem personagem selecionado, que é liberado
-                UpdateDictionary((int)cur_character, null);
-                UpdateUI((int)cur_character, true, connectionToClient);
-            }
-            UpdateDictionary(character, this);
-            UpdateUI(character, false, connectionToClient);
-            cur_character = (Character)character;
-        }else{
-            
+            //HandleSelection(character, this, query);
+            SelectCharacter(character);
         }
-
-
-        // var btnID = characterSelection.buttons[character].GetComponent<NetworkIdentity>();
-        // characterSelection.playerDictionary[(Character)character] = this; 
-        // btnID.AssignClientAuthority(connectionToClient);
-        //print(connectionToClient.playerController.name);
-        // RpcFillCharacter(charSelectObj, character);
-        // btnID.RemoveClientAuthority(connectionToClient);
-        /*foreach(var kvp in GameLobbyManager.characterSelection.playerDictionary){
-            Debug.Log(kvp.Key + ", " + kvp.Value);
-        }*/
     }
 
-    
-    void UpdateUI(int character, bool fill, NetworkConnection sender){
-        /*var msg = new LobbyUIMessage();
-        msg.fill = fill;
-        msg.character = character;
-        NetworkServer.SendToAll<LobbyUIMessage>(msg);*/
+    void DeselectCharacter(int character){
+        print("aqui");
+        UpdateDictionary(character, null);
+        UpdateOtherPlayersUI(character, true, connectionToClient); //Libera botão para outros jogadores
+        TargetHandleUI(connectionToClient, character, false); //Desceleciona botão para requerente
+    }
 
+    void SelectCharacter(int character){
+        Character? cur = null;
+        foreach(var kvp in GameLobbyManager.characterSelection.playerDictionary){
+            if(kvp.Value == this){
+                cur = kvp.Key;
+            }
+        }
+        if(cur != null){ //Jogador já tem personagem selecionado e eatá escolhendo outro
+            DeselectCharacter((int) cur);
+        }
+
+        UpdateDictionary(character, this);
+        UpdateOtherPlayersUI(character, false, connectionToClient);
+        TargetHandleUI(connectionToClient, character, true);
+    }
+    /*void HandleSelection(int character, LobbyPlayer player, LobbyPlayer query){
+        Character? cur = null;
+        bool fill = true;
+        foreach(var kvp in GameLobbyManager.characterSelection.playerDictionary){
+            if(kvp.Value == this){
+                cur = kvp.Key;
+            }
+        }
+        if(cur != null && query == null){ //jogador já tem personagem selecionado, que é liberado
+            UpdateDictionary((int) cur, null);
+            UpdateUI((int) cur, true, connectionToClient);
+        }
+        if(query == null) fill = false;
+        if(player == null){
+            this.readyToBegin = false;
+        }else{
+            this.readyToBegin = true;
+        }
+        UpdateDictionary(character, player);
+        UpdateUI(character, fill, connectionToClient);
+    }*/
+
+    
+    void UpdateOtherPlayersUI(int character, bool fill, NetworkConnection sender){
         foreach(var kvp in NetworkServer.connections){
             if(kvp.Value == sender) continue;
-            print(kvp.Value);
             TargetHandleUI(kvp.Value, character, fill);
         }
 
     }
 
-    
-
     void UpdateDictionary(int charIndex, LobbyPlayer value){
-        //var btnID = GameLobbyManager.characterSelection.getCharacterButton(charIndex).GetComponent<NetworkIdentity>();
         GameLobbyManager.characterSelection.playerDictionary[(Character)charIndex] = value; 
         var btn = GameLobbyManager.characterSelection.getCharacterButton(charIndex);
-        btn.Select();
-        /*btnID.AssignClientAuthority(connectionToClient);
-        RpcFillCharacter(charIndex);
-        btnID.RemoveClientAuthority(connectionToClient);*/
-    }
-
-    [ClientRpc]
-    public void RpcFillCharacter(int btnIndex){
-        if(!isLocalPlayer) GameLobbyManager.characterSelection.getCharacterButton(btnIndex).interactable = false; // desativa botão da posição escolhida para todos exceto para o jogador
-        
+        //btn.Toggle(value != null);
     }
 
 

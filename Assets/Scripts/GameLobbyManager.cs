@@ -14,11 +14,17 @@ public class GameLobbyManager: NetworkLobbyManager{
     public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
     {
         PlayerController player = gamePlayer.GetComponent<PlayerController>();
-        var character = lobbyPlayer.GetComponent<LobbyPlayer>().cur_character;
-        if(character != null){
-            player.character = character.GetValueOrDefault();
-        }   
-        
+        LobbyPlayer _lobbyPlayer = lobbyPlayer.GetComponent<LobbyPlayer>();
+        // var character = lobbyPlayer.GetComponent<LobbyPlayer>().cur_character;
+        // if(character != null){
+        //     player.character = character.GetValueOrDefault();
+        // }   
+
+        foreach(var kvp in characterSelection.playerDictionary){
+            if(kvp.Value == _lobbyPlayer){
+                player.character = kvp.Key;
+            }
+        }
         return true;
     }
 

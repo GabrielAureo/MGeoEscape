@@ -5,11 +5,10 @@ using System.Collections.Generic;
 
 public class CharacterSelection : NetworkBehaviour{
     Character chosenCharacter;
-    [SerializeField] Button detectiveButton;
-    [SerializeField] Button geologistButton;
-    [SerializeField] Button archeologistButton;
-    [HideInInspector] public List<bool> _buttons;
-    //[HideInInspector] public List<Button> buttons;
+    [SerializeField] CharacterButton detectiveButton;
+    [SerializeField] CharacterButton geologistButton;
+    [SerializeField] CharacterButton archeologistButton;
+
     public Dictionary<Character, LobbyPlayer> playerDictionary;
     
     public override void OnStartServer(){
@@ -20,10 +19,6 @@ public class CharacterSelection : NetworkBehaviour{
             {Character.Detective, null},
             {Character.Geologist, null}
         };
-        _buttons = new List<bool>();
-        for(int i = 0; i < 3; i++){
-            _buttons.Add(false);
-        }
     }
 
     public override void OnStartClient(){
@@ -31,7 +26,7 @@ public class CharacterSelection : NetworkBehaviour{
         Debug.Log("set Charselection to manager");
         GameLobbyManager.characterSelection = this;
     }
-    public Button getCharacterButton(Character character){
+    public CharacterButton getCharacterButton(Character character){
         switch(character){
             case Character.Geologist:
                 return geologistButton;
@@ -45,20 +40,13 @@ public class CharacterSelection : NetworkBehaviour{
         }
     }
 
-    public Button getCharacterButton(int characterIndex){
+    public CharacterButton getCharacterButton(int characterIndex){
         var character = (Character)characterIndex;
         return getCharacterButton(character);
     }
-    //[Command]
     public void CmdSelectCharacter(int character){
-        GameLobbyManager.localLobbyPlayer.CmdSelectCharacter(gameObject, character);
+        GameLobbyManager.localLobbyPlayer.CmdSelectCharacter(character);
     }
-
-    /*[ClientRpc]
-    public void RpcFillCharacter(int character){
-        print("vrau");
-        buttons[character].interactable = false;
-    }*/
 }
 public enum Character {Detective = 0,  Geologist = 1, Archeologist = 2}
 
