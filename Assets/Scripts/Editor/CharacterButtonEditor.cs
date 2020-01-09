@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine.UI;
 using UnityEngine;
 
-[CustomEditor(typeof(CharacterButton))]
+//[CustomEditor(typeof(CharacterButton))]
 [CanEditMultipleObjects]
 public class CharacterButtonEditor: Editor{
     SerializedProperty m_baseColor;

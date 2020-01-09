@@ -23,11 +23,23 @@ public class LobbyPlayer: NetworkLobbyPlayer{
     }
 
     [TargetRpc]
-    void TargetHandleUI(NetworkConnection target, int character, bool fill){
-        Debug.Log("Rpc received by " + connectionToClient);
+    void TargetLocalUI(NetworkConnection target, int character, bool select){
         var btn = GameLobbyManager.characterSelection.getCharacterButton(character);
-        print(fill);
-        btn.Toggle(fill);
+        if(select){
+            btn.Select();
+        }else{
+            btn.Deselect();
+        }
+    }
+
+    [TargetRpc]
+    void TargetTeamUI(NetworkConnection target, int character, bool active){
+        var btn = GameLobbyManager.characterSelection.getCharacterButton(character);
+        if(active){
+            btn.Deselect();
+        }else{
+            btn.Disable();
+        }
     }
 
     [Command]
@@ -57,8 +69,8 @@ public class LobbyPlayer: NetworkLobbyPlayer{
     void DeselectCharacter(int character){
         print("aqui");
         UpdateDictionary(character, null);
-        UpdateOtherPlayersUI(character, true, connectionToClient); //Libera botão para outros jogadores
-        TargetHandleUI(connectionToClient, character, false); //Desceleciona botão para requerente
+        UpdateTeamUI(character, true, connectionToClient); //Libera botão para outros jogadores
+        TargetLocalUI(connectionToClient, character, false); //Desceleciona botão para requerente
     }
 
     void SelectCharacter(int character){
@@ -73,36 +85,15 @@ public class LobbyPlayer: NetworkLobbyPlayer{
         }
 
         UpdateDictionary(character, this);
-        UpdateOtherPlayersUI(character, false, connectionToClient);
-        TargetHandleUI(connectionToClient, character, true);
+        UpdateTeamUI(character, false, connectionToClient);
+        TargetLocalUI(connectionToClient, character, true);
     }
-    /*void HandleSelection(int character, LobbyPlayer player, LobbyPlayer query){
-        Character? cur = null;
-        bool fill = true;
-        foreach(var kvp in GameLobbyManager.characterSelection.playerDictionary){
-            if(kvp.Value == this){
-                cur = kvp.Key;
-            }
-        }
-        if(cur != null && query == null){ //jogador já tem personagem selecionado, que é liberado
-            UpdateDictionary((int) cur, null);
-            UpdateUI((int) cur, true, connectionToClient);
-        }
-        if(query == null) fill = false;
-        if(player == null){
-            this.readyToBegin = false;
-        }else{
-            this.readyToBegin = true;
-        }
-        UpdateDictionary(character, player);
-        UpdateUI(character, fill, connectionToClient);
-    }*/
 
     
-    void UpdateOtherPlayersUI(int character, bool fill, NetworkConnection sender){
+    void UpdateTeamUI(int character, bool active, NetworkConnection sender){
         foreach(var kvp in NetworkServer.connections){
             if(kvp.Value == sender) continue;
-            TargetHandleUI(kvp.Value, character, fill);
+            TargetTeamUI(kvp.Value, character, active);
         }
 
     }
@@ -110,7 +101,6 @@ public class LobbyPlayer: NetworkLobbyPlayer{
     void UpdateDictionary(int charIndex, LobbyPlayer value){
         GameLobbyManager.characterSelection.playerDictionary[(Character)charIndex] = value; 
         var btn = GameLobbyManager.characterSelection.getCharacterButton(charIndex);
-        //btn.Toggle(value != null);
     }
 
 

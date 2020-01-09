@@ -13,7 +13,7 @@ public class CharacterButton : MonoBehaviour, IPointerClickHandler, IPointerUpHa
     public Color baseColor;
     public Color selectedColor;
     public Color unselectedColor;
-    public Color inactiveColor = Color.white;
+    public Color inactiveColor;
     public Color pressedColor;
     Tween transition;
 
@@ -27,7 +27,8 @@ public class CharacterButton : MonoBehaviour, IPointerClickHandler, IPointerUpHa
         graphic.canvasRenderer.SetColor(baseColor);
     }
 
-    public void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData){            
+    public void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData){   
+        print("Cliquei no "+ gameObject.name);         
         GameLobbyManager.characterSelection.CmdSelectCharacter((int)character);
     }
     public void OnPointerUp(PointerEventData eventData)
@@ -46,12 +47,16 @@ public class CharacterButton : MonoBehaviour, IPointerClickHandler, IPointerUpHa
         DoTransition(State.Unselected);
     }
 
+    public void Disable(){
+        DoTransition(State.Inactive);
+    }
+
     public void Toggle(bool toggle){
         print(toggle);
-        if(toggle){
+        if(!toggle){
             Select();
         }else{
-            Deselect();
+            Disable();
         }
     }
 

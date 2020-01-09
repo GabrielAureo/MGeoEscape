@@ -10,7 +10,7 @@ using DG.Tweening;
 public class ConnectScreen : NetworkBehaviour
 {
     [SerializeField] CanvasGroup nameScreen;
-    [SerializeField] CanvasGroup selectionScreen;
+    CanvasGroup selectionScreen;
     [SerializeField] TMP_InputField inputField;
     [SerializeField] Button acceptButton;
 
@@ -20,8 +20,8 @@ public class ConnectScreen : NetworkBehaviour
     bool reveal;
 
 
-    void Start()
-    {
+    void Start(){
+        selectionScreen = GameLobbyManager.characterSelection.GetComponent<CanvasGroup>();
         reveal = false;
         selectionScreen.alpha = 0;
         selectionScreen.interactable = false;
@@ -29,6 +29,7 @@ public class ConnectScreen : NetworkBehaviour
         var submit = new TMP_InputField.SubmitEvent();
         submit.AddListener(ConfirmName);
         inputField.onSubmit = submit;
+        
     }
 
     // Update is called once per frame
