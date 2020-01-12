@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Detective BG
+  m_Name: Default
   m_Shader: {fileID: -6465566751694194690, guid: 2509dda4588a8124db90cfeccffa2dcb,
     type: 3}
   m_ShaderKeywords: 
@@ -21,22 +21,13 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Texture2D_BFA9CB3F:
-        m_Texture: {fileID: 2800000, guid: 803c2d8fa2dc57546928820a4b0ea05c, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_3F3E3D6: 0
-    - Vector1_5B2A128B: 1
-    - Vector1_6BD46D14: 0
-    - Vector1_7D8DE024: 6.17
-    - Vector1_7E40E256: 3
+    - Vector1_5B2A128B: 2
+    - Vector1_7D8DE024: 5
     - Vector1_81740309: 0
     - Vector1_91214B53: 1
-    - Vector1_9C871483: 133.36
-    - Vector1_B4D589DD: 1
     m_Colors:
-    - Color_2ACE8A5B: {r: 0.9339623, g: 0.3472883, b: 0.2511125, a: 0}
-    - Color_4F9F1D8C: {r: 1, g: 0, b: 0, a: 0}
-    - Color_580A3B64: {r: 0.6415094, g: 0, b: 0, a: 0}
-    - Vector2_8A6CAF49: {r: 9, g: 18, b: 0, a: 0}
-    - Vector2_AC38D326: {r: 1, g: 2, b: 0, a: 0}
+    - Color_580A3B64: {r: 0.7169812, g: 0.37169227, b: 0, a: 0}

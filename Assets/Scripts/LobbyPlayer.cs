@@ -86,6 +86,7 @@ public class LobbyPlayer: NetworkLobbyPlayer{
 
         UpdateDictionary(character, this);
         UpdateTeamUI(character, false, connectionToClient);
+        GameLobbyManager.characterSelection.ChangeSelectionBackground(character);
         TargetLocalUI(connectionToClient, character, true);
     }
 

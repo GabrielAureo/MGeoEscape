@@ -338,7 +338,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &228696324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2116,7 +2116,7 @@ MonoBehaviour:
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 5a7e2ae94553f6546ae4cf7f75710443, type: 2}
+  m_Material: {fileID: 2100000, guid: 6b04f653454b017439f73cbd2d661ee3, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
@@ -2805,9 +2805,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0
+  backgroundRenderer: {fileID: 1385480441}
   detectiveButton: {fileID: 1019851826}
   geologistButton: {fileID: 455468758}
   archeologistButton: {fileID: 535662191}
+  detectiveMaterial: {fileID: 2100000, guid: 5a7e2ae94553f6546ae4cf7f75710443, type: 2}
+  geologistMaterial: {fileID: 2100000, guid: 517ae7afd5ea73c44b5b74b9a50f951d, type: 2}
+  archeologistMaterial: {fileID: 2100000, guid: 7352cb75029269c4fbf43468897d6c3f,
+    type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 6b04f653454b017439f73cbd2d661ee3, type: 2}
 --- !u!114 &1912756804
 MonoBehaviour:
   m_ObjectHideFlags: 0
