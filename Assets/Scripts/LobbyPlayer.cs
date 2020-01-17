@@ -27,8 +27,11 @@ public class LobbyPlayer: NetworkLobbyPlayer{
         var btn = GameLobbyManager.characterSelection.getCharacterButton(character);
         if(select){
             btn.Select();
+            GameLobbyManager.characterSelection.ChangeSelectionBackground(character);
         }else{
             btn.Deselect();
+            GameLobbyManager.characterSelection.ChangeSelectionBackground(-1);
+
         }
     }
 
@@ -58,16 +61,13 @@ public class LobbyPlayer: NetworkLobbyPlayer{
         print(query);
 
         if(query == this){ //jogador descelecionou seu personagem
-            //HandleSelection(character, null, query);
             DeselectCharacter(character);
         }else if(query == null){  //jogador sselecionou posição vazia
-            //HandleSelection(character, this, query);
             SelectCharacter(character);
         }
     }
 
     void DeselectCharacter(int character){
-        print("aqui");
         UpdateDictionary(character, null);
         UpdateTeamUI(character, true, connectionToClient); //Libera botão para outros jogadores
         TargetLocalUI(connectionToClient, character, false); //Desceleciona botão para requerente
@@ -86,7 +86,6 @@ public class LobbyPlayer: NetworkLobbyPlayer{
 
         UpdateDictionary(character, this);
         UpdateTeamUI(character, false, connectionToClient);
-        GameLobbyManager.characterSelection.ChangeSelectionBackground(character);
         TargetLocalUI(connectionToClient, character, true);
     }
 

@@ -87,10 +87,8 @@ public class ARTouchController : MonoBehaviour{
     }
 
     private Ray CameraRay(){
-        Vector2 inputPosition;
-        #if UNITY_EDITOR
-        inputPosition = Input.mousePosition;
-        #elif UNITY_ANDROID
+        Vector2 inputPosition = Input.mousePosition;      
+        #if UNITY_ANDROID
         inputPosition = Input.touches[0].position;
         #endif
 
