@@ -13,10 +13,11 @@ public class Movable : MonoBehaviour
     private Vector3 originalPosition;
     [HideInInspector] public Rigidbody rb;
     private Material material;
-    TrackableBehaviour trackableBehaviour;
     [HideInInspector]
     public Mesh mesh;
     public UnityAction<ARInteractable, ARInteractable> releaseAction;
+    [HideInInspector]
+    public bool released;
 
     void Start(){
         originalParent = transform.parent;
@@ -25,12 +26,13 @@ public class Movable : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         mesh = GetComponent<MeshFilter>().sharedMesh;
         material = GetComponent<MeshRenderer>().material;
-        trackableBehaviour = GetComponentInParent<TrackableBehaviour>();
+        released = false;
     }
 
     public void onHold(){
         print("holding");
         material.DOFade(0.5f,"_BaseColor", .2f);
+        released = false;
         // transform.parent = null;
         // //transform.rotation = Quaternion.identity;
         // transform.rotation = originalRotation;
@@ -44,25 +46,12 @@ public class Movable : MonoBehaviour
         // transform.localRotation = originalRotation;
         // transform.localPosition = originalPosition;
         rb.isKinematic = true;
-        if(trackableBehaviour?.CurrentStatus == TrackableBehaviour.Status.NO_POSE){
-            DisableObject();
-        }
+        released = true;
         //releaseAction(dropInteractable);
         
     }
 
-    private void DisableObject(){
-        var rendererComponents = GetComponentsInChildren<Renderer>(true);
-        var colliderComponents = GetComponentsInChildren<Collider>(true);
-
-        // Enable rendering:
-        foreach (var component in rendererComponents)
-            component.enabled = false;
-
-        // Enable colliders:
-        foreach (var component in colliderComponents)
-            component.enabled = false;
-    }
+    
 
  
 }

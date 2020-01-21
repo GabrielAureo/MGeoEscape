@@ -1,7 +1,7 @@
 using UnityEngine;
 using Mirror;
 
-public class LobbyPlayer: NetworkLobbyPlayer{
+public class LobbyPlayer: NetworkRoomPlayer{
     [SyncVar(hook = "RenameGameObject")]
     public string playerName;
 
@@ -27,8 +27,10 @@ public class LobbyPlayer: NetworkLobbyPlayer{
         var btn = GameLobbyManager.characterSelection.getCharacterButton(character);
         if(select){
             btn.Select();
+            GameLobbyManager.characterSelection.ChangeSelectionBackground(character);
         }else{
             btn.Deselect();
+            GameLobbyManager.characterSelection.ChangeSelectionBackground(-1);
         }
     }
 
@@ -86,7 +88,7 @@ public class LobbyPlayer: NetworkLobbyPlayer{
 
         UpdateDictionary(character, this);
         UpdateTeamUI(character, false, connectionToClient);
-        GameLobbyManager.characterSelection.ChangeSelectionBackground(character);
+        
         TargetLocalUI(connectionToClient, character, true);
     }
 

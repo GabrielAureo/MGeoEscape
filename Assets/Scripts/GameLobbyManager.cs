@@ -1,7 +1,7 @@
 using UnityEngine;
 using Mirror;
 
-public class GameLobbyManager: NetworkLobbyManager{
+public class GameLobbyManager: NetworkRoomManager{
 
     public static LobbyPlayer localLobbyPlayer;
     public static CharacterSelection characterSelection;
@@ -11,7 +11,7 @@ public class GameLobbyManager: NetworkLobbyManager{
         characterSelection = m_characterSelection;
     }    
 
-    public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
+    public override bool OnRoomServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
     {
         PlayerController player = gamePlayer.GetComponent<PlayerController>();
         LobbyPlayer _lobbyPlayer = lobbyPlayer.GetComponent<LobbyPlayer>();
@@ -28,9 +28,9 @@ public class GameLobbyManager: NetworkLobbyManager{
         return true;
     }
 
-    public override void OnLobbyServerPlayersReady()
+    public override void OnRoomServerPlayersReady()
     {
-        base.OnLobbyServerPlayersReady();
+        base.OnRoomServerPlayersReady();
     }
 
 }
