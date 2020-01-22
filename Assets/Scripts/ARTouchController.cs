@@ -27,15 +27,6 @@ public class ARTouchController : MonoBehaviour{
     void Update()
     {
         Ray ray = CameraRay();
-        #if UNITY_ANDROID
-            if(Input.touchCount > 0){
-                InputStateMachine(ray);
-
-                if(Input.touches[0].phase == TouchPhase.Ended){
-                    Release(ray);
-                }
-            }
-        #endif
 
         #if UNITY_EDITOR
         var input = Input.GetMouseButton(0);
@@ -47,14 +38,30 @@ public class ARTouchController : MonoBehaviour{
             Release(ray);
         }
         #endif
+
+        
+        #if UNITY_ANDROID
+            if(Input.touchCount > 0){
+                InputStateMachine(ray);
+
+                if(Input.touches[0].phase == TouchPhase.Ended){
+                    Release(ray);
+                }
+            }
+        #endif
+
+        
+        
+        
     }
 
     private void InputStateMachine(Ray ray){
         RaycastHit hit;
         if(currentStatus == Status.NO_TOUCH){
             timer = 0.0f;
-            if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
+            if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Default"))){
                 selectedInteractable = hit.transform.GetComponent<ARInteractable>();
+                
                 if(selectedInteractable is Socket){
                     lastSocket = (Socket)selectedInteractable;
                 }
@@ -107,6 +114,7 @@ public class ARTouchController : MonoBehaviour{
 
         if(currentStatus == Status.WAITING){
             selectedInteractable?.onTap(this);
+           
         }
         selectedInteractable?.onRelease(this);
 
