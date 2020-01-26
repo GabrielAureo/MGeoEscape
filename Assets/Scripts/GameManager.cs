@@ -1,6 +1,7 @@
 using UnityEngine;
+using Mirror;
 
-public class GameManager : Singleton<GameManager>{
+public class GameManager : NetworkManager{
 
     public ARTouchController inputController;
     

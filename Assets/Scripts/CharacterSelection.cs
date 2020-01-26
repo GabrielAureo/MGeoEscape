@@ -92,10 +92,10 @@ public class CharacterSelection : NetworkBehaviour{
         return getCharacterButton(character);
     }
     public void CmdSelectCharacter(int character){
-        GameLobbyManager.localLobbyPlayer.CmdSelectCharacter(character);
+        GameLobbyManager.localLobbyPlayer.SelectCharacter(character);
     }
 }
-public enum Character {Detective = 0,  Geologist = 1, Archeologist = 2}
+public enum Character {Detective = (1 << 0),  Geologist = (1 << 1), Archeologist = (1 << 2)}
 
 
 

@@ -1,65 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-public class SafePuzzle : MonoBehaviour
-{
-    public List<PetrolItem> items;
+using Mirror;
+using System.Collections;
+using System.Collections.Generic;
 
-    [Header("Components")]
-    [SerializeField] Animator doorAnimator;
-    [SerializeField] Transform buttonsObject;
-    [SerializeField] TextMeshPro visorText;
-    [SerializeField] AudioSource audioPlayer;
-    [Header("Sound Effects")]
-    [SerializeField] AudioClip keyPressSFX;
-    [SerializeField] AudioClip lockOpenSFX;
-    [SerializeField] AudioClip wrongPasswordSFX;
-    string password;
-    string input;
-    // Start is called before the first frame update
-    void Start()
+
+public class SafePuzzle: Puzzle{
+    [SerializeField] Safe m_safe = null;
+    [SerializeField] GameObject[] m_stickers = null;
+    [SerializeField] List<PetrolItem> m_items = null;
+
+    public override void Initialize()
     {
         GeneratePassword();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void GeneratePassword(){
-        password = "";
-        for(int i =0; i < 3; i++){
-            password += items[Random.Range(0, items.Count)].value.ToString();
+    private void GeneratePassword(){
+        string password = "";
+        for(int i = 0; i < m_stickers.Length; i++){
+            var item = m_items[Random.Range(0, m_items.Count)];
+            password += item.value.ToString();
+            m_stickers[i].GetComponent<MeshRenderer>().material.SetTexture("_BaseMap", item.stickerTexture);
         }
+        m_safe.password = password;
         Debug.Log("Safe Password: " + password);
     }
 
-    public void Input(int value){
-        input += value.ToString();
-        visorText.text = input;
-        audioPlayer.PlayOneShot(keyPressSFX);
-        if(input.Length == password.Length) ParseInput();
-    }
 
-    private void ParseInput(){
-        if(input == password){
-            Unlock();
-            audioPlayer.PlayOneShot(lockOpenSFX);
-        }else{
-            audioPlayer.PlayOneShot(wrongPasswordSFX);
-            input = "";
-            visorText.text = input;
-        }
-    }
-
-    private void Unlock(){
-        doorAnimator.SetTrigger("Open");
-        var triggers = buttonsObject.GetComponentsInChildren<Collider>();
-        foreach(var trigger in triggers) trigger.enabled = false;
-
-
-    }
 }

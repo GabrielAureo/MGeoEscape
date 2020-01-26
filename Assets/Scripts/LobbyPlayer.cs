@@ -28,9 +28,11 @@ public class LobbyPlayer: NetworkRoomPlayer{
         if(select){
             btn.Select();
             GameLobbyManager.characterSelection.ChangeSelectionBackground(character);
+            CmdChangeReadyState(true);
         }else{
             btn.Deselect();
             GameLobbyManager.characterSelection.ChangeSelectionBackground(-1);
+            CmdChangeReadyState(false);
         }
     }
 
@@ -53,7 +55,9 @@ public class LobbyPlayer: NetworkRoomPlayer{
         gameObject.name = "Player " + name;
     }
 
-
+    public void SelectCharacter(int character){
+        CmdSelectCharacter(character);
+    }
     [Command]
     public void CmdSelectCharacter(int character){
         var query = GameLobbyManager.characterSelection.playerDictionary[(Character)character];
@@ -61,21 +65,22 @@ public class LobbyPlayer: NetworkRoomPlayer{
 
         if(query == this){ //jogador descelecionou seu personagem
             //HandleSelection(character, null, query);
-            DeselectCharacter(character);
+            Deselect(character);
         }else if(query == null){  //jogador sselecionou posição vazia
             //HandleSelection(character, this, query);
-            SelectCharacter(character);
+            Select(character);
         }
+         
     }
 
-    void DeselectCharacter(int character){
+    void Deselect(int character){
         print("aqui");
         UpdateDictionary(character, null);
         UpdateTeamUI(character, true, connectionToClient); //Libera botão para outros jogadores
         TargetLocalUI(connectionToClient, character, false); //Desceleciona botão para requerente
     }
 
-    void SelectCharacter(int character){
+    void Select(int character){
         Character? cur = null;
         foreach(var kvp in GameLobbyManager.characterSelection.playerDictionary){
             if(kvp.Value == this){
@@ -83,7 +88,7 @@ public class LobbyPlayer: NetworkRoomPlayer{
             }
         }
         if(cur != null){ //Jogador já tem personagem selecionado e eatá escolhendo outro
-            DeselectCharacter((int) cur);
+            Deselect((int) cur);
         }
 
         UpdateDictionary(character, this);

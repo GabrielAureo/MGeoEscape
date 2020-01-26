@@ -1,5 +1,5 @@
 using UnityEngine;
 using Mirror;
-public class PlayerController: NetworkBehaviour{
+public class OnlinePlayer: NetworkBehaviour{
     [SyncVar] public Character character;
 }

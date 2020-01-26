@@ -20,8 +20,8 @@ public class ConnectScreen : NetworkBehaviour
     bool reveal;
 
 
-    void Start(){
-        selectionScreen = GameLobbyManager.characterSelection.GetComponent<CanvasGroup>();
+    public override void OnStartClient(){
+        selectionScreen = GameObject.FindObjectOfType<CharacterSelection>().GetComponent<CanvasGroup>();
         reveal = false;
         selectionScreen.alpha = 0;
         selectionScreen.interactable = false;

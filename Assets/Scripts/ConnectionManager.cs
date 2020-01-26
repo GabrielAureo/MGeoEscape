@@ -5,26 +5,20 @@ using Mirror;
 
 public class ConnectionManager : MonoBehaviour{
 
+    bool connected;
+
     void Start(){
-        Connect();
-    }
-    void Connect(){
         #if UNITY_EDITOR
-        NetworkManager.singleton.StartHost();
-        #else
-        NetworkDiscovery.onReceivedServerResponse += (info)=>{
-            NetworkManager.singleton.networkAddress = info.EndPoint.Address.ToString();
-            NetworkManager.singleton.StartClient();
-            StopCoroutine(RefreshLAN());
-        };
-        StartCoroutine(RefreshLAN());
+            NetworkManager.singleton.StartHost();
         #endif
-        
     }
-    IEnumerator RefreshLAN(){
-        while(true){
-            NetworkDiscovery.SendBroadcast();
-            yield return new WaitForSeconds(1f);
-        }
+    void Update(){
+        #if UNITY_EDITOR
+            return;
+        #endif
+        if(!NetworkClient.active){
+            NetworkManager.singleton.StartClient();
+        }    
+        
     }
 }

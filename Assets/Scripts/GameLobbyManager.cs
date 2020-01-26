@@ -13,7 +13,7 @@ public class GameLobbyManager: NetworkRoomManager{
 
     public override bool OnRoomServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
     {
-        PlayerController player = gamePlayer.GetComponent<PlayerController>();
+        OnlinePlayer player = gamePlayer.GetComponent<OnlinePlayer>();
         LobbyPlayer _lobbyPlayer = lobbyPlayer.GetComponent<LobbyPlayer>();
         // var character = lobbyPlayer.GetComponent<LobbyPlayer>().cur_character;
         // if(character != null){
@@ -23,6 +23,7 @@ public class GameLobbyManager: NetworkRoomManager{
         foreach(var kvp in characterSelection.playerDictionary){
             if(kvp.Value == _lobbyPlayer){
                 player.character = kvp.Key;
+                break;
             }
         }
         return true;
