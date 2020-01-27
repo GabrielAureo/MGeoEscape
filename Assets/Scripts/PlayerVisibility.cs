@@ -1,13 +1,28 @@
 using UnityEngine;
 using Mirror;
 
-public class PlayerVisibility: NetworkBehaviour{
+public class PlayerVisibility: MonoBehaviour{
     [EnumFlag]
     [SerializeField] Character character;
+    
 
-    public override void OnStartClient(){
-        if(!character.HasFlag(NetworkServer.localConnection.identity.GetComponent<OnlinePlayer>().character)){
-            gameObject.SetActive(false);
+    public void Awake(){
+        CheckFlag(ClientScene.localPlayer);
+
+        LocalPlayerAnnouncer.OnLocalPlayerUpdated += (CheckFlag);
+    }
+
+    private void CheckFlag(NetworkIdentity localPlayer){
+        if(localPlayer != null){
+            var player = localPlayer.GetComponent<GamePlayer>();
+            if(player!= null && !character.HasFlag(player.character)){
+                gameObject.SetActive(false);
+            }
         }
+        
+    }
+
+    private void OnDestroy(){
+        LocalPlayerAnnouncer.OnLocalPlayerUpdated -= (CheckFlag);
     }
 }

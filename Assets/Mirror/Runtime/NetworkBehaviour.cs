@@ -772,7 +772,7 @@ namespace Mirror
         public virtual void OnStartClient() { }
 
         /// <summary>
-        /// Called when the local player object has been set up.
+        /// Called when the local player object has been set up. OnStartLocalPlayer is only called on scripts that are part of a game object that is the players object. 
         /// <para>This happens after OnStartClient(), as it is triggered by an ownership message from the server. This is an appropriate place to activate components or functionality that should only be active for the local player, such as cameras and input.</para>
         /// </summary>
         public virtual void OnStartLocalPlayer() { }

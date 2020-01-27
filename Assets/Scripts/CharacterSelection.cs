@@ -33,8 +33,8 @@ public class CharacterSelection : NetworkBehaviour{
         };
     }
 
-    public override void OnStartClient(){
-        base.OnStartLocalPlayer();
+    public void Awake(){
+
         GameLobbyManager.characterSelection = this;
     }
     public CharacterButton getCharacterButton(Character character){

@@ -54,13 +54,13 @@ public class Socket : ARInteractable
     }
 
     private void SetObject(Movable obj){
-        print(obj.name + " set to socket " + this.name);
+        //print(obj.name + " set to socket " + this.name);
         obj.transform.parent = transform;
         obj.transform.localPosition = Vector3.zero; // change this to offset
         obj.transform.localRotation = Quaternion.identity;
         currentObject = obj;
         obj.releaseAction = UnsetObject;
-        print(obj.releaseAction.Method.Name);
+        //print(obj.releaseAction.Method.Name);
     }
 
     private void UnsetObject(ARInteractable oldInteractable, ARInteractable newInteractable){
