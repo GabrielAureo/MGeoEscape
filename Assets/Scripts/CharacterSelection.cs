@@ -7,16 +7,16 @@ using DG.Tweening;
 public class CharacterSelection : NetworkBehaviour{
     Character chosenCharacter;
     [Header("UI Components")]
-    [SerializeField] CanvasRenderer backgroundRenderer;
-    [SerializeField] CharacterButton detectiveButton;
-    [SerializeField] CharacterButton geologistButton;
-    [SerializeField] CharacterButton archeologistButton;
+    [SerializeField] CanvasRenderer backgroundRenderer = null;
+    [SerializeField] CharacterButton detectiveButton = null;
+    [SerializeField] CharacterButton geologistButton = null;
+    [SerializeField] CharacterButton archeologistButton = null;
     
     [Header("Materials")]
-    [SerializeField] Material detectiveMaterial;
-    [SerializeField] Material geologistMaterial;
-    [SerializeField] Material archeologistMaterial;
-    [SerializeField] Material defaultMaterial;
+    [SerializeField] Material detectiveMaterial = null;
+    [SerializeField] Material geologistMaterial = null;
+    [SerializeField] Material archeologistMaterial = null;
+    [SerializeField] Material defaultMaterial = null;
     
 
     Tween fade;
@@ -35,7 +35,7 @@ public class CharacterSelection : NetworkBehaviour{
 
     public void Awake(){
 
-        GameLobbyManager.characterSelection = this;
+        GameManager.characterSelection = this;
     }
     public CharacterButton getCharacterButton(Character character){
         switch(character){
@@ -92,7 +92,7 @@ public class CharacterSelection : NetworkBehaviour{
         return getCharacterButton(character);
     }
     public void CmdSelectCharacter(int character){
-        GameLobbyManager.localLobbyPlayer.SelectCharacter(character);
+        GameManager.localLobbyPlayer.SelectCharacter(character);
     }
 }
 public enum Character {Detective = (1 << 0),  Geologist = (1 << 1), Archeologist = (1 << 2)}

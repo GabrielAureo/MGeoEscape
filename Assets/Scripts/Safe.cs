@@ -17,11 +17,12 @@ public class Safe : MonoBehaviour
     [SerializeField] AudioClip wrongPasswordSFX = null;
     [HideInInspector] public string password;
     string input;
-    // Start is called before the first frame update
+    
     public void Input(int value){
         input += value.ToString();
         visorText.text = input;
         audioPlayer.PlayOneShot(keyPressSFX);
+        Debug.Log("input: " + input + " password: " + password);
         if(input.Length == password.Length) ParseInput();
     }
 

@@ -10,4 +10,10 @@ public class LocalPlayerAnnouncer : NetworkBehaviour{
         base.OnStartLocalPlayer();
         OnLocalPlayerUpdated?.Invoke(base.netIdentity);
     }
+
+    private void OnDestroy(){
+        if(base.isLocalPlayer){
+            OnLocalPlayerUpdated?.Invoke(null);
+        }
+    }
 }

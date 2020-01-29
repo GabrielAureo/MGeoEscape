@@ -9,6 +9,7 @@ public class SafePuzzle: Puzzle{
     [SerializeField] GameObject[] m_stickers = null;
     [SerializeField] List<PetrolItem> m_items = null;
     public SyncListInt chosenItems  = new SyncListInt();
+    [SyncVar] private string generatedPassword;
 
     void Awake(){
     }
@@ -25,28 +26,20 @@ public class SafePuzzle: Puzzle{
             var item = m_items[index];
             chosenItems.Add(index);
             password += item.value.ToString();
-            
         }
-        m_safe.password = password;
-        Debug.Log("Safe Password: " + password);
+        generatedPassword = password;
     }
-
     public override void OnStartClient(){
-        // var conn_idx = NetworkClient.connection.connectionId;
-        // var item_idx = chosenItems[conn_idx];
-        // Debug.Log(conn_idx);
-
-        // m_stickers[conn_idx].GetComponent<MeshRenderer>().material.SetTexture("_BaseMap", m_items[item_idx].stickerTexture);
-        // SetStickers(GameLobbyManager.localGamePlayer.netIdentity);
-        Debug.Log("Print this fucking shit");
+        Debug.Log("Safe Password: " + generatedPassword);
+        m_safe.password = generatedPassword;
     }
 
     public void SetStickers(NetworkIdentity localPlayer){
-        print(localPlayer.connectionToServer);
-        var conn_idx = localPlayer.connectionToServer.connectionId;
-        var item_idx = chosenItems[conn_idx];
+        var player_char = (int)localPlayer.GetComponent<GamePlayer>().character;
+        var player_idx = player_char >> 1;
+        var item_idx = chosenItems[player_idx];
 
-        m_stickers[conn_idx].GetComponent<MeshRenderer>().material.SetTexture("_BaseMap", m_items[item_idx].stickerTexture);
+        m_stickers[player_idx].GetComponent<MeshRenderer>().material.SetTexture("_BaseMap", m_items[item_idx].stickerTexture);
     }
 
     public override void OnLocalPlayerReady(NetworkIdentity player)

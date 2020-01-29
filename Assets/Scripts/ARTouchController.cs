@@ -24,22 +24,10 @@ public class ARTouchController : MonoBehaviour{
         }
         return null;
     }
-    void Update()
+    public void HandleInput()
     {
         Ray ray = CameraRay();
 
-        #if UNITY_EDITOR
-        var input = Input.GetMouseButton(0);
-        if(input){
-          
-           InputStateMachine(ray);           
-        }
-        if(Input.GetMouseButtonUp(0)){
-            Release(ray);
-        }
-        #endif
-
-        
         #if UNITY_ANDROID
             if(Input.touchCount > 0){
                 InputStateMachine(ray);
@@ -48,10 +36,19 @@ public class ARTouchController : MonoBehaviour{
                     Release(ray);
                 }
             }
+            return;
         #endif
 
         
-        
+        var input = Input.GetMouseButton(0);
+        if(input){
+          
+           InputStateMachine(ray);           
+        }
+        if(Input.GetMouseButtonUp(0)){
+            Release(ray);
+        }
+
         
     }
 

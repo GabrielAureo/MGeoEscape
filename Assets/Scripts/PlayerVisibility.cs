@@ -10,11 +10,14 @@ public class PlayerVisibility: MonoBehaviour{
         CheckFlag(ClientScene.localPlayer);
 
         LocalPlayerAnnouncer.OnLocalPlayerUpdated += (CheckFlag);
+        
+        //CheckFlag(ClientScene.localPlayer);
     }
 
     private void CheckFlag(NetworkIdentity localPlayer){
         if(localPlayer != null){
             var player = localPlayer.GetComponent<GamePlayer>();
+            Debug.Log("Setting Visibility of " + gameObject.name + "for player:" + player);
             if(player!= null && !character.HasFlag(player.character)){
                 gameObject.SetActive(false);
             }

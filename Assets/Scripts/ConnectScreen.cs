@@ -21,7 +21,7 @@ public class ConnectScreen : NetworkBehaviour
 
 
     public override void OnStartClient(){
-        selectionScreen = GameLobbyManager.characterSelection.GetComponent<CanvasGroup>();
+        selectionScreen = GameManager.characterSelection.GetComponent<CanvasGroup>();
         reveal = false;
         selectionScreen.alpha = 0;
         selectionScreen.interactable = false;
@@ -59,6 +59,6 @@ public class ConnectScreen : NetworkBehaviour
         nameScreen.DOFade(0f, .2f).onComplete += ()=> nameScreen.interactable = false;
         selectionScreen.DOFade(1f, .2f).onComplete += ()=> selectionScreen.interactable = true;
         //GameLobbyManager.playerName = inputField.text;
-        GameLobbyManager.localLobbyPlayer.CmdChangeName(inputField.text);
+        GameManager.localLobbyPlayer.CmdChangeName(inputField.text);
     }
 }

@@ -29,7 +29,7 @@ public class CharacterButton : MonoBehaviour, IPointerClickHandler, IPointerUpHa
 
     public void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData){   
         //print("Cliquei no "+ gameObject.name);         
-        GameLobbyManager.characterSelection.CmdSelectCharacter((int)character);
+        GameManager.characterSelection.CmdSelectCharacter((int)character);
     }
     public void OnPointerUp(PointerEventData eventData)
     {

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Mirror;
 
-public class GameLobbyManager: NetworkRoomManager{
+public class GameManager: NetworkRoomManager{
 
     public static LobbyPlayer localLobbyPlayer;
     public static CharacterSelection characterSelection;

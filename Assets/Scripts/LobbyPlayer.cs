@@ -6,7 +6,7 @@ public class LobbyPlayer: NetworkRoomPlayer{
     public string playerName;
 
     public override void OnStartLocalPlayer(){
-        GameLobbyManager.localLobbyPlayer = this;
+        GameManager.localLobbyPlayer = this;
     }
 
     public override void OnStartClient(){
@@ -14,9 +14,9 @@ public class LobbyPlayer: NetworkRoomPlayer{
     }
 
     private void SetupUI(){
-        foreach(var kvp in GameLobbyManager.characterSelection.playerDictionary){
+        foreach(var kvp in GameManager.characterSelection.playerDictionary){
             if(kvp.Value != null){
-                var btn = GameLobbyManager.characterSelection.getCharacterButton(kvp.Key);
+                var btn = GameManager.characterSelection.getCharacterButton(kvp.Key);
                 btn.Toggle(false);
             }
         }
@@ -24,21 +24,21 @@ public class LobbyPlayer: NetworkRoomPlayer{
 
     [TargetRpc]
     void TargetLocalUI(NetworkConnection target, int character, bool select){
-        var btn = GameLobbyManager.characterSelection.getCharacterButton(character);
+        var btn = GameManager.characterSelection.getCharacterButton(character);
         if(select){
             btn.Select();
-            GameLobbyManager.characterSelection.ChangeSelectionBackground(character);
+            GameManager.characterSelection.ChangeSelectionBackground(character);
             CmdChangeReadyState(true);
         }else{
             btn.Deselect();
-            GameLobbyManager.characterSelection.ChangeSelectionBackground(-1);
+            GameManager.characterSelection.ChangeSelectionBackground(-1);
             CmdChangeReadyState(false);
         }
     }
 
     [TargetRpc]
     void TargetTeamUI(NetworkConnection target, int character, bool active){
-        var btn = GameLobbyManager.characterSelection.getCharacterButton(character);
+        var btn = GameManager.characterSelection.getCharacterButton(character);
         if(active){
             btn.Deselect();
         }else{
@@ -52,7 +52,7 @@ public class LobbyPlayer: NetworkRoomPlayer{
     }
 
     void RenameGameObject(string name){
-        gameObject.name = "Player " + name;
+        gameObject.name = "Lobby Player " + name;
     }
 
     public void SelectCharacter(int character){
@@ -60,7 +60,7 @@ public class LobbyPlayer: NetworkRoomPlayer{
     }
     [Command]
     public void CmdSelectCharacter(int character){
-        var query = GameLobbyManager.characterSelection.playerDictionary[(Character)character];
+        var query = GameManager.characterSelection.playerDictionary[(Character)character];
         print(query);
 
         if(query == this){ //jogador descelecionou seu personagem
@@ -82,7 +82,7 @@ public class LobbyPlayer: NetworkRoomPlayer{
 
     void Select(int character){
         Character? cur = null;
-        foreach(var kvp in GameLobbyManager.characterSelection.playerDictionary){
+        foreach(var kvp in GameManager.characterSelection.playerDictionary){
             if(kvp.Value == this){
                 cur = kvp.Key;
             }
@@ -107,8 +107,8 @@ public class LobbyPlayer: NetworkRoomPlayer{
     }
 
     void UpdateDictionary(int charIndex, LobbyPlayer value){
-        GameLobbyManager.characterSelection.playerDictionary[(Character)charIndex] = value; 
-        var btn = GameLobbyManager.characterSelection.getCharacterButton(charIndex);
+        GameManager.characterSelection.playerDictionary[(Character)charIndex] = value; 
+        var btn = GameManager.characterSelection.getCharacterButton(charIndex);
     }
 
 
