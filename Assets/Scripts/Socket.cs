@@ -81,7 +81,7 @@ public class Socket : ARInteractable
         if(currentObject == null) return;
         currentObject.onHold();
         currentObject.rb.isKinematic = false;
-        controller.HoldMovable(currentObject);
+        controller.movableController.HoldMovable(currentObject);
         currentObject = null;
     }
 
@@ -90,11 +90,11 @@ public class Socket : ARInteractable
         
     }
 
-    public override void onTarget(ARTouchController controller, Movable movable)
+    public override void onTarget(Movable movable)
     {
         TryTarget(movable);
     }
-    public override void onUntarget(ARTouchController controller, Movable movable){
+    public override void onUntarget(Movable movable){
         Untarget();
     }
 }

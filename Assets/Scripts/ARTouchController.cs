@@ -1,33 +1,44 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.Events;
 
 public class ARTouchController : MonoBehaviour{
-    public enum Status {HOLDING, WAITING, NO_TOUCH}
-    public Status currentStatus;
-    Status lastStatus;
+    [System.Serializable]
+    public sealed class TouchEvent : UnityEvent<ARTouchData>{}
+    //public ARTouchData.Status currentStatus;
+    //ARTouchData.Status lastStatus;
     float timer;
     public float holdThreshold = 0.2f;
     HingeJoint hinge;
-    ARInteractable selectedInteractable;
-    Socket lastSocket;
-    Movable currentMovable;
+
+    [HideInInspector] public Ray ray;
     ARInteractable targetInteractable;
+    [HideInInspector] public TouchEvent onTouch;
+    [HideInInspector] public TouchEvent onHold;
+    [HideInInspector] public TouchEvent onRelease;
+
+    public MovableController movableController;
+
+    public ARTouchData touchData;
 
     void Awake(){
         hinge = GetComponent<HingeJoint>();
-        currentStatus = Status.NO_TOUCH;
+        movableController = new MovableController();
+        movableController.SetupController(this, hinge);
+        touchData = new ARTouchData();
     }
-    public ARInteractable GetCurrentObject(){
-        if(currentStatus == Status.HOLDING){
+    /*public ARInteractable GetCurrentObject(){
+        if(touchData.currentStatus == ARTouchData.Status.HOLDING){
             return selectedInteractable;
         }
         return null;
-    }
+    }*/
     public void HandleInput()
     {
-        Ray ray = CameraRay();
-
+        
+        ray = CameraRay();
+        touchData.ray = ray;
         #if UNITY_ANDROID
             if(Input.touchCount > 0){
                 InputStateMachine(ray);
@@ -43,49 +54,52 @@ public class ARTouchController : MonoBehaviour{
         var input = Input.GetMouseButton(0);
         if(input){
           
-           InputStateMachine(ray);           
+           InputStateMachine();           
         }
         if(Input.GetMouseButtonUp(0)){
-            Release(ray);
+            Release();
         }
-
-        
     }
 
-    private void InputStateMachine(Ray ray){
+    private void InputStateMachine(){
         RaycastHit hit;
-        if(currentStatus == Status.NO_TOUCH){
+        if(touchData.currentStatus == ARTouchData.Status.NO_TOUCH){
             timer = 0.0f;
-            if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Default"))){
-                selectedInteractable = hit.transform.GetComponent<ARInteractable>();
+            if(Physics.Raycast(ray,out hit, Mathf.Infinity, 1<<LayerMask.NameToLayer("Default"))){
+                var selectedInteractable = hit.transform.GetComponent<ARInteractable>();
+                touchData.selectedInteractable = selectedInteractable;
+
+                onTouch.Invoke(touchData);
                 
-                if(selectedInteractable is Socket){
+                /*if(selectedInteractable is Socket){
                     lastSocket = (Socket)selectedInteractable;
-                }
+                }*/
             }
-            ChangeStatus(Status.WAITING);
+            ChangeStatus(touchData, ARTouchData.Status.WAITING);
         }
-        if(currentStatus == Status.HOLDING){
-            if(lastStatus == Status.WAITING){
-                selectedInteractable?.onHold(this);
-                ChangeStatus(Status.HOLDING);                
+        if(touchData.currentStatus == ARTouchData.Status.HOLDING){
+            if(touchData.lastStatus == ARTouchData.Status.WAITING){
+                touchData.selectedInteractable?.onHold(this);
+                ChangeStatus(touchData, ARTouchData.Status.HOLDING);                
             }
             Debug.DrawRay(ray.origin, ray.direction, Color.green);
+
+            onHold.Invoke(touchData);
             
-            if(currentMovable){
+            /*if(currentMovable){
                 if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
                     targetInteractable = hit.transform.GetComponent<ARInteractable>();
                     targetInteractable?.onTarget(this, currentMovable);
                 }else{
                     targetInteractable?.onUntarget(this,currentMovable);
                 }
-            }
+            }*/
         }
 
-        if(currentStatus == Status.WAITING){
+        if(touchData.currentStatus == ARTouchData.Status.WAITING){
             timer+=Time.deltaTime;
             if(timer >= holdThreshold){
-                ChangeStatus(Status.HOLDING);
+                ChangeStatus(touchData, ARTouchData.Status.HOLDING);
             }
         }
     }
@@ -103,52 +117,50 @@ public class ARTouchController : MonoBehaviour{
         
     }
 
-    private void Release(Ray ray){
-        RaycastHit hit;
-        if(lastStatus == Status.HOLDING){
-            targetInteractable?.onUntarget(this,currentMovable);
-        }
+    private void Release(){
+        //RaycastHit hit;
+        onRelease.Invoke(touchData);
 
-        if(currentStatus == Status.WAITING){
-            selectedInteractable?.onTap(this);
+        if(touchData.currentStatus == ARTouchData.Status.WAITING){
+            touchData.selectedInteractable?.onTap(this);
            
         }
-        selectedInteractable?.onRelease(this);
+       touchData.selectedInteractable?.onRelease(this);
 
-        if(currentMovable){
+        /*if(currentMovable){
             Socket target = (Socket) selectedInteractable;
-            if(Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Sockets"))){
+            if(Physics.Raycast(touchData.ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Sockets"))){
                 target = hit.transform.GetComponent<Socket>();
             }
            
             ReleaseMovable(target);            
             
-        }
-        selectedInteractable = null;
-        ChangeStatus(Status.NO_TOUCH);
+        }*/
+         touchData.selectedInteractable = null;
+        ChangeStatus(touchData, ARTouchData.Status.NO_TOUCH);
     }
 
-    private void ChangeStatus(Status newStatus){
-        lastStatus = currentStatus;
-        currentStatus = newStatus;
+    private void ChangeStatus(ARTouchData touchData, ARTouchData.Status newStatus){
+        touchData.lastStatus = touchData.currentStatus;
+        touchData.currentStatus = newStatus;
     }
 
    
-    public void HoldMovable(Movable movable){
-        currentMovable = movable;
-        hinge.connectedBody = movable.rb;
-        movable.transform.parent = null;
-    }
+    // public void HoldMovable(Movable movable){
+    //     currentMovable = movable;
+    //     hinge.connectedBody = movable.rb;
+    //     movable.transform.parent = null;
+    // }
 
-    public void ReleaseMovable(Socket target){
-        currentMovable.rb.isKinematic = true;
-        var placed = target.TryPlaceObject(currentMovable);
-        if(!placed){
-            lastSocket.TryPlaceObject(currentMovable);
-        }
-        lastSocket = null;
-        currentMovable = null;
-        hinge.connectedBody = null;
-    }
+    // public void ReleaseMovable(Socket target){
+    //     currentMovable.rb.isKinematic = true;
+    //     var placed = target.TryPlaceObject(currentMovable);
+    //     if(!placed){
+    //         lastSocket.TryPlaceObject(currentMovable);
+    //     }
+    //     lastSocket = null;
+    //     currentMovable = null;
+    //     hinge.connectedBody = null;
+    // }
 
 }

@@ -5,13 +5,8 @@ using System;
 
 
 public class BuildScript{
-    #if UNITY_STANDALONE_WIN || UNITY_EDITOR
-        [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
-        private static extern bool SetWindowPos(IntPtr hwnd, int hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
-    #endif
-
     [MenuItem("File/Build Standalone")]
-    public static void PerformBuild(){
+    public static void PerformWindowsBuild(){
         var report = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, "./Builds/MGeoEscape.exe", BuildTarget.StandaloneWindows64,  BuildOptions.Development);
         while(BuildPipeline.isBuildingPlayer){} 
         if(report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded){
@@ -19,7 +14,7 @@ public class BuildScript{
         }
         
     }
-    [MenuItem("File/Run Build")]
+    [MenuItem("File/Run Standalone Build")]
     public static void Run(){
         var rootPath = System.IO.Directory.GetCurrentDirectory();
         var path = System.IO.Path.Combine(rootPath, "Builds\\MGeoEscape.exe");
@@ -34,5 +29,10 @@ public class BuildScript{
         
     }
 
+    [MenuItem("File/Build Android")]
+    public static void PerformAndroidBuild(){
+        UnityEngine.Debug.Log(EditorApplication.applicationContentsPath);
+        var adbPath = System.IO.Path.Combine(EditorApplication.applicationContentsPath, "PlaybackEngines\\AndroidPlayer\\SDK\\platform-tools\\adb.exe")
+    }
 
 }
