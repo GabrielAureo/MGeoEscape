@@ -22,6 +22,7 @@ public class GamePlayer: NetworkBehaviour{
     void Update(){
         if(!isLocalPlayer) return;
         touchController.HandleInput();
+        transform.position = Camera.main.transform.position;
 
     }
     

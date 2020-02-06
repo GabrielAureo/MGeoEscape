@@ -10,10 +10,8 @@ public class ARTouchController : MonoBehaviour{
     //ARTouchData.Status lastStatus;
     float timer;
     public float holdThreshold = 0.2f;
-    HingeJoint hinge;
 
     [HideInInspector] public Ray ray;
-    ARInteractable targetInteractable;
     [HideInInspector] public TouchEvent onTouch;
     [HideInInspector] public TouchEvent onHold;
     [HideInInspector] public TouchEvent onRelease;
@@ -23,7 +21,7 @@ public class ARTouchController : MonoBehaviour{
     public ARTouchData touchData;
 
     void Awake(){
-        hinge = GetComponent<HingeJoint>();
+        var hinge = GetComponent<HingeJoint>();
         movableController = new MovableController();
         movableController.SetupController(this, hinge);
         touchData = new ARTouchData();
@@ -79,7 +77,7 @@ public class ARTouchController : MonoBehaviour{
         }
         if(touchData.currentStatus == ARTouchData.Status.HOLDING){
             if(touchData.lastStatus == ARTouchData.Status.WAITING){
-                touchData.selectedInteractable?.onHold(this);
+                touchData.selectedInteractable?.onHold(touchData);
                 ChangeStatus(touchData, ARTouchData.Status.HOLDING);                
             }
             Debug.DrawRay(ray.origin, ray.direction, Color.green);
@@ -122,10 +120,10 @@ public class ARTouchController : MonoBehaviour{
         onRelease.Invoke(touchData);
 
         if(touchData.currentStatus == ARTouchData.Status.WAITING){
-            touchData.selectedInteractable?.onTap(this);
+            touchData.selectedInteractable?.onTap(touchData);
            
         }
-       touchData.selectedInteractable?.onRelease(this);
+       touchData.selectedInteractable?.onRelease(touchData);
 
         /*if(currentMovable){
             Socket target = (Socket) selectedInteractable;

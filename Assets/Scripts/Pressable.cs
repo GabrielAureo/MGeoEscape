@@ -3,7 +3,7 @@ using UnityEngine.Events;
 public class Pressable : ARInteractable
 {
     public UnityEvent pressEvent;
-    public override void onTap(ARTouchController controller)
+    public override void onTap(ARTouchData touchData)
     {
         pressEvent.Invoke();
     }

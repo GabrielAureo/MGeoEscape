@@ -29,10 +29,4 @@ public class BuildScript{
         
     }
 
-    [MenuItem("File/Build Android")]
-    public static void PerformAndroidBuild(){
-        UnityEngine.Debug.Log(EditorApplication.applicationContentsPath);
-        var adbPath = System.IO.Path.Combine(EditorApplication.applicationContentsPath, "PlaybackEngines\\AndroidPlayer\\SDK\\platform-tools\\adb.exe")
-    }
-
 }

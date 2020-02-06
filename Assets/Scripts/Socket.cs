@@ -71,21 +71,21 @@ public class Socket : ARInteractable
         }
     }
 
-    public override void onTap(ARTouchController controller)
+    public override void onTap(ARTouchData touchData)
     {
         
     }
 
-    public override void onHold(ARTouchController controller)
+    public override void onHold(ARTouchData touchData)
     {
         if(currentObject == null) return;
         currentObject.onHold();
         currentObject.rb.isKinematic = false;
-        controller.movableController.HoldMovable(currentObject);
+        //controller.movableController.HoldMovable(currentObject);
         currentObject = null;
     }
 
-    public override void onRelease(ARTouchController controller)
+    public override void onRelease(ARTouchData touchData)
     {
         
     }

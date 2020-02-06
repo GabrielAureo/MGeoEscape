@@ -18,14 +18,20 @@ public class MovableController{
 
     void TouchSocket(ARTouchData touchData){
         Debug.Log("Touch phase");
+        Debug.Log(touchData.selectedInteractable);
         if(touchData.selectedInteractable is Socket){
-            lastSocket = (Socket)touchData.selectedInteractable;
+            var socket = touchData.selectedInteractable as Socket;
+            lastSocket = socket;
+            currentMovable = socket.currentObject;
         }
     }
 
     void CheckTarget(ARTouchData touchData){
         Debug.Log("Hold phase");
         if(currentMovable == null) return;
+        Debug.Log(currentMovable);
+
+        HoldMovable(currentMovable);
 
         RaycastHit hit;
         if(Physics.Raycast(touchData.ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
