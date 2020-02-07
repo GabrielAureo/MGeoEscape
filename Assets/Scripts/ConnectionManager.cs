@@ -13,6 +13,9 @@ public class ConnectionManager : MonoBehaviour{
         #endif
     }
     void Update(){
+        #if UNITY_ANDROID && !UNITY_EDITOR
+            
+        #endif
         #if UNITY_EDITOR
             return;
         #endif
