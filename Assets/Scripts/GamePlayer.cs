@@ -5,7 +5,7 @@ public class GamePlayer: NetworkBehaviour{
     [HideInInspector] public string playerName;
     [HideInInspector] [SyncVar] public Character character;
 
-    [SerializeField] ARTouchController touchController;
+    [SerializeField] ARTouchController touchController = null;
 
     [Command]
     public void CmdPlayerReady(){

@@ -34,21 +34,22 @@ public class ARTouchController : MonoBehaviour{
     }*/
     public void HandleInput()
     {
-        
-        ray = CameraRay();
-        touchData.ray = ray;
-        #if UNITY_ANDROID
+        #if UNITY_ANDROID && !UNITY_EDITOR
+            
             if(Input.touchCount > 0){
-                InputStateMachine(ray);
+                ray = CameraRay();
+                touchData.ray = ray;
+                InputStateMachine();
 
                 if(Input.touches[0].phase == TouchPhase.Ended){
-                    Release(ray);
+                    Release();
                 }
             }
             return;
         #endif
 
-        
+        ray = CameraRay();
+        touchData.ray = ray;
         var input = Input.GetMouseButton(0);
         if(input){
           
@@ -104,8 +105,8 @@ public class ARTouchController : MonoBehaviour{
 
     private Ray CameraRay(){
         Vector2 inputPosition = Input.mousePosition;
-        #if UNITY_ANDROID
-        inputPosition = Input.touches[0].position;
+        #if UNITY_ANDROID && !UNITY_EDITOR
+            inputPosition = Input.touches[0].position;
         #endif
 
         var wrldPos = Camera.main.ScreenToWorldPoint(new Vector3(inputPosition.x, inputPosition.y, 1.35f));

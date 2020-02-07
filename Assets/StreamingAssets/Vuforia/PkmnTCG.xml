@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="meowth" size="1.000000 0.657500" />
+    <ImageTarget name="doduo" size="1.000000 0.652412" />
+    <ImageTarget name="eevee" size="1.000000 0.658915" />
+    <ImageTarget name="hoothoot" size="1.000000 0.624776" />
+    <ImageTarget name="bunnelby" size="1.000000 0.661685" />
+  </Tracking>
+</QCARConfig>

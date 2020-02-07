@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2639386183063929690}
   - component: {fileID: 7678060925501688504}
   - component: {fileID: 7119489911690733988}
+  - component: {fileID: 6016877799460190656}
   m_Layer: 0
   m_Name: OnlinePlayer
   m_TagString: Untagged
@@ -80,6 +81,18 @@ MonoBehaviour:
   playerName: 
   character: 0
   touchController: {fileID: 3377005378713223696}
+--- !u!114 &6016877799460190656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2244715815718480842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ac728aeb595934fbd2ea80243e1fd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6522793632032611080
 PrefabInstance:
   m_ObjectHideFlags: 0
