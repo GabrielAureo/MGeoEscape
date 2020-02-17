@@ -41,5 +41,5 @@ MonoBehaviour:
     autoStartTracker: 0
   webcam:
     deviceNameSetInEditor: EasyCamera
-    turnOffWebCam: 0
+    turnOffWebCam: 1
     renderTextureLayer: 30

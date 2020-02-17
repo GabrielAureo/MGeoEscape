@@ -30,7 +30,7 @@ namespace Mirror
         public int offsetX = 5;
         public int offsetY = 150;
         public int width = 500, height = 400;
-        [Range(1, 5)] public float refreshInterval = 3f;
+        [Range(0, 5)] public float refreshInterval = 3f;
 
         public System.Action<NetworkDiscovery.DiscoveryInfo> connectAction;
 

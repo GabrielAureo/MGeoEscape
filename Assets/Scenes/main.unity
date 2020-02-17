@@ -479,7 +479,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1409293360}
+      objectReference: {fileID: 1441717722}
     - target: {fileID: 1827257799680092992, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
       propertyPath: m_RootOrder
@@ -513,7 +513,7 @@ PrefabInstance:
     - target: {fileID: 2118283833123081191, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.387002
+      value: -0.534
       objectReference: {fileID: 0}
     - target: {fileID: 2118283833123081191, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
@@ -538,7 +538,7 @@ PrefabInstance:
     - target: {fileID: 2118283833123081191, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.17016205
+      value: 0.17
       objectReference: {fileID: 0}
     - target: {fileID: 2118283833123081191, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
@@ -555,6 +555,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -270.945
       objectReference: {fileID: 0}
+    - target: {fileID: 2118283833123081191, guid: 52a376d3ca693494c97bbe4ac69e5639,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.7204101
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118283833123081191, guid: 52a376d3ca693494c97bbe4ac69e5639,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7204101
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118283833123081191, guid: 52a376d3ca693494c97bbe4ac69e5639,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.7204101
+      objectReference: {fileID: 0}
     - target: {fileID: 2561950105369011451, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
       propertyPath: m_Mesh
@@ -564,7 +579,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 1402973684}
+      objectReference: {fileID: 1321344081}
     - target: {fileID: 4011626383720083603, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -738,7 +753,7 @@ PrefabInstance:
     - target: {fileID: 9021773622835903360, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
       propertyPath: mTrackableName
-      value: poyo
+      value: DebugDetective
       objectReference: {fileID: 0}
     - target: {fileID: 9021773622835903360, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
@@ -753,7 +768,7 @@ PrefabInstance:
     - target: {fileID: 9021773622835903360, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
       propertyPath: mDataSetPath
-      value: Vuforia/ImageMarkers.xml
+      value: Vuforia/MGeoEscape.xml
       objectReference: {fileID: 0}
     - target: {fileID: 9021773622835903360, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
@@ -1061,7 +1076,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 63996de4a77122c46a13899e340640df,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.442
+      value: 2.612
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 63996de4a77122c46a13899e340640df,
         type: 3}
@@ -1131,7 +1146,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 63996de4a77122c46a13899e340640df,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63996de4a77122c46a13899e340640df, type: 3}
@@ -1416,6 +1431,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &1321344081
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'DebugDetectiveMaterial
+
+    -6816'
+  m_Shader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 41cd91b46058461d8418a2ff19565253, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats: []
+    m_Colors:
+    - _Color: {r: 0.82089555, g: 0.82089555, b: 0.82089555, a: 1}
 --- !u!1001 &1343548359
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1490,34 +1533,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7601751d9ac4f854a8cd2a7db750b10b, type: 3}
---- !u!21 &1402973684
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'poyoMaterial
-
-    25226'
-  m_Shader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: f20b428f84474185974d3f953563a352, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats: []
-    m_Colors:
-    - _Color: {r: 0.82089555, g: 0.82089555, b: 0.82089555, a: 1}
 --- !u!1 &1408201678
 GameObject:
   m_ObjectHideFlags: 0
@@ -1610,13 +1625,13 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!43 &1409293360
+--- !u!43 &1441717722
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ImageTargetMesh25214
+  m_Name: ImageTargetMesh-6826
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1948,7 +1963,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1841454182
 MonoBehaviour:
   m_ObjectHideFlags: 0
