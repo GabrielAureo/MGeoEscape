@@ -33,9 +33,10 @@ public class CharacterSelection : NetworkBehaviour{
         };
     }
 
-    public void Awake(){
 
+    public void Awake(){
         GameManager.characterSelection = this;
+        GetComponent<CanvasGroup>().interactable = false;
     }
     public CharacterButton getCharacterButton(Character character){
         switch(character){

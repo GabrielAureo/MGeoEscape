@@ -3,7 +3,7 @@ using Mirror;
 
 public class PlayerVisibility: MonoBehaviour{
     [EnumFlag]
-    [SerializeField] Character character;
+    [SerializeField] Character character = 0;
     
 
     public void Awake(){

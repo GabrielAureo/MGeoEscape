@@ -7,19 +7,23 @@ public class LobbyPlayer: NetworkRoomPlayer{
 
     public override void OnStartLocalPlayer(){
         GameManager.localLobbyPlayer = this;
+        CmdSetupUI();
     }
 
-    public override void OnStartClient(){
-        
-    }
-
-    private void SetupUI(){
+    [Command]
+    void CmdSetupUI(){
         foreach(var kvp in GameManager.characterSelection.playerDictionary){
             if(kvp.Value != null){
-                var btn = GameManager.characterSelection.getCharacterButton(kvp.Key);
-                btn.Toggle(false);
+                TargetLocalSetup(connectionToServer, (int)kvp.Key);
+                //btn.Toggle(false);
             }
         }
+    }
+
+    [TargetRpc]
+    void TargetLocalSetup(NetworkConnection target, int character){
+        var btn = GameManager.characterSelection.getCharacterButton(character);
+        btn.Toggle(false);
     }
 
     [TargetRpc]
@@ -39,11 +43,12 @@ public class LobbyPlayer: NetworkRoomPlayer{
     [TargetRpc]
     void TargetTeamUI(NetworkConnection target, int character, bool active){
         var btn = GameManager.characterSelection.getCharacterButton(character);
-        if(active){
-            btn.Deselect();
+        btn.Toggle(active);
+        /*if(active){
+            btn.Enable();
         }else{
             btn.Disable();
-        }
+        }*/
     }
 
     [Command]

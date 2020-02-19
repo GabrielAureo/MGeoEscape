@@ -1,11 +1,16 @@
 using UnityEngine;
 using Mirror;
+using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager: NetworkRoomManager{
 
     public static LobbyPlayer localLobbyPlayer;
     public static CharacterSelection characterSelection;
     [SerializeField] CharacterSelection m_characterSelection = null;
+
+    public Dictionary<string, GamePlayer> clientDictionary;
+
 
     public override void OnStartServer(){
         characterSelection = m_characterSelection;
@@ -32,6 +37,11 @@ public class GameManager: NetworkRoomManager{
     public override void OnRoomServerPlayersReady()
     {
         base.OnRoomServerPlayersReady();
+    }
+
+   
+    public override void OnServerDisconnect(NetworkConnection conn){
+        base.OnServerDisconnect(conn);
     }
 
 }

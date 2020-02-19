@@ -2,34 +2,63 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Collections.Generic;
 
-public class CharacterButton : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPointerDownHandler {
-    public enum State{Selected, Unselected, Inactive, Pressed}
-
-    [HideInInspector] State state;
+public class CharacterButton : UIBehaviour, IPointerClickHandler, IPointerUpHandler, IPointerDownHandler {
+    public enum SelectionState{Selected, Normal, Disabled, Pressed}
+    public bool interactable;
+    [HideInInspector] SelectionState state;
     public Character character;
 
-    public Graphic graphic;
-    public Color baseColor;
+
+    public Graphic targetGraphic;
+
+    public ColorBlock colors = ColorBlock.defaultColorBlock;
+    /*public Color baseColor;
     public Color selectedColor;
     public Color unselectedColor;
     public Color inactiveColor;
-    public Color pressedColor;
-    Tween transition;
+    public Color pressedColor;*/
+    //Tween transition;
+    /// <summary>
+    /// Interaction state of the parent Canvas Group
+    /// </summary>
+    private bool m_groupInteraction;
 
-    void Start(){
-        graphic = GetComponent<Graphic>();
-        state = State.Unselected;
+    protected override void Start(){
+        targetGraphic = GetComponent<Graphic>();
+        state = SelectionState.Normal;
     }
 
     void OnValidate(){
-        if(graphic == null) graphic = GetComponent<Graphic>();
-        graphic.canvasRenderer.SetColor(baseColor);
+        if(targetGraphic == null) targetGraphic = GetComponent<Graphic>();
+        targetGraphic.canvasRenderer.SetColor(colors.normalColor);
+    }
+    //https://bitbucket.org/Unity-Technologies/ui/src/2019.1/UnityEngine.UI/UI/Core/Selectable.cs
+    protected override void OnCanvasGroupChanged()
+    {
+        //Depth Search of parent that contains Canvas Group
+        //Note that it stops as soon as it finds the first Canvas Group, if there are more parent Groups
+        //this behaviour needs to change as to find all of them. Check the link above.
+        var t = transform.parent;
+        CanvasGroup group = null;
+        //if t is null, no canvas group has been found
+        while(group == null && t != null){
+            group = t.GetComponent<CanvasGroup>();
+            t = t.parent;
+        }
+
+        m_groupInteraction = group.interactable;
+
+    }
+
+    public bool IsInteractable(){
+        return interactable && m_groupInteraction;
     }
 
     public void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData){   
         //print("Cliquei no "+ gameObject.name);         
-        GameManager.characterSelection.CmdSelectCharacter((int)character);
+        if(IsInteractable()) GameManager.characterSelection.CmdSelectCharacter((int)character);
     }
     public void OnPointerUp(PointerEventData eventData)
     {
@@ -40,47 +69,52 @@ public class CharacterButton : MonoBehaviour, IPointerClickHandler, IPointerUpHa
     }
 
     public void Select(){
-        DoTransition(State.Selected);
+        DoTransition(SelectionState.Selected);
     }
 
     public void Deselect(){
-        DoTransition(State.Unselected);
+        DoTransition(SelectionState.Normal);
     }
 
     public void Disable(){
-        DoTransition(State.Inactive);
+        DoTransition(SelectionState.Disabled);
+        interactable = false;
     }
 
+    public void Enable(){
+        DoTransition(SelectionState.Normal);
+        interactable = true;
+    }
     public void Toggle(bool toggle){
         print(toggle);
-        if(!toggle){
-            Select();
+        if(toggle){
+            Enable();
         }else{
             Disable();
         }
     }
 
-    void DoTransition(State newState){
+    void DoTransition(SelectionState newState){
         //if(transition != null && transition.IsActive()) transition.Kill();
         Color newColor = GetColor(newState);
-        graphic.CrossFadeColor(newColor, .1f, true, true);
+        targetGraphic.CrossFadeColor(newColor, .1f, true, true);
         state = newState;
     }
     
-    Color GetColor(State state){
+    Color GetColor(SelectionState state){
         Color color = Color.white;
         switch(state){
-            case State.Unselected:
-                color = unselectedColor;
+            case SelectionState.Normal:
+                color = colors.normalColor;
                 break;
-            case State.Selected:
-                color =  selectedColor;
+            case SelectionState.Selected:
+                color =  colors.selectedColor;
                 break;
-            case State.Pressed:
-                color =  pressedColor;
+            case SelectionState.Pressed:
+                color =  colors.pressedColor;
                 break;
-            case State.Inactive:
-                color =  inactiveColor;
+            case SelectionState.Disabled:
+                color =  colors.disabledColor;
                 break;
             default:
                 Debug.LogError("Invalid State");

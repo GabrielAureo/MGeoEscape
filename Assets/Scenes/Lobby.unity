@@ -738,7 +738,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 473615583}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -757,13 +757,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08338c2a75df69d4289d27b4f2f37617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactable: 1
   character: 2
-  graphic: {fileID: 455468760}
-  baseColor: {r: 1, g: 1, b: 1, a: 1}
-  selectedColor: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 1}
-  unselectedColor: {r: 1, g: 1, b: 1, a: 1}
-  inactiveColor: {r: 1, g: 1, b: 1, a: 0.49019608}
-  pressedColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
+  targetGraphic: {fileID: 455468760}
+  colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
 --- !u!222 &455468759
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -843,15 +847,15 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 535662190}
   - {fileID: 1019851824}
   - {fileID: 455468757}
-  - {fileID: 535662190}
   m_Father: {fileID: 1912756802}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 67.1, y: 3.1}
+  m_AnchoredPosition: {x: 67.09961, y: 3.1}
   m_SizeDelta: {x: 133.9, y: 278.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &473615584
@@ -911,7 +915,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 473615583}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -930,13 +934,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08338c2a75df69d4289d27b4f2f37617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactable: 1
   character: 4
-  graphic: {fileID: 535662193}
-  baseColor: {r: 1, g: 1, b: 1, a: 1}
-  selectedColor: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 1}
-  unselectedColor: {r: 1, g: 1, b: 1, a: 1}
-  inactiveColor: {r: 1, g: 1, b: 1, a: 0.49019608}
-  pressedColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
+  targetGraphic: {fileID: 535662193}
+  colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
 --- !u!222 &535662192
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1846,11 +1854,11 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs: []
   showRoomGUI: 0
-  minPlayers: 1
+  minPlayers: 3
   roomPlayerPrefab: {fileID: 7571584967546881626, guid: ee119e7fac2df2d44ba7e8921cee1efb,
     type: 3}
   RoomScene: Lobby
-  GameplayScene: Main
+  GameplayScene: main
   roomSlots: []
   allPlayersReady: 0
   m_characterSelection: {fileID: 1912756803}
@@ -1918,7 +1926,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 473615583}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1945,13 +1953,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08338c2a75df69d4289d27b4f2f37617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactable: 1
   character: 1
-  graphic: {fileID: 1019851827}
-  baseColor: {r: 1, g: 1, b: 1, a: 1}
-  selectedColor: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 1}
-  unselectedColor: {r: 1, g: 1, b: 1, a: 1}
-  inactiveColor: {r: 1, g: 1, b: 1, a: 0.49019608}
-  pressedColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
+  targetGraphic: {fileID: 1019851827}
+  colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
 --- !u!114 &1019851827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2031,7 +2043,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -89.31, y: 3.1}
+  m_AnchoredPosition: {x: -89.30957, y: 3.1}
   m_SizeDelta: {x: 178.62, y: 321.17}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1385480438
@@ -2527,7 +2539,7 @@ CanvasGroup:
   m_GameObject: {fileID: 1912756798}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
+  m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!1 &1966281189

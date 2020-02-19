@@ -9,10 +9,10 @@ using DG.Tweening;
 
 public class ConnectScreen : NetworkBehaviour
 {
-    [SerializeField] CanvasGroup nameScreen;
+    [SerializeField] CanvasGroup nameScreen = null;
     CanvasGroup selectionScreen;
-    [SerializeField] TMP_InputField inputField;
-    [SerializeField] Button acceptButton;
+    [SerializeField] TMP_InputField inputField = null;
+    [SerializeField] Button acceptButton = null;
 
     [HideInInspector] string playerName;
 
