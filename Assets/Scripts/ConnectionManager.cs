@@ -2,41 +2,61 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using Mirror;
-
+using Mirror.Discovery;
 public class ConnectionManager : MonoBehaviour{
+    [SerializeField] NetworkDiscovery networkDiscovery = null;
+
     void Start(){
-        #if UNITY_EDITOR
-            //NetworkManager.singleton.StartHost();
-        #endif
-        #if UNITY_ANDROID && !UNITY_EDITOR
-            StartCoroutine(RefreshLAN());
+        #if !UNITY_EDITOR
+            networkDiscovery.StartDiscovery();
         #endif
     }
 
-    void OnEnable()
+    public void Connect(ServerResponse info){
+        if (!NetworkClient.isConnected && !NetworkServer.active && !NetworkClient.active)
+            NetworkManager.singleton.StartClient(info.uri);
+    }
+
+    void OnGUI()
     {
-        NetworkDiscovery.onReceivedServerResponse += Connect;
+        if (NetworkManager.singleton == null)
+            return;
+
+        if (NetworkServer.active || NetworkClient.active)
+            return;
+
+        if (!NetworkClient.isConnected && !NetworkServer.active && !NetworkClient.active)
+            DrawGUI();
     }
 
-    void OnDisable()
-    {
-        NetworkDiscovery.onReceivedServerResponse -= Connect;
-    }
+    void DrawGUI()
+        {
+            GUILayout.BeginHorizontal();
 
-    void Connect(NetworkDiscovery.DiscoveryInfo info){
-        if(NetworkClient.active) return;
+            // LAN Host
+            if (GUILayout.Button("Start Host"))
+            {
+                NetworkManager.singleton.StartHost();
+                networkDiscovery.AdvertiseServer();
+            }
 
-        NetworkManager.singleton.networkAddress = info.EndPoint.Address.ToString();
-        ((TelepathyTransport) Transport.activeTransport).port = ushort.Parse( info.KeyValuePairs[NetworkDiscovery.kPortKey] );
-        NetworkManager.singleton.StartClient();
-    }
-    
+            // Dedicated server
+            if (GUILayout.Button("Start Server"))
+            {
+                NetworkManager.singleton.StartServer();
 
+                networkDiscovery.AdvertiseServer();
+            }
 
-    IEnumerator RefreshLAN(){
-        while(!NetworkClient.active){
-            NetworkDiscovery.SendBroadcast();
-            yield return null;
+            GUILayout.EndHorizontal();
+
         }
-    }
+
+    /*IEnumerator RefreshLAN(){
+        while(true){
+            networkDiscovery.StartDiscovery();
+            print("Searching LAN");
+            yield return true;
+        }
+    }*/
 }

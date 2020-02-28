@@ -2,7 +2,7 @@ using UnityEngine;
 using Mirror;
 
 public class LobbyPlayer: NetworkRoomPlayer{
-    [SyncVar(hook = "RenameGameObject")]
+    [SyncVar(hook = nameof(RenameGameObject))]
     public string playerName;
 
     public override void OnStartLocalPlayer(){
@@ -44,11 +44,6 @@ public class LobbyPlayer: NetworkRoomPlayer{
     void TargetTeamUI(NetworkConnection target, int character, bool active){
         var btn = GameManager.characterSelection.getCharacterButton(character);
         btn.Toggle(active);
-        /*if(active){
-            btn.Enable();
-        }else{
-            btn.Disable();
-        }*/
     }
 
     [Command]
@@ -56,8 +51,8 @@ public class LobbyPlayer: NetworkRoomPlayer{
         playerName = name;
     }
 
-    void RenameGameObject(string name){
-        gameObject.name = "Lobby Player " + name;
+    void RenameGameObject(string oldName, string newName){
+        gameObject.name = "Lobby Player " + newName;
     }
 
     public void SelectCharacter(int character){

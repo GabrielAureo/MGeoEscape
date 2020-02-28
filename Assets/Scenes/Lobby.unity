@@ -219,7 +219,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 137911586}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 746.4648, y: 494.13885, z: -394}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -232,11 +232,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 137911586}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f83b266f6a07ed4cb9357c67d90e1f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  networkDiscovery: {fileID: 950639391}
+  showGUI: 1
+  offsetX: 0
+  offsetY: 0
 --- !u!1 &228696323
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,9 +707,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneId: 3365781870
   serverOnly: 0
   m_AssetId: 
-  m_SceneId: 3365781870
 --- !u!1 &455468756
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,9 +820,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneId: 2612793520
   serverOnly: 0
   m_AssetId: 
-  m_SceneId: 2612793520
 --- !u!1 &473615582
 GameObject:
   m_ObjectHideFlags: 0
@@ -993,9 +997,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneId: 949906831
   serverOnly: 0
   m_AssetId: 
-  m_SceneId: 949906831
 --- !u!1 &598803719
 GameObject:
   m_ObjectHideFlags: 0
@@ -1746,8 +1750,6 @@ GameObject:
   - component: {fileID: 950639387}
   - component: {fileID: 950639390}
   - component: {fileID: 950639389}
-  - component: {fileID: 950639388}
-  - component: {fileID: 950639392}
   - component: {fileID: 950639391}
   m_Layer: 0
   m_Name: Game Manager
@@ -1770,21 +1772,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &950639388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 950639386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showGUI: 1
-  offsetX: 0
-  offsetY: 0
 --- !u!114 &950639389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1840,8 +1827,8 @@ MonoBehaviour:
   dontDestroyOnLoad: 1
   runInBackground: 1
   startOnHeadless: 1
-  serverTickRate: 30
   showDebugMessages: 0
+  serverTickRate: 30
   offlineScene: 
   onlineScene: 
   transport: {fileID: 950639389}
@@ -1869,31 +1856,29 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 950639386}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa3dba0c3dccbb842998a825b2df0f46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  drawGUI: 1
-  offsetX: 5
-  offsetY: 150
-  width: 1000
-  height: 800
-  refreshInterval: 0
---- !u!114 &950639392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 950639386}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 595fd51693c158445b314d315bad9fcb, type: 3}
+  m_Script: {fileID: 11500000, guid: c761308e733c51245b2e8bb4201f46dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_serverPort: 18418
-  gameServerPortNumber: 7777
+  secretHandshake: 6899903858733111870
+  serverBroadcastListenPort: 47777
+  ActiveDiscoveryInterval: 3
+  transport: {fileID: 950639389}
+  OnServerFound:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 137911589}
+        m_MethodName: Connect
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1019851823
 GameObject:
   m_ObjectHideFlags: 0
@@ -2004,9 +1989,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneId: 2057428232
   serverOnly: 0
   m_AssetId: 
-  m_SceneId: 2057428232
 --- !u!1 &1378561039
 GameObject:
   m_ObjectHideFlags: 0
@@ -2527,9 +2512,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneId: 1877380886
   serverOnly: 0
   m_AssetId: 
-  m_SceneId: 1877380886
 --- !u!225 &1912756805
 CanvasGroup:
   m_ObjectHideFlags: 0

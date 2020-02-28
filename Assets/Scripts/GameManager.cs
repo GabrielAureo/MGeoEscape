@@ -2,6 +2,7 @@ using UnityEngine;
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class GameManager: NetworkRoomManager{
 
@@ -14,7 +15,30 @@ public class GameManager: NetworkRoomManager{
 
     public override void OnStartServer(){
         characterSelection = m_characterSelection;
-    }    
+    }
+
+    public override void OnServerConnect(NetworkConnection conn){
+         if (numPlayers >= maxConnections)
+        {
+            conn.Disconnect();
+            return;
+        }
+        string scene = SceneManager.GetActiveScene().name;
+        if(scene != RoomScene){
+
+        }      
+    }
+
+    public override void OnRoomServerDisconnect(NetworkConnection conn){
+        base.OnRoomServerDisconnect(conn);
+        //conn.
+    }
+
+    public override void OnRoomServerPlayersReady(){
+        base.OnRoomServerPlayersReady();
+        ServerChangeScene(GameplayScene);
+    }
+
 
     public override bool OnRoomServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
     {
@@ -32,11 +56,6 @@ public class GameManager: NetworkRoomManager{
             }
         }
         return true;
-    }
-
-    public override void OnRoomServerPlayersReady()
-    {
-        base.OnRoomServerPlayersReady();
     }
 
    

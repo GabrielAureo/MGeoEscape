@@ -1,7 +1,7 @@
 using UnityEngine;
 using Mirror;
 public class GamePlayer: NetworkBehaviour{
-    [SyncVar(hook="RenameGameObject")]
+    [SyncVar(hook=nameof(RenameGameObject))]
     [HideInInspector] public string playerName;
     [HideInInspector] [SyncVar] public Character character;
 
@@ -15,7 +15,7 @@ public class GamePlayer: NetworkBehaviour{
     public override void OnStartLocalPlayer(){
         CmdPlayerReady();
     }
-    void RenameGameObject(string name){
+    void RenameGameObject(string oldName, string newName){
         gameObject.name = "Game Player " + name;
     }
 

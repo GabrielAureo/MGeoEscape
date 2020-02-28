@@ -27,15 +27,23 @@ namespace Mirror.Weaver
                 return foundFunc;
             }
 
+            MethodDefinition newReaderFunc;
+
+            // Arrays are special,  if we resolve them, we get teh element type,
+            // so the following ifs might choke on it for scriptable objects
+            // or other objects that require a custom serializer
+            // thus check if it is an array and skip all the checks.
+            if (variable.IsArray)
+            {
+                newReaderFunc = GenerateArrayReadFunc(variable, recursionCount);
+                RegisterReadFunc(variable.FullName, newReaderFunc);
+                return newReaderFunc;
+            }
+
             TypeDefinition td = variable.Resolve();
             if (td == null)
             {
                 Weaver.Error($"{variable} is not a supported type");
-                return null;
-            }
-            if (td.IsDerivedFrom(Weaver.ScriptableObjectType))
-            {
-                Weaver.Error($"Cannot generate reader for scriptable object {variable}. Use a supported type or provide a custom reader");
                 return null;
             }
             if (td.IsDerivedFrom(Weaver.ComponentType))
@@ -60,13 +68,7 @@ namespace Mirror.Weaver
                 return null;
             }
 
-            MethodDefinition newReaderFunc;
-
-            if (variable.IsArray)
-            {
-                newReaderFunc = GenerateArrayReadFunc(variable, recursionCount);
-            }
-            else if (td.IsEnum)
+            if (td.IsEnum)
             {
                 return GetReadFunc(td.GetEnumUnderlyingType(), recursionCount);
             }
@@ -76,7 +78,7 @@ namespace Mirror.Weaver
             }
             else
             {
-                newReaderFunc = GenerateStructReadFunction(variable, recursionCount);
+                newReaderFunc = GenerateClassOrStructReadFunction(variable, recursionCount);
             }
 
             if (newReaderFunc == null)
@@ -286,7 +288,7 @@ namespace Mirror.Weaver
             return readerFunc;
         }
 
-        static MethodDefinition GenerateStructReadFunction(TypeReference variable, int recursionCount)
+        static MethodDefinition GenerateClassOrStructReadFunction(TypeReference variable, int recursionCount)
         {
             if (recursionCount > MaxRecursionCount)
             {
@@ -324,13 +326,22 @@ namespace Mirror.Weaver
 
             ILProcessor worker = readerFunc.Body.GetILProcessor();
 
+            TypeDefinition td = variable.Resolve();
+
             if (variable.IsValueType)
             {
                 // structs are created with Initobj
                 worker.Append(worker.Create(OpCodes.Ldloca, 0));
                 worker.Append(worker.Create(OpCodes.Initobj, variable));
             }
-            else
+            else if (td.IsDerivedFrom(Weaver.ScriptableObjectType))
+            {
+                GenericInstanceMethod genericInstanceMethod = new GenericInstanceMethod(Weaver.ScriptableObjectCreateInstanceMethod);
+                genericInstanceMethod.GenericArguments.Add(variable);
+                worker.Append(worker.Create(OpCodes.Call, genericInstanceMethod));
+                worker.Append(worker.Create(OpCodes.Stloc_0));
+            }
+            else 
             {
                 // classes are created with their constructor
 

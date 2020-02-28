@@ -26,7 +26,7 @@ namespace Mirror.Examples.NetworkRoom
 
         void OnDisable()
         {
-            if (isLocalPlayer)
+            if (isLocalPlayer && Camera.main != null)
             {
                 Camera.main.orthographic = true;
                 Camera.main.transform.SetParent(null);
@@ -51,7 +51,8 @@ namespace Mirror.Examples.NetworkRoom
 
         void Update()
         {
-            if (!isLocalPlayer) return;
+            if (!isLocalPlayer)
+                return;
 
             horizontal = Input.GetAxis("Horizontal");
             vertical = Input.GetAxis("Vertical");
@@ -80,7 +81,8 @@ namespace Mirror.Examples.NetworkRoom
 
         void FixedUpdate()
         {
-            if (!isLocalPlayer || characterController == null) return;
+            if (!isLocalPlayer || characterController == null)
+                return;
 
             transform.Rotate(0f, turn * Time.fixedDeltaTime, 0f);
 

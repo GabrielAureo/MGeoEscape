@@ -340,7 +340,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 2.7105054e-20, z: 2.3509887e-38, w: 0}
+  m_BoundingSphereOverride: {x: 4.96e-43, y: -30.465714, z: 4.96e-43, w: 1.18e-43}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -629,6 +629,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SceneId
       value: 3114391712
+      objectReference: {fileID: 0}
+    - target: {fileID: 5451433377784913003, guid: 52a376d3ca693494c97bbe4ac69e5639,
+        type: 3}
+      propertyPath: sceneId
+      value: 4260544447
       objectReference: {fileID: 0}
     - target: {fileID: 5981283704589425283, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
@@ -1414,9 +1419,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneId: 3403925950
   serverOnly: 0
   m_AssetId: 
-  m_SceneId: 3403925950
 --- !u!4 &1260519314
 Transform:
   m_ObjectHideFlags: 0
