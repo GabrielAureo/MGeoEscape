@@ -16,7 +16,8 @@ public class Safe : MonoBehaviour
     [SerializeField] AudioClip lockOpenSFX = null;
     [SerializeField] AudioClip wrongPasswordSFX = null;
     [HideInInspector] public string password;
-    string input;
+    public string input;
+    public bool open = false;
     
     public void Input(int value){
         input += value.ToString();

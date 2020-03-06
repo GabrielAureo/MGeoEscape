@@ -15,7 +15,7 @@ public class SafePuzzle: Puzzle{
     }
     public override void Initialize()
     {
-
+        //Inititaliza Safe open state when the game begins
         GeneratePassword();
     }
 
@@ -32,6 +32,7 @@ public class SafePuzzle: Puzzle{
     public override void OnStartClient(){
         Debug.Log("Safe Password: " + generatedPassword);
         m_safe.password = generatedPassword;
+        m_safe.input = "******";
     }
 
     public void SetStickers(NetworkIdentity localPlayer){

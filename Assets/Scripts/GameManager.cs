@@ -10,15 +10,35 @@ public class GameManager: NetworkRoomManager{
     public static CharacterSelection characterSelection;
     [SerializeField] CharacterSelection m_characterSelection = null;
 
-    public Dictionary<string, GamePlayer> clientDictionary;
-
+    public Dictionary<byte[], GamePlayer> clientDictionary;
 
     public override void OnStartServer(){
+        base.OnStartServer();
         characterSelection = m_characterSelection;
+        clientDictionary = new Dictionary<byte[], GamePlayer>();
+        NetworkServer.RegisterHandler<GUIDMessage>(LookupDevice, false);
+    }
+
+    private void LookupDevice(NetworkConnection conn, GUIDMessage msg){
+        var guid = new System.Guid(msg.guid);
+        print(guid.ToString());
+    }
+
+    public override void OnClientConnect(NetworkConnection conn){
+        base.OnClientConnect(conn);
+        var msg = new GUIDMessage();       
+        
+        msg.guid = GetDeviceGUID();
+        NetworkClient.Send<GUIDMessage>(msg);
+    }
+
+    public override void OnStartClient(){
+        base.OnStartClient();
+        InitializeDeviceGUID();
     }
 
     public override void OnServerConnect(NetworkConnection conn){
-         if (numPlayers >= maxConnections)
+        if (numPlayers >= maxConnections)
         {
             conn.Disconnect();
             return;
@@ -26,7 +46,8 @@ public class GameManager: NetworkRoomManager{
         string scene = SceneManager.GetActiveScene().name;
         if(scene != RoomScene){
 
-        }      
+        }
+
     }
 
     public override void OnRoomServerDisconnect(NetworkConnection conn){
@@ -40,7 +61,7 @@ public class GameManager: NetworkRoomManager{
     }
 
 
-    public override bool OnRoomServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
+    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject lobbyPlayer, GameObject gamePlayer)
     {
         GamePlayer player = gamePlayer.GetComponent<GamePlayer>();
         LobbyPlayer _lobbyPlayer = lobbyPlayer.GetComponent<LobbyPlayer>();
@@ -61,6 +82,25 @@ public class GameManager: NetworkRoomManager{
    
     public override void OnServerDisconnect(NetworkConnection conn){
         base.OnServerDisconnect(conn);
+    }
+
+    //Generate unique indentifier on the first run of the game
+    private void InitializeDeviceGUID(){
+        print(Application.persistentDataPath);
+        if(!System.IO.File.Exists(Application.persistentDataPath + "/PlayerGUID")){
+            var guid = System.Guid.NewGuid();
+            System.IO.File.WriteAllBytes(Application.persistentDataPath + "/PlayerGUID", guid.ToByteArray());
+        }
+    }
+
+    private byte[] GetDeviceGUID(){
+#if UNITY_STANDALONE
+        var guidString = System.Environment.GetCommandLineArgs()[2];
+        var guid = new System.Guid(guidString);
+        return guid.ToByteArray();
+#elif UNITY_ANDROID && !UNITY_EDITOR
+        return System.IO.File.ReadAllBytes(Application.persistentDataPath + "/PlayerGUID");
+#endif
     }
 
 }

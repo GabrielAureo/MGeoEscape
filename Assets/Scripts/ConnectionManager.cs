@@ -11,7 +11,7 @@ public class ConnectionManager : MonoBehaviour{
             networkDiscovery.StartDiscovery();
         #endif
     }
-
+    
     public void Connect(ServerResponse info){
         if (!NetworkClient.isConnected && !NetworkServer.active && !NetworkClient.active)
             NetworkManager.singleton.StartClient(info.uri);
