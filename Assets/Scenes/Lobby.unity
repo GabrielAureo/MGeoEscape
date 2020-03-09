@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1842,7 +1842,7 @@ MonoBehaviour:
   roomPlayerPrefab: {fileID: 7571584967546881626, guid: ee119e7fac2df2d44ba7e8921cee1efb,
     type: 3}
   RoomScene: Lobby
-  GameplayScene: main
+  GameplayScene: Main
   roomSlots: []
   allPlayersReady: 0
   m_characterSelection: {fileID: 1912756803}

@@ -3,9 +3,11 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System;
 using System.Threading;
+using UnityEditor.SceneManagement;
 
 
 public class BuildScript{
+    
     public static string buildPath{
         get{
             var rootPath = System.IO.Directory.GetCurrentDirectory();
@@ -22,27 +24,30 @@ public class BuildScript{
         }
         
     }
-    [MenuItem("File/Run All Standalone Builds",false,1001)]
+    [MenuItem("File/Run Standalone/All",false,1001)]
     public static void Run(){
         RunPlayerOne();
         RunPlayerTwo();
         RunPlayerThree();
 
+        EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+        EditorSceneManager.OpenScene("Assets/Scenes/Lobby.unity");
+
         EditorApplication.EnterPlaymode();
     }
 
-    [MenuItem("File/Run Single Standalone Build/Player 1",false,1002)]
+    [MenuItem("File/Run Standalone/Single/Player 1",false,1002)]
     public static void RunPlayerOne(){
         StartWindow(1, "f342e61e-9946-41a6-b2ca-d3a6e54f7af8");
     }
 
-    [MenuItem("File/Run Single Standalone Build/Player 2",false,1003)]
+    [MenuItem("File/Run Standalone/Single/Player 2",false,1003)]
     public static void RunPlayerTwo(){
         // Process.Start(buildPath,"a54e0a4a-df2c-4ec3-9c77-f8a8b1261a73");
         StartWindow(2, "a54e0a4a-df2c-4ec3-9c77-f8a8b1261a73");
     }
 
-    [MenuItem("File/Run Single Standalone Build/Player 3",false,1004)]
+    [MenuItem("File/Run Standalone/Single/Player 3",false,1004)]
     public static void RunPlayerThree(){
         // Process.Start(buildPath,"0dc42813-73cb-4e3e-9736-0ece4049ad4c");
         StartWindow(3, "0dc42813-73cb-4e3e-9736-0ece4049ad4c");
@@ -52,10 +57,5 @@ public class BuildScript{
         var p = Process.Start(buildPath, string.Format("{0} {1}", player, guid));       
 
     }
-
-    [DllImport("user32.dll", EntryPoint = "SetWindowText")]
-    public static extern bool SetWindowText(System.IntPtr hwnd, System.String lpString);
-    [DllImport("user32.dll", EntryPoint = "FindWindow")]
-    public static extern System.IntPtr FindWindow(System.String className, System.String windowName);
 
 }

@@ -25,12 +25,17 @@ public class StandaloneWindowBehaviour : MonoBehaviour{
     static extern bool SetWindowText(System.IntPtr hwnd, System.String lpString);
 
     [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
-    static extern bool SetWindowPos(IntPtr hwnd, int hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
+    static extern bool SetWindowPos(IntPtr hwnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint wFlags);
 
     #endregion
     
     #region Private fields
     private static IntPtr windowHandle = IntPtr.Zero;
+
+    private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+    private const UInt32 SWP_NOSIZE = 0x0001;
+    private const UInt32 SWP_NOMOVE = 0x0002;
+    private const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
     #endregion
     void Start(){
         uint threadId = GetCurrentThreadId();
@@ -51,7 +56,7 @@ public class StandaloneWindowBehaviour : MonoBehaviour{
 
         SetWindowText(windowHandle, string.Format("Player {0} GUID: {1}", args[1], args[2]));
         int p = 1920/3;
-        SetWindowPos(windowHandle, 0, (int.Parse(args[1]) - 1) * p, 200, 0, 0, 1);
+        SetWindowPos(windowHandle,  HWND_TOPMOST, (int.Parse(args[1]) - 1) * p, 200, 0, 0, SWP_NOSIZE);
     }
     
 #endif

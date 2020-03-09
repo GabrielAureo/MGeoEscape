@@ -77,6 +77,7 @@ namespace Mirror.Discovery
 
         void Shutdown()
         {
+            print("Shutdown Discovery");
             if (serverUdpClient != null)
             {
                 try
