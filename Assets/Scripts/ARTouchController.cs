@@ -61,13 +61,18 @@ public class ARTouchController : MonoBehaviour{
     }
 
     private void InputStateMachine(){
-        RaycastHit hit;
+        RaycastHit[] hits;
         if(touchData.currentStatus == ARTouchData.Status.NO_TOUCH){
             timer = 0.0f;
-            if(Physics.Raycast(ray,out hit, Mathf.Infinity, 1<<LayerMask.NameToLayer("Default"))){
-                var selectedInteractable = hit.transform.GetComponent<ARInteractable>();
+            hits = Physics.RaycastAll(ray, Mathf.Infinity, 1<<LayerMask.NameToLayer("Default"));
+            if(hits.Length > 0){
+                ARInteractable selectedInteractable = null;
+                foreach(var hit in hits){
+                    selectedInteractable = hit.transform.GetComponent<ARInteractable>();
+                    if(selectedInteractable != null) break;
+                }
+               
                 touchData.selectedInteractable = selectedInteractable;
-
                 onTouch.Invoke(touchData);
                 
                 /*if(selectedInteractable is Socket){

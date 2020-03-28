@@ -4,19 +4,22 @@ using UnityEngine;
 
 public class Socket : ARInteractable
 {
-    [SerializeField] private MeshRenderer previewRenderer;
-    [SerializeField] private MeshFilter previewFilter;
+    public enum PlacementAnchor{AtPosition, AtBottomAnchor}
+    [SerializeField] private MeshRenderer previewRenderer = null;
+    [SerializeField] private MeshFilter previewFilter = null;
+
+    public PlacementAnchor placementBehaviour;
     public Movable currentObject;
     private Mesh lastMesh;
     public Transform bottomAnchor;
 
-    
+    public MovablePlacementPose placementPose;
 
     void Awake()
     {
-        previewRenderer = GetComponentInChildren<MeshRenderer>();
-        previewFilter = GetComponentInChildren<MeshFilter>();
-        previewRenderer.enabled = false;
+        //previewRenderer = GetComponentInChildren<MeshRenderer>();
+        //previewFilter = GetComponentInChildren<MeshFilter>();
+        if(previewRenderer != null) previewRenderer.enabled = false;
         var movable = GetComponentInChildren<Movable>();
         if(movable) SetObject(movable);
     }

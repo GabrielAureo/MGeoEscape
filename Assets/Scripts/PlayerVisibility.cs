@@ -5,7 +5,6 @@ public class PlayerVisibility: MonoBehaviour{
     [EnumFlag]
     [SerializeField] Character character = 0;
     
-
     public void Awake(){
         CheckFlag(ClientScene.localPlayer);
 

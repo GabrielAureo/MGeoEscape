@@ -33,9 +33,15 @@ public class MovableController{
 
         HoldMovable(currentMovable);
 
-        RaycastHit hit;
-        if(Physics.Raycast(touchData.ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
-            targetInteractable = hit.transform.GetComponent<ARInteractable>();
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(touchData.ray);
+        if(hits.Length>0){
+            ARInteractable targetInteractable = null;
+            foreach(var hit in hits){
+                targetInteractable = hit.transform.GetComponent<ARInteractable>();
+                if(targetInteractable!= null) break;
+            }
+            
             targetInteractable?.onTarget(currentMovable);
         }else{
             targetInteractable?.onUntarget(currentMovable);
@@ -43,16 +49,23 @@ public class MovableController{
     }
 
     void Release(ARTouchData touchData){
-        RaycastHit hit;
         Debug.Log("Release phase");
         if(touchData.lastStatus == ARTouchData.Status.HOLDING){
             targetInteractable?.onUntarget(currentMovable);
         }
+        
 
         if(currentMovable){
             Socket target = (Socket)touchData.selectedInteractable;
-            if(Physics.Raycast(touchData.ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Sockets"))){
-                target = hit.transform.GetComponent<Socket>();
+
+            RaycastHit[] hits;
+            hits = Physics.RaycastAll(touchData.ray);
+
+            if(hits.Length > 0){
+                foreach(var hit in hits){
+                    target = hit.transform.GetComponent<Socket>();
+                    if(target != null) break;
+                }
             }
            
             ReleaseMovable(target);            
