@@ -1,0 +1,35 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.1.151580502)
+
+newmtl Body
+kd 1 0.825325 0.851579
+illum 1
+
+newmtl Door
+kd 1 0.978686 0.916345
+illum 1
+
+newmtl Lock_Handle
+kd 0.8 0.8 0.8
+illum 1
+
+newmtl Doorknob_Base
+kd 0.8 0.8 0.8
+illum 1
+
+newmtl Doorknob_Handle
+kd 0.8 0.8 0.8
+illum 1
+
+newmtl Lock_Base
+kd 0.8 0.8 0.8
+illum 1
+
+newmtl DiscBody
+kd 0.8 0.8 0.8
+illum 1
+
+newmtl DiscPointers
+kd 0 0 0
+illum 1
+

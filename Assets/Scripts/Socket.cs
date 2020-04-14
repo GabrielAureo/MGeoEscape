@@ -1,31 +1,58 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class Socket : ARInteractable
+public class Socket : NetworkBehaviour, IARInteractable
 {
-    public enum PlacementAnchor{AtPosition, AtBottomAnchor}
-    [SerializeField] private MeshRenderer previewRenderer = null;
-    [SerializeField] private MeshFilter previewFilter = null;
-
-    public PlacementAnchor placementBehaviour;
-    public Movable currentObject;
+    /// <summary>
+    /// Sockets in exclusive mode only allow one kind of object to be placed;
+    /// </summary>
+    public bool exclusiveMode;
+    public GameObject exclusiveObject;
+    private MeshRenderer previewRenderer = null;
+    private MeshFilter previewFilter = null;
+    [HideInInspector] public Movable currentObject;
+    private Movable lastObject;
     private Mesh lastMesh;
-    public Transform bottomAnchor;
 
     public MovablePlacementPose placementPose;
+    [SyncVar]
+    public bool busy;
 
     void Awake()
     {
         //previewRenderer = GetComponentInChildren<MeshRenderer>();
         //previewFilter = GetComponentInChildren<MeshFilter>();
-        if(previewRenderer != null) previewRenderer.enabled = false;
+        //if(previewRenderer != null) previewRenderer.enabled = false;
         var movable = GetComponentInChildren<Movable>();
         if(movable) SetObject(movable);
+
+        
+
+    }
+
+    void Start(){
+        var preview = GameObject.Instantiate(Resources.Instance.previewSocketPrefab,transform);
+        previewRenderer = preview.GetComponent<MeshRenderer>();
+        previewFilter = preview.GetComponent<MeshFilter>();
     }
 
     public bool TryTarget(Movable obj){
         if(currentObject != null) return false;
+
+        /*if(previewRenderer == null){
+            var preview = new GameObject("Preview");
+
+            preview.transform.parent = transform;
+            preview.transform.localPosition = Vector3.zero;
+            preview.transform.localRotation = Quaternion.identity;
+            preview.transform.localScale = Vector3.one;
+
+            previewRenderer = preview.AddComponent<MeshRenderer>();
+            previewFilter = preview.AddComponent<MeshFilter>();
+           
+        }*/
 
         if(obj.mesh != lastMesh){
             lastMesh = obj.mesh;
@@ -52,6 +79,7 @@ public class Socket : ARInteractable
 
     public bool TryPlaceObject(Movable obj){
         if(currentObject != null) return false;
+        if(busy && obj != lastObject) return false;
         SetObject(obj);
         return true;
     }
@@ -66,7 +94,7 @@ public class Socket : ARInteractable
         //print(obj.releaseAction.Method.Name);
     }
 
-    private void UnsetObject(ARInteractable oldInteractable, ARInteractable newInteractable){
+    private void UnsetObject(IARInteractable oldInteractable, IARInteractable newInteractable){
         print(newInteractable);
         print(oldInteractable);
         if(newInteractable != null && newInteractable != oldInteractable){
@@ -74,30 +102,34 @@ public class Socket : ARInteractable
         }
     }
 
-    public override void onTap(ARTouchData touchData)
-    {
-        
-    }
+    public void onTap(ARTouchData touchData){}
 
-    public override void onHold(ARTouchData touchData)
+    public void onHold(ARTouchData touchData)
     {
         if(currentObject == null) return;
         currentObject.onHold();
         currentObject.rb.isKinematic = false;
         //controller.movableController.HoldMovable(currentObject);
+        lastObject = currentObject;
         currentObject = null;
+        busy = true;
     }
 
-    public override void onRelease(ARTouchData touchData)
+    public void onRelease(ARTouchData touchData)
     {
-        
+        if(currentObject == null) return;
+        currentObject.onRelease();
     }
 
-    public override void onTarget(Movable movable)
+    public void FreeSocket(){
+        busy = false;
+    }
+
+    public void onTarget(Movable movable)
     {
         TryTarget(movable);
     }
-    public override void onUntarget(Movable movable){
+    public void onUntarget(Movable movable){
         Untarget();
     }
 }

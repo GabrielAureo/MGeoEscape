@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class SafePuzzle: Puzzle{
     [SerializeField] Safe m_safe = null;
     [SerializeField] GameObject[] m_stickers = null;
-    [SerializeField] List<PetrolItem> m_items = null;
+    [SerializeField] List<PetrolCollection.PetrolItem> m_items = null;
     public SyncListInt chosenItems  = new SyncListInt();
     [SyncVar] private string generatedPassword;
 

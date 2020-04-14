@@ -8,23 +8,25 @@ public class ARTouchController : MonoBehaviour{
     public sealed class TouchEvent : UnityEvent<ARTouchData>{}
     //public ARTouchData.Status currentStatus;
     //ARTouchData.Status lastStatus;
-    float timer;
+    public float timer;
     public float holdThreshold = 0.2f;
 
     [HideInInspector] public Ray ray;
     [HideInInspector] public TouchEvent onTouch;
     [HideInInspector] public TouchEvent onHold;
     [HideInInspector] public TouchEvent onRelease;
+    public ARTouchData.Status status;
 
     public MovableController movableController;
 
-    public ARTouchData touchData;
+    public static ARTouchData touchData;
 
     void Awake(){
         var hinge = GetComponent<HingeJoint>();
         movableController = new MovableController();
         movableController.SetupController(this, hinge);
         touchData = new ARTouchData();
+        touchData.currentStatus = ARTouchData.Status.NO_TOUCH;
     }
     /*public ARInteractable GetCurrentObject(){
         if(touchData.currentStatus == ARTouchData.Status.HOLDING){
@@ -32,6 +34,13 @@ public class ARTouchController : MonoBehaviour{
         }
         return null;
     }*/
+
+    void Update(){
+        status = touchData.currentStatus;
+        HandleInput();
+        transform.position = Camera.main.transform.position;
+        transform.rotation = Camera.main.transform.rotation;
+    }
     public void HandleInput()
     {
         #if UNITY_ANDROID && !UNITY_EDITOR
@@ -62,14 +71,18 @@ public class ARTouchController : MonoBehaviour{
 
     private void InputStateMachine(){
         RaycastHit[] hits;
+        print(touchData.currentStatus);
         if(touchData.currentStatus == ARTouchData.Status.NO_TOUCH){
-            timer = 0.0f;
+            
             hits = Physics.RaycastAll(ray, Mathf.Infinity, 1<<LayerMask.NameToLayer("Default"));
             if(hits.Length > 0){
-                ARInteractable selectedInteractable = null;
+                IARInteractable selectedInteractable = null;
                 foreach(var hit in hits){
-                    selectedInteractable = hit.transform.GetComponent<ARInteractable>();
-                    if(selectedInteractable != null) break;
+                    selectedInteractable = hit.transform.GetComponent<IARInteractable>();
+                    if(selectedInteractable != null){
+                        touchData.hit = hit;
+                        break;
+                    } 
                 }
                
                 touchData.selectedInteractable = selectedInteractable;
@@ -103,6 +116,7 @@ public class ARTouchController : MonoBehaviour{
         if(touchData.currentStatus == ARTouchData.Status.WAITING){
             timer+=Time.deltaTime;
             if(timer >= holdThreshold){
+                print("time: " + timer + ", holdT: " + holdThreshold);
                 ChangeStatus(touchData, ARTouchData.Status.HOLDING);
             }
         }
@@ -115,14 +129,14 @@ public class ARTouchController : MonoBehaviour{
         #endif
 
         var wrldPos = Camera.main.ScreenToWorldPoint(new Vector3(inputPosition.x, inputPosition.y, 1.35f));
-        transform.position = new Vector3(wrldPos.x, wrldPos.y,transform.position.z);
+        transform.position = new Vector3(wrldPos.x, wrldPos.y, wrldPos.z);
         Ray ray = Camera.main.ScreenPointToRay(inputPosition);
         return ray;
         
     }
 
     private void Release(){
-        //RaycastHit hit;
+        timer = 0.0f;
         onRelease.Invoke(touchData);
 
         if(touchData.currentStatus == ARTouchData.Status.WAITING){

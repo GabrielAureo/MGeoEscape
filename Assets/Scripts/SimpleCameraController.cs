@@ -105,17 +105,25 @@ namespace UnityTemplateProjects
             }
             return direction;
         }
-        
+        private bool disabledBehaviour = false;
         void Update()
         {
             // Exit Sample  
-            if (Input.GetKey(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Application.Quit();
+                /*Application.Quit();
 				#if UNITY_EDITOR
 				UnityEditor.EditorApplication.isPlaying = false; 
-				#endif
+				#endif*/
+                if(disabledBehaviour){
+                    disabledBehaviour = false;
+                    Cursor.lockState = CursorLockMode.Locked;
+                }else{
+                    disabledBehaviour = true;
+                    Cursor.lockState = CursorLockMode.None;
+                }
             }
+            if(disabledBehaviour) return;
 
             // Hide and lock cursor when right mouse button pressed
             if (Input.GetMouseButtonDown(1))

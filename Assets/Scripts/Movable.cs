@@ -12,26 +12,41 @@ public class Movable : MonoBehaviour
     private Quaternion originalRotation;
     private Vector3 originalPosition;
     [HideInInspector] public Rigidbody rb;
-    private Material material;
+    
     [HideInInspector]
     public Mesh mesh;
-    public UnityAction<ARInteractable, ARInteractable> releaseAction;
+    public UnityAction<IARInteractable, IARInteractable> releaseAction;
     [HideInInspector]
     public bool released;
+    [SerializeField] Material opaqueMaterial = null;
+    [SerializeField] Material transparentMaterial = null;
+    private MeshRenderer meshRenderer;
+
+    void Awake(){
+        rb = GetComponent<Rigidbody>();
+        mesh = GetComponent<MeshFilter>().sharedMesh;
+        meshRenderer = GetComponent<MeshRenderer>();
+        opaqueMaterial = meshRenderer.materials[0];
+    }
+
 
     void Start(){
         originalParent = transform.parent;
         originalRotation = transform.localRotation;
         originalPosition = transform.localPosition;
-        rb = GetComponent<Rigidbody>();
-        mesh = GetComponent<MeshFilter>().sharedMesh;
-        material = GetComponent<MeshRenderer>().material;
+        
         released = false;
     }
 
     public void onHold(){
         print("holding");
-        material.DOFade(0.5f,"_BaseColor", .2f);
+
+        var mats = meshRenderer.materials;
+        mats[0] = transparentMaterial;
+        meshRenderer.materials = mats;
+        
+        transparentMaterial.DOFade(0.5f,"_BaseColor", .2f);
+        
         released = false;
         // transform.parent = null;
         // //transform.rotation = Quaternion.identity;
@@ -39,9 +54,13 @@ public class Movable : MonoBehaviour
         
     }
 
-    public void onRelease(ARInteractable dropInteractable)
+    public void onRelease()
     {
-        material.DOFade(1f,"_BaseColor", .2f);
+        transparentMaterial.DOFade(1f,"_BaseColor", .2f);
+
+        var mats = meshRenderer.materials;
+        mats[0] = opaqueMaterial;
+        meshRenderer.materials = mats;
         // transform.parent = originalParent;
         // transform.localRotation = originalRotation;
         // transform.localPosition = originalPosition;

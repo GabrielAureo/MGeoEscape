@@ -30,7 +30,7 @@ public class GameManager: NetworkRoomManager{
     }
     /*TBD aparentemente, o cliente se conecta automaticamente pra cena que o servidor está. Posso aproveitar isso e verificar se a cena atual não é o Lobby e
     e já começar a rotina de reconexão*/
-    public override void OnClientConnect(NetworkConnection conn){
+    /*public override void OnClientConnect(NetworkConnection conn){
         OnRoomClientConnect(conn);
         base.CallOnClientEnterRoom();
 
@@ -40,14 +40,14 @@ public class GameManager: NetworkRoomManager{
         
         msg.guid = GetDeviceGUID();
         NetworkClient.Send<GUIDMessage>(msg);
-    }
+    }*/
 
     public override void OnStartClient(){
         base.OnStartClient();
         InitializeDeviceGUID();
     }
 
-    public override void OnServerConnect(NetworkConnection conn){
+   /* public override void OnServerConnect(NetworkConnection conn){
         if (numPlayers >= maxConnections)
         {
             conn.Disconnect();
@@ -58,7 +58,7 @@ public class GameManager: NetworkRoomManager{
 
         }
 
-    }
+    }*/
 
     public override void OnRoomServerDisconnect(NetworkConnection conn){
         base.OnRoomServerDisconnect(conn);

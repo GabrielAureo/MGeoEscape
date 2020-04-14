@@ -46,6 +46,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   holdThreshold: 0.2
+  onTouch:
+    m_PersistentCalls:
+      m_Calls: []
+  onHold:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!54 &8383475171401586972
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -71,12 +80,12 @@ HingeJoint:
   m_GameObject: {fileID: 8383475171401586983}
   m_ConnectedBody: {fileID: 0}
   m_Anchor: {x: 0, y: 0, z: 0}
-  m_Axis: {x: 0, y: 0, z: 1}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.014000058, y: 0.47199997, z: 0.01700002}
-  m_UseSpring: 0
+  m_Axis: {x: 0, y: 1, z: 1}
+  m_AutoConfigureConnectedAnchor: 0
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_UseSpring: 1
   m_Spring:
-    spring: 0
+    spring: 2.21
     damper: 0
     targetPosition: 0
   m_UseMotor: 0

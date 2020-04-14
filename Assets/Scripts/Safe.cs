@@ -4,7 +4,6 @@ using UnityEngine;
 using TMPro;
 public class Safe : MonoBehaviour
 {
-    public List<PetrolItem> items;
 
     [Header("Components")]
     [SerializeField] Animator doorAnimator = null;

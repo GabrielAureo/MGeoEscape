@@ -6,7 +6,7 @@ public class MovableController{
     public Movable currentMovable; //Current movable object being held by the controller. Is assigned by the socket on the holding phase of the touch controller
     HingeJoint hinge;
     Socket lastSocket;
-    ARInteractable targetInteractable;
+    IARInteractable targetInteractable;
 
     public void SetupController(ARTouchController touchController, HingeJoint hinge){
         this.hinge = hinge;
@@ -36,9 +36,9 @@ public class MovableController{
         RaycastHit[] hits;
         hits = Physics.RaycastAll(touchData.ray);
         if(hits.Length>0){
-            ARInteractable targetInteractable = null;
+            IARInteractable targetInteractable = null;
             foreach(var hit in hits){
-                targetInteractable = hit.transform.GetComponent<ARInteractable>();
+                targetInteractable = hit.transform.GetComponent<IARInteractable>();
                 if(targetInteractable!= null) break;
             }
             
@@ -67,7 +67,7 @@ public class MovableController{
                     if(target != null) break;
                 }
             }
-           
+
             ReleaseMovable(target);            
             
         }
@@ -81,10 +81,15 @@ public class MovableController{
 
     public void ReleaseMovable(Socket target){
         currentMovable.rb.isKinematic = true;
-        var placed = target.TryPlaceObject(currentMovable);
-        if(!placed){
-            lastSocket.TryPlaceObject(currentMovable);
-        }
+        bool placed = false;
+
+        if(target != null) placed = target.TryPlaceObject(currentMovable);
+
+        if(!placed) lastSocket.TryPlaceObject(currentMovable);
+
+        lastSocket.FreeSocket();
+        
+
         lastSocket = null;
         currentMovable = null;
         hinge.connectedBody = null;
