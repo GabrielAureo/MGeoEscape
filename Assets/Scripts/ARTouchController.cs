@@ -71,7 +71,6 @@ public class ARTouchController : MonoBehaviour{
 
     private void InputStateMachine(){
         RaycastHit[] hits;
-        print(touchData.currentStatus);
         if(touchData.currentStatus == ARTouchData.Status.NO_TOUCH){
             
             hits = Physics.RaycastAll(ray, Mathf.Infinity, 1<<LayerMask.NameToLayer("Default"));
@@ -116,7 +115,6 @@ public class ARTouchController : MonoBehaviour{
         if(touchData.currentStatus == ARTouchData.Status.WAITING){
             timer+=Time.deltaTime;
             if(timer >= holdThreshold){
-                print("time: " + timer + ", holdT: " + holdThreshold);
                 ChangeStatus(touchData, ARTouchData.Status.HOLDING);
             }
         }

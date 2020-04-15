@@ -2,6 +2,8 @@ using UnityEngine;
 public class Resources: MonoBehaviour{
     [Header("Prefabs")]
     public GameObject previewSocketPrefab;
+    [Header("Puzzles Assets")]
+    public PetrolCollection petrolCollection;
     private static Resources _instance;
 
     public static Resources Instance { get { return _instance; } }

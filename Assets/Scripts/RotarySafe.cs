@@ -38,6 +38,10 @@ public class RotarySafe : MonoBehaviour
         m_gizmoPlane = new Plane(m_wheelHandle.right, m_wheelHandle.position);
     }
 
+    void Start(){
+        var items = Resources.Instance.petrolCollection.items;
+    }
+
     public void ToggleGizmo(ARTouchData data){
         m_motion.Kill();
         if(m_gizmoToggle){
@@ -65,25 +69,50 @@ public class RotarySafe : MonoBehaviour
         if(m_trackerRoutine != null) StopCoroutine(m_trackerRoutine);
     }
     IEnumerator RotationTracker(){
+        // var startRay = ARTouchController.touchData.ray;
+        // float startRayDist;
+        // m_gizmoPlane.SetNormalAndPosition(m_wheelHandle.right, m_wheelHandle.position);
+        // m_gizmoPlane.Raycast(startRay, out startRayDist);
+        // //get current rotation of wheel as offset, so the top of the object doesn't automatically end up facing the cursor
+        // float angleOffset = Vector3.SignedAngle(m_wheelHandle.parent.up, m_wheelHandle.up,m_wheelHandle.right); 
+
+        // float startAngle = CalculateAngle(startRayDist) + angleOffset;
+
         while(true){
-            var oldPosition = m_wheelHandle.transform.position;
             var ray = ARTouchController.touchData.ray;
             float rayDist;
+            m_gizmoPlane = new Plane(m_wheelHandle.right, m_wheelHandle.position);
             if(!m_gizmoPlane.Raycast(ray, out rayDist)) yield return null;
-            
-            var newPosition = ray.GetPoint(rayDist);
-            Debug.DrawLine(oldPosition,newPosition,Color.green,0);
-
-            var direction = oldPosition - newPosition;
-    
-
-            float angle = ((Mathf.Atan2(direction.y, direction.z) * Mathf.Rad2Deg + 90));
-            angle = ((int)angle/90) * 90f;
-
+            float angle = CalculateAngle(rayDist);
+            //angle -= startAngle;
+            //angle = ((int)angle/90) * 90f;
+            var orient = Quaternion.FromToRotation(Vector3.right, m_wheelHandle.right);
             Quaternion rotation = Quaternion.AngleAxis(-angle, m_wheelHandle.right);
-            m_wheelHandle.transform.rotation = rotation;    
+
+            m_wheelHandle.transform.rotation = rotation * orient;
 
             yield return null;
         }
+    }
+
+    float CalculateAngle(float rayDist){
+        var oldPosition = m_wheelHandle.position;
+        var ray = ARTouchController.touchData.ray;
+        
+        var newPosition = ray.GetPoint(rayDist);
+        Debug.DrawLine(oldPosition,newPosition,Color.green,0);
+
+        var direction = oldPosition - newPosition;
+        direction.Normalize();
+        print(direction);
+        direction = Vector3.ProjectOnPlane(direction, Vector3.right);
+        //direction = Vector3.Project(direction, Vector3.right);
+
+        print(direction);
+        
+
+
+        float angle = ((Mathf.Atan2(direction.y, direction.z) * Mathf.Rad2Deg) + 90f);
+        return angle;
     }
 }

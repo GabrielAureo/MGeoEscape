@@ -17,8 +17,6 @@ public class MovableController{
     }
 
     void TouchSocket(ARTouchData touchData){
-        Debug.Log("Touch phase");
-        Debug.Log(touchData.selectedInteractable);
         if(touchData.selectedInteractable is Socket){
             var socket = touchData.selectedInteractable as Socket;
             lastSocket = socket;
@@ -27,9 +25,7 @@ public class MovableController{
     }
 
     void CheckTarget(ARTouchData touchData){
-        Debug.Log("Hold phase");
         if(currentMovable == null) return;
-        Debug.Log(currentMovable);
 
         HoldMovable(currentMovable);
 
@@ -49,7 +45,6 @@ public class MovableController{
     }
 
     void Release(ARTouchData touchData){
-        Debug.Log("Release phase");
         if(touchData.lastStatus == ARTouchData.Status.HOLDING){
             targetInteractable?.onUntarget(currentMovable);
         }
