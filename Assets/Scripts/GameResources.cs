@@ -1,12 +1,13 @@
 using UnityEngine;
-public class Resources: MonoBehaviour{
+
+public class GameResources: MonoBehaviour{
     [Header("Prefabs")]
     public GameObject previewSocketPrefab;
     [Header("Puzzles Assets")]
     public PetrolCollection petrolCollection;
-    private static Resources _instance;
+    private static GameResources _instance;
 
-    public static Resources Instance { get { return _instance; } }
+    public static GameResources Instance { get { return _instance; } }
 
     private void Awake()
     {
@@ -15,6 +16,7 @@ public class Resources: MonoBehaviour{
             Destroy(this.gameObject);
         } else {
             _instance = this;
+            DontDestroyOnLoad(this);
         }
     }
 

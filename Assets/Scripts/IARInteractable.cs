@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public interface IARInteractable{
-    void onTap(ARTouchData touchData);
-    void onHold(ARTouchData touchData);
-    void onRelease(ARTouchData touchData);
+    void onTap();
+    void onHold();
+    void onRelease();
     void onTarget(Movable movable);
     void onUntarget(Movable movable);
 }

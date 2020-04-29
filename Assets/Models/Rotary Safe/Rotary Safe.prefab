@@ -489,6 +489,7 @@ GameObject:
   m_Component:
   - component: {fileID: 555347184613080183}
   - component: {fileID: 5484233186397161479}
+  - component: {fileID: 3696105450421159393}
   m_Layer: 0
   m_Name: Rotary Safe
   m_TagString: Untagged
@@ -529,6 +530,30 @@ MonoBehaviour:
   m_lockHandle: {fileID: 6805261880034870053}
   m_lockGlowAnimation: {fileID: 6535469869926601787}
   m_wheelHandle: {fileID: 7358834057573143180}
+  m_numberPrefab: {fileID: 5914843584580651189, guid: 096f00eb6f3bde545b2a0058262d089d,
+    type: 3}
+  m_safeAnimator: {fileID: 3696105450421159393}
+  radius: 0.675
+  password: []
+--- !u!95 &3696105450421159393
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3598275542563343972}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4f305465eaceca947ae96917852c2487, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3912693020483298064
 GameObject:
   m_ObjectHideFlags: 0
@@ -638,7 +663,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5484233186397161479}
-        m_MethodName: StopTracker
+        m_MethodName: ReleaseLock
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -828,6 +853,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1767373101146286815}
     m_Modifications:
+    - target: {fileID: 2166247688921018989, guid: a640830ad7f4d5040a3f36462b06f3e7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2166247688921018989, guid: a640830ad7f4d5040a3f36462b06f3e7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: 2914256747990992285, guid: a640830ad7f4d5040a3f36462b06f3e7,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -946,7 +981,7 @@ PrefabInstance:
     - target: {fileID: 5694303812625526324, guid: a640830ad7f4d5040a3f36462b06f3e7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.36
+      value: 0.153
       objectReference: {fileID: 0}
     - target: {fileID: 5694303812625526324, guid: a640830ad7f4d5040a3f36462b06f3e7,
         type: 3}
@@ -1021,7 +1056,7 @@ PrefabInstance:
     - target: {fileID: 8745254891081210919, guid: a640830ad7f4d5040a3f36462b06f3e7,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9048891777497902311, guid: a640830ad7f4d5040a3f36462b06f3e7,
         type: 3}

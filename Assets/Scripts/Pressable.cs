@@ -4,11 +4,11 @@ public class Pressable: MonoBehaviour, IARInteractable
 {
     public UnityEvent pressEvent;
 
-    public void onHold(ARTouchData touchData){}
+    public void onHold(){}
 
-    public void onRelease(ARTouchData touchData){}
+    public void onRelease(){}
 
-    public void onTap(ARTouchData touchData)
+    public void onTap()
     {
         pressEvent.Invoke();
     }

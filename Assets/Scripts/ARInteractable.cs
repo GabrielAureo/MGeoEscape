@@ -4,28 +4,26 @@ using UnityEngine.Events;
 public class ARInteractable :  MonoBehaviour, IARInteractable
 {
     [System.Serializable]
-    public class InteractionEvent: UnityEvent<ARTouchData>{}
-    [System.Serializable]
     public class MovableEvent: UnityEvent<Movable>{}
 
-    public InteractionEvent HoldEvent;
-    public InteractionEvent ReleaseEvent;
-    public InteractionEvent TapEvent;
+    public UnityEvent HoldEvent;
+    public UnityEvent ReleaseEvent;
+    public UnityEvent TapEvent;
     public MovableEvent TargetEvent;
     public MovableEvent UntargetEvent;
-    public void onHold(ARTouchData touchData)
+    public void onHold()
     {
-        HoldEvent.Invoke(touchData);
+        HoldEvent.Invoke();
     }
 
-    public void onRelease(ARTouchData touchData)
+    public void onRelease()
     {
-        ReleaseEvent.Invoke(touchData);
+        ReleaseEvent.Invoke();
     }
 
-    public void onTap(ARTouchData touchData)
+    public void onTap()
     {
-        TapEvent.Invoke(touchData);
+        TapEvent.Invoke();
     }
 
     public void onTarget(Movable movable)

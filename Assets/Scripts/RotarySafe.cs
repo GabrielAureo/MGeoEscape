@@ -12,14 +12,50 @@ public class RotarySafe : MonoBehaviour
     [SerializeField] Transform m_lockHandle = null;
     [SerializeField] Animation m_lockGlowAnimation = null;
     [SerializeField] Transform m_wheelHandle = null;
+    [SerializeField] GameObject m_numberPrefab = null;
+    [SerializeField] Animator m_safeAnimator = null;
     private Renderer m_lockRenderer;
     private Renderer[] m_handleRenderer;
     private Color m_handleLockColor;
+    [Header("Adjustments")]
+    [SerializeField] private float radius = 0f;
 
     private Tween m_motion;
     private Coroutine m_trackerRoutine;
+    private int angleClamp;
 
     private Plane m_gizmoPlane;
+
+    public List<float> password;
+     public List<float> input;
+
+    private List<float> numbers;
+
+    float? valueLooked;
+
+
+
+    void SpawnNumbers(){
+        var items = new List<PetrolCollection.PetrolItem>(GameResources.Instance.petrolCollection.items.Values);
+        int n = items.Count;
+        numbers = new List<float>();
+        angleClamp = 360/(n * 4);
+        float part = (2 * Mathf.PI)/n;
+        for(int i = 0; i< n; i++){
+            var angle = part * i;
+            var pos = radius * new Vector3(-Mathf.Cos(angle), 0, -Mathf.Sin(angle));
+
+            var g = GameObject.Instantiate(m_numberPrefab, m_wheelHandle.GetChild(0));
+            g.transform.localPosition = pos;
+
+            var rot = (Mathf.Atan2(pos.x, pos.z) * Mathf.Rad2Deg) - 90f;
+            g.transform.localRotation = Quaternion.Euler(0, rot ,0);
+            g.GetComponentInChildren<TMPro.TextMeshPro>().text = items[i].value.ToString();
+
+            numbers.Add(items[i].value);
+        }
+    }
+
 
     // Start is called before the first frame update
     void Awake()
@@ -38,11 +74,21 @@ public class RotarySafe : MonoBehaviour
         m_gizmoPlane = new Plane(m_wheelHandle.right, m_wheelHandle.position);
     }
 
-    void Start(){
-        var items = Resources.Instance.petrolCollection.items;
+    public void ClearInput(){
+        if(input != null){
+            input.Clear();
+        }else{
+            input = new List<float>();
+        }
+        
     }
 
-    public void ToggleGizmo(ARTouchData data){
+
+    void Start(){
+        SpawnNumbers();
+    }
+
+    public void ToggleGizmo(){
         m_motion.Kill();
         if(m_gizmoToggle){
             m_lockGlowAnimation["LockGlow"].speed = 1;
@@ -62,21 +108,47 @@ public class RotarySafe : MonoBehaviour
         }
     }
 
-    public void RotateLock(ARTouchData data){
+    public void RotateLock(){
         m_trackerRoutine = StartCoroutine(RotationTracker());
     }
-    public void StopTracker(ARTouchData data){
+    public void ReleaseLock(){
         if(m_trackerRoutine != null) StopCoroutine(m_trackerRoutine);
+        if(valueLooked != null){
+            input.Add((float)valueLooked);
+        }
+        if(input.Count == password.Count){
+            if(EvaluateInput()){
+                m_safeAnimator.SetTrigger("UnlockSuccess");
+            }else{
+                m_safeAnimator.SetTrigger("UnlockFail");
+            }
+            input.Clear();
+        }
+    }
+    private bool EvaluateInput(){
+        //if both lists have the same values in same order, return true
+        if(input == password) return true; 
+        var temp = new List<float>(password);
+        foreach(var val in input){
+            foreach(var val2 in temp){
+                if(val == val2){
+                    temp.Remove(val2);
+                    break;
+                }
+            }
+        }
+        return (temp.Count == 0);
     }
     IEnumerator RotationTracker(){
-        // var startRay = ARTouchController.touchData.ray;
-        // float startRayDist;
-        // m_gizmoPlane.SetNormalAndPosition(m_wheelHandle.right, m_wheelHandle.position);
-        // m_gizmoPlane.Raycast(startRay, out startRayDist);
-        // //get current rotation of wheel as offset, so the top of the object doesn't automatically end up facing the cursor
-        // float angleOffset = Vector3.SignedAngle(m_wheelHandle.parent.up, m_wheelHandle.up,m_wheelHandle.right); 
+        var startRay = ARTouchController.touchData.ray;
+        float startRayDist;
+        m_gizmoPlane = new Plane(m_wheelHandle.right, m_wheelHandle.position);
+        m_gizmoPlane.Raycast(startRay, out startRayDist);
+        //get current rotation of wheel as offset, so the top of the object doesn't automatically end up facing the cursor
+        float angleOffset = -Vector3.SignedAngle(m_wheelHandle.parent.up, m_wheelHandle.up, m_wheelHandle.right);
 
-        // float startAngle = CalculateAngle(startRayDist) + angleOffset;
+        float startAngle = CalculateAngle(startRayDist) + angleOffset;
+
 
         while(true){
             var ray = ARTouchController.touchData.ray;
@@ -84,35 +156,48 @@ public class RotarySafe : MonoBehaviour
             m_gizmoPlane = new Plane(m_wheelHandle.right, m_wheelHandle.position);
             if(!m_gizmoPlane.Raycast(ray, out rayDist)) yield return null;
             float angle = CalculateAngle(rayDist);
-            //angle -= startAngle;
-            //angle = ((int)angle/90) * 90f;
-            var orient = Quaternion.FromToRotation(Vector3.right, m_wheelHandle.right);
-            Quaternion rotation = Quaternion.AngleAxis(-angle, m_wheelHandle.right);
+            var temp = angle;
+            angle -= startAngle;
 
-            m_wheelHandle.transform.rotation = rotation * orient;
+            angle = angle - Mathf.CeilToInt(angle/360f) * 360f;
+            if(angle < 0) angle += 360f;
+
+            var clampedAngle = ((int)angle/angleClamp);
+            angle = clampedAngle * angleClamp;
+
+            valueLooked = ValueLooked(clampedAngle);
+
+
+            m_wheelHandle.transform.localRotation = Quaternion.Euler(angle, 0 ,0);
 
             yield return null;
         }
     }
+    float? ValueLooked(float angle){
+        var items = GameResources.Instance.petrolCollection.items.Values;
+        var n = items.Count;
+        if(angle % 4 != 0) return null;
+        return numbers[(int)angle/4];
+    }
 
     float CalculateAngle(float rayDist){
-        var oldPosition = m_wheelHandle.position;
+        var center = m_wheelHandle.position;        
         var ray = ARTouchController.touchData.ray;
         
-        var newPosition = ray.GetPoint(rayDist);
-        Debug.DrawLine(oldPosition,newPosition,Color.green,0);
+        var grabPosition = ray.GetPoint(rayDist);
+        Debug.DrawLine(center,grabPosition,Color.green,0);
 
-        var direction = oldPosition - newPosition;
-        direction.Normalize();
-        print(direction);
-        direction = Vector3.ProjectOnPlane(direction, Vector3.right);
-        //direction = Vector3.Project(direction, Vector3.right);
-
-        print(direction);
         
+    
+        //direction = m_wheelHandle.InverseTransformDirection(direction);
+        var dir = center - grabPosition;
+        Debug.DrawLine(Vector3.zero, dir * 5, Color.yellow, 0);
 
+        var rot = Quaternion.FromToRotation(m_wheelHandle.right, Vector3.right);
 
-        float angle = ((Mathf.Atan2(direction.y, direction.z) * Mathf.Rad2Deg) + 90f);
-        return angle;
+        dir = rot * dir;
+        Debug.DrawLine(Vector3.zero, dir * 5, Color.blue, 0);
+        float angle = ((Mathf.Atan2(dir.y, dir.z) * Mathf.Rad2Deg) + 90f);  
+        return -angle;
     }
 }

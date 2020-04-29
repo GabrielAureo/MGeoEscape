@@ -33,7 +33,7 @@ public class Socket : NetworkBehaviour, IARInteractable
     }
 
     void Start(){
-        var preview = GameObject.Instantiate(Resources.Instance.previewSocketPrefab,transform);
+        var preview = GameObject.Instantiate(GameResources.Instance.previewSocketPrefab,transform);
         previewRenderer = preview.GetComponent<MeshRenderer>();
         previewFilter = preview.GetComponent<MeshFilter>();
     }
@@ -102,9 +102,9 @@ public class Socket : NetworkBehaviour, IARInteractable
         }
     }
 
-    public void onTap(ARTouchData touchData){}
+    public void onTap(){}
 
-    public void onHold(ARTouchData touchData)
+    public void onHold()
     {
         if(currentObject == null) return;
         currentObject.onHold();
@@ -115,7 +115,7 @@ public class Socket : NetworkBehaviour, IARInteractable
         busy = true;
     }
 
-    public void onRelease(ARTouchData touchData)
+    public void onRelease()
     {
         if(currentObject == null) return;
         currentObject.onRelease();

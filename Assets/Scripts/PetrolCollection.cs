@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Mirror;
+using RotaryHeart.Lib.SerializableDictionary;
 
 [CreateAssetMenu(menuName ="Puzzles/PetrolCollection")]
 public class PetrolCollection : ScriptableObject{
@@ -9,6 +11,11 @@ public class PetrolCollection : ScriptableObject{
         public string itemName;
         public int value;
         public Texture2D stickerTexture;
+
     }
-    public List<PetrolItem> items;
+    [Serializable]
+    public class PetrolDictionary : SerializableDictionaryBase<int, PetrolItem> {}
+    public PetrolDictionary items;
 }
+
+

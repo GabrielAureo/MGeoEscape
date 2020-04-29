@@ -12,6 +12,7 @@ public class ARTouchController : MonoBehaviour{
     public float holdThreshold = 0.2f;
 
     [HideInInspector] public Ray ray;
+    //To be used by the movable controller
     [HideInInspector] public TouchEvent onTouch;
     [HideInInspector] public TouchEvent onHold;
     [HideInInspector] public TouchEvent onRelease;
@@ -41,6 +42,8 @@ public class ARTouchController : MonoBehaviour{
         transform.position = Camera.main.transform.position;
         transform.rotation = Camera.main.transform.rotation;
     }
+
+   
     public void HandleInput()
     {
         #if UNITY_ANDROID && !UNITY_EDITOR
@@ -91,12 +94,18 @@ public class ARTouchController : MonoBehaviour{
                     lastSocket = (Socket)selectedInteractable;
                 }*/
             }
-            ChangeStatus(touchData, ARTouchData.Status.WAITING);
+            ChangeStatus(ARTouchData.Status.WAITING);
         }
         if(touchData.currentStatus == ARTouchData.Status.HOLDING){
+
             if(touchData.lastStatus == ARTouchData.Status.WAITING){
-                touchData.selectedInteractable?.onHold(touchData);
-                ChangeStatus(touchData, ARTouchData.Status.HOLDING);                
+                try{
+                    touchData.selectedInteractable?.onHold();
+                }catch(System.Exception e){
+                    Debug.LogError("ARTouchController: " + e.GetType().ToString() + " caught on " + touchData.selectedInteractable?.ToString() +" Hold Event");
+                }
+
+                ChangeStatus(ARTouchData.Status.HOLDING);                
             }
             Debug.DrawRay(ray.origin, ray.direction, Color.green);
 
@@ -115,7 +124,7 @@ public class ARTouchController : MonoBehaviour{
         if(touchData.currentStatus == ARTouchData.Status.WAITING){
             timer+=Time.deltaTime;
             if(timer >= holdThreshold){
-                ChangeStatus(touchData, ARTouchData.Status.HOLDING);
+                ChangeStatus(ARTouchData.Status.HOLDING);
             }
         }
     }
@@ -138,45 +147,27 @@ public class ARTouchController : MonoBehaviour{
         onRelease.Invoke(touchData);
 
         if(touchData.currentStatus == ARTouchData.Status.WAITING){
-            touchData.selectedInteractable?.onTap(touchData);
-           
-        }
-       touchData.selectedInteractable?.onRelease(touchData);
-
-        /*if(currentMovable){
-            Socket target = (Socket) selectedInteractable;
-            if(Physics.Raycast(touchData.ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Sockets"))){
-                target = hit.transform.GetComponent<Socket>();
+            try{
+                touchData.selectedInteractable?.onTap();
+            }catch(System.Exception e){
+                Debug.LogError("ARTouchController: " + e.GetType().ToString() + " caught on " + touchData.selectedInteractable?.ToString() +" Tap Event");
             }
-           
-            ReleaseMovable(target);            
+        }
             
-        }*/
-         touchData.selectedInteractable = null;
-        ChangeStatus(touchData, ARTouchData.Status.NO_TOUCH);
+        //Catch Exceptions so the controller doesn't get stuck in the Holding or Waiting status
+        try{
+            touchData.selectedInteractable?.onRelease();
+        }catch(System.Exception e){
+            Debug.LogError("ARTouchController: " + e.GetType().ToString() + " caught on " + touchData.selectedInteractable?.ToString() +" Release Event");
+        }
+        
+        
+        touchData.selectedInteractable = null;
+        ChangeStatus(ARTouchData.Status.NO_TOUCH);
     }
 
-    private void ChangeStatus(ARTouchData touchData, ARTouchData.Status newStatus){
+    private void ChangeStatus(ARTouchData.Status newStatus){
         touchData.lastStatus = touchData.currentStatus;
         touchData.currentStatus = newStatus;
     }
-
-   
-    // public void HoldMovable(Movable movable){
-    //     currentMovable = movable;
-    //     hinge.connectedBody = movable.rb;
-    //     movable.transform.parent = null;
-    // }
-
-    // public void ReleaseMovable(Socket target){
-    //     currentMovable.rb.isKinematic = true;
-    //     var placed = target.TryPlaceObject(currentMovable);
-    //     if(!placed){
-    //         lastSocket.TryPlaceObject(currentMovable);
-    //     }
-    //     lastSocket = null;
-    //     currentMovable = null;
-    //     hinge.connectedBody = null;
-    // }
-
 }
