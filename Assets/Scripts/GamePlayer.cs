@@ -9,7 +9,7 @@ public class GamePlayer: NetworkBehaviour{
 
     [Command]
     public void CmdPlayerReady(){
-        GameObject.FindObjectOfType<PuzzlesInitializer>().RpcSceneSetup(netIdentity);
+        GameObject.FindObjectOfType<PuzzlesManager>().RpcSceneSetup(netIdentity);
     }
 
     public override void OnStartLocalPlayer(){

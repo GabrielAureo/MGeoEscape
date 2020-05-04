@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class PuzzlesInitializer : NetworkBehaviour
+public class PuzzlesManager : NetworkBehaviour
 {
-    [SerializeField] List<Puzzle> m_puzzles = null;
+    [SerializeField] public List<Puzzle> puzzles = null;
     public override void OnStartServer(){
-        foreach(var puzzle in m_puzzles){
+        foreach(var puzzle in puzzles){
             puzzle.Initialize();
         }
     }
     [ClientRpc]
     public void RpcSceneSetup(NetworkIdentity localPlayer){
-        foreach(var puzzle in m_puzzles){
+        foreach(var puzzle in puzzles){
             puzzle.OnLocalPlayerReady(localPlayer);
         }
     }

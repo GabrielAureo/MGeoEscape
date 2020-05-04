@@ -30,7 +30,7 @@ public class BuildScript{
         RunPlayerTwo();
         RunPlayerThree();
 
-        EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+        EditorSceneManager.SaveOpenScenes();
         EditorSceneManager.OpenScene("Assets/Scenes/Lobby.unity");
 
         EditorApplication.EnterPlaymode();

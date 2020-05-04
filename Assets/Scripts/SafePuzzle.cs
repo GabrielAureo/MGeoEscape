@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class SafePuzzle: Puzzle{
     [SerializeField] RotarySafe m_safe = null;
     [SerializeField] Vuforia.ImageTargetBehaviour m_target = null;
-    public List<float> generatedPassword = new List<float>();
+    public SyncListFloat generatedPassword = new SyncListFloat();
     public SyncListInt chosenItems = new SyncListInt();
 
     void Awake(){
@@ -16,6 +16,16 @@ public class SafePuzzle: Puzzle{
     {
         //Inititaliza Safe open state when the game begins
         GeneratePassword();
+    }
+
+    private void SetupPuzzleAcrossClients(NetworkIdentity localPlayer){
+        var player = localPlayer.GetComponent<GamePlayer>();
+        if(player != null){
+            if(player.character != Character.Detective){
+                if(m_safe.isActiveAndEnabled) GameObject.Destroy(m_safe.gameObject);
+            }
+
+        }
     }
 
     private void GeneratePassword(){
@@ -35,7 +45,7 @@ public class SafePuzzle: Puzzle{
         #if UNITY_ANDROID && !UNITY_EDITOR
         m_safe.transform.parent =  m_target.transform;
         #endif
-        m_safe.password = generatedPassword;
+        m_safe.password = new List<float>(generatedPassword);
         //Reset safe input
         m_safe.ClearInput();
     }
@@ -51,5 +61,9 @@ public class SafePuzzle: Puzzle{
     public override void OnLocalPlayerReady(NetworkIdentity player)
     {
         SetStickers(player);
+        //LocalPlayerAnnouncer.RunOnLocalPlayer(SetupPuzzleAcrossClients);
+        SetupPuzzleAcrossClients(player);
+        
+
     }
 }

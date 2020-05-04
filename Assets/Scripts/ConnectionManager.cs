@@ -48,6 +48,11 @@ public class ConnectionManager : MonoBehaviour{
                 networkDiscovery.AdvertiseServer();
             }
 
+            if(GUILayout.Button("Find Server"))
+            {
+                networkDiscovery.StartDiscovery();
+            }
+
             GUILayout.EndHorizontal();
 
         }

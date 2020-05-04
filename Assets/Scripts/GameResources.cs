@@ -5,6 +5,7 @@ public class GameResources: MonoBehaviour{
     public GameObject previewSocketPrefab;
     [Header("Puzzles Assets")]
     public PetrolCollection petrolCollection;
+    
     private static GameResources _instance;
 
     public static GameResources Instance { get { return _instance; } }

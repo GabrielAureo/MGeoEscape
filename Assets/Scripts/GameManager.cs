@@ -70,7 +70,6 @@ public class GameManager: NetworkRoomManager{
         ServerChangeScene(GameplayScene);
     }
 
-
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject lobbyPlayer, GameObject gamePlayer)
     {
         GamePlayer player = gamePlayer.GetComponent<GamePlayer>();

@@ -1,19 +1,10 @@
 using UnityEngine;
 using System;
+using Mirror;
+using System.Collections.Generic;
 
 public class DebugMenu: MonoBehaviour{
 
-    private static readonly Lazy<DebugMenu> LazyInstance = new Lazy<DebugMenu>(CreateSingleton);
-
-    public static DebugMenu Instance => LazyInstance.Value;
-
-    private static DebugMenu CreateSingleton()
-    {
-        var ownerObject = new GameObject($"{typeof(DebugMenu).Name} (singleton)");
-        var instance = ownerObject.AddComponent<DebugMenu>();
-        DontDestroyOnLoad(ownerObject);
-        return instance;
-    }
     private Action func;
     
      void OnGUI(){
@@ -29,14 +20,55 @@ public class DebugMenu: MonoBehaviour{
         if(GUILayout.Button("Touch")){
             func = TouchControllerDebug;
         }
+        if(GUILayout.Button("Puzzles")){
+            func = PuzzlesDebug;
+        }
 
         GUILayout.EndHorizontal();
         if(func != null) func();
 
     }
 
-    void NetworkDebug(){
+    void PuzzlesDebug(){
+        int s = 0;
+        string[] puzzles = {"Safe"};
+        s = GUILayout.Toolbar(s,puzzles);
 
+        switch(s){
+            case 0: 
+            SafePuzzleDebug();
+            break;
+        }
+    }
+    void SafePuzzleDebug(){
+        SafePuzzle sp = MainManager.Instance.puzzlesManager.puzzles.Find((x) => x.GetType() == typeof(SafePuzzle)) as SafePuzzle;
+        Debug.Log(sp.generatedPassword.Count);
+        //sp.generatedPassword.Add(100);
+        var password = "";
+
+        foreach(var pass in sp.generatedPassword){
+            password += pass.ToString() + " ";
+        }
+        password.TrimEnd(' ');
+        DrawLabeled("Password", password);
+
+        GUILayout.Button("Unlock Safe (TODO)");
+    }
+    void NetworkDebug(){
+        if(ClientScene.localPlayer != null){
+            var character = ClientScene.localPlayer.GetComponent<GamePlayer>().character;
+            DrawLabeled("Character", System.Enum.GetName(typeof(Character), character));
+        }
+    }
+
+    void DrawLabeled(string label, string content){
+        var labelStyle = new GUIStyle(GUI.skin.label);
+        labelStyle.fontStyle = FontStyle.Bold;
+        GUILayout.BeginHorizontal();
+        GUILayout.Label(label, labelStyle);
+        GUILayout.Label(content);
+        GUILayout.EndHorizontal();
+        
     }
 
     void TouchControllerDebug(){
