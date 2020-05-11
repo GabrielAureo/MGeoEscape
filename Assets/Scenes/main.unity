@@ -1078,6 +1078,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6104161056440037140, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
+      propertyPath: m_trueRocksPrefabs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6104161056440037140, guid: 52a376d3ca693494c97bbe4ac69e5639,
+        type: 3}
+      propertyPath: m_fakeRocksPrefabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6104161056440037140, guid: 52a376d3ca693494c97bbe4ac69e5639,
+        type: 3}
       propertyPath: m_safe
       value: 
       objectReference: {fileID: 2108846508}
@@ -1086,6 +1096,36 @@ PrefabInstance:
       propertyPath: m_target
       value: 
       objectReference: {fileID: 1673165500}
+    - target: {fileID: 6104161056440037140, guid: 52a376d3ca693494c97bbe4ac69e5639,
+        type: 3}
+      propertyPath: m_trueRocksPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 6207987107604856589, guid: 6f8f2093fecad4145a3034de61201fb4,
+        type: 3}
+    - target: {fileID: 6104161056440037140, guid: 52a376d3ca693494c97bbe4ac69e5639,
+        type: 3}
+      propertyPath: m_trueRocksPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 4928199531153783405, guid: 22440b59c3e968147b95f561dff87ae1,
+        type: 3}
+    - target: {fileID: 6104161056440037140, guid: 52a376d3ca693494c97bbe4ac69e5639,
+        type: 3}
+      propertyPath: m_trueRocksPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 7165724411415962402, guid: 67cbff99ec2a07749859fa2e3e2461a2,
+        type: 3}
+    - target: {fileID: 6104161056440037140, guid: 52a376d3ca693494c97bbe4ac69e5639,
+        type: 3}
+      propertyPath: m_fakeRocksPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 2158628101002630389, guid: ccd2c744704e5d74ca8776fe11a0a9cc,
+        type: 3}
+    - target: {fileID: 6104161056440037140, guid: 52a376d3ca693494c97bbe4ac69e5639,
+        type: 3}
+      propertyPath: m_fakeRocksPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 8638561024148378291, guid: 888c071ee7db5f14e8cdda6c4fe7a149,
+        type: 3}
     - target: {fileID: 7303308136603216016, guid: 52a376d3ca693494c97bbe4ac69e5639,
         type: 3}
       propertyPath: m_LocalPosition.x

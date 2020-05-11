@@ -16,7 +16,7 @@ public class ARTouchController : MonoBehaviour{
     [HideInInspector] public TouchEvent onTouch;
     [HideInInspector] public TouchEvent onHold;
     [HideInInspector] public TouchEvent onRelease;
-    public ARTouchData.Status status;
+
 
     public MovableController movableController;
 
@@ -37,7 +37,6 @@ public class ARTouchController : MonoBehaviour{
     }*/
 
     void Update(){
-        status = touchData.currentStatus;
         HandleInput();
         transform.position = Camera.main.transform.position;
         transform.rotation = Camera.main.transform.rotation;

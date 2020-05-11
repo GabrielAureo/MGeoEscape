@@ -7,14 +7,14 @@ public class GamePlayer: NetworkBehaviour{
 
     [SerializeField] ARTouchController touchController = null;
 
-    [Command]
-    public void CmdPlayerReady(){
-        GameObject.FindObjectOfType<PuzzlesManager>().RpcSceneSetup(netIdentity);
-    }
+    // [Command]
+    // public void CmdPlayerReady(){
+    //     GameObject.FindObjectOfType<PuzzlesManager>().RpcSceneSetup(netIdentity);
+    // }
 
-    public override void OnStartLocalPlayer(){
-        CmdPlayerReady();
-    }
+    // public override void OnStartLocalPlayer(){
+    //     CmdPlayerReady();
+    // }
     void RenameGameObject(string oldName, string newName){
         gameObject.name = "Game Player " + name;
     }

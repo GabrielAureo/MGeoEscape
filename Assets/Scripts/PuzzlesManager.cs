@@ -11,10 +11,17 @@ public class PuzzlesManager : NetworkBehaviour
             puzzle.Initialize();
         }
     }
-    [ClientRpc]
+    /*[ClientRpc]
     public void RpcSceneSetup(NetworkIdentity localPlayer){
         foreach(var puzzle in puzzles){
             puzzle.OnLocalPlayerReady(localPlayer);
         }
+    }*/
+    public override void OnStartClient(){
+        foreach(var puzzle in puzzles){
+            LocalPlayerAnnouncer.RunOnLocalPlayer(puzzle.OnLocalPlayerReady);
+        }
     }
+
+
 }

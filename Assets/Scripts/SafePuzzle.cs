@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 public class SafePuzzle: Puzzle{
     [SerializeField] RotarySafe m_safe = null;
+    [SerializeField] List<GameObject> m_trueRocksPrefabs = null;
+    [SerializeField] List<GameObject> m_fakeRocksPrefabs = null;
     [SerializeField] Vuforia.ImageTargetBehaviour m_target = null;
     public SyncListFloat generatedPassword = new SyncListFloat();
     public SyncListInt chosenItems = new SyncListInt();
@@ -21,10 +23,13 @@ public class SafePuzzle: Puzzle{
     private void SetupPuzzleAcrossClients(NetworkIdentity localPlayer){
         var player = localPlayer.GetComponent<GamePlayer>();
         if(player != null){
+            var player_idx = (int)player.character >> 1;
             if(player.character != Character.Detective){
                 if(m_safe.isActiveAndEnabled) GameObject.Destroy(m_safe.gameObject);
             }
-
+            var rock = GameObject.Instantiate(m_trueRocksPrefabs[player_idx]);
+            var item = GameResources.Instance.petrolCollection.items[chosenItems[player_idx]];
+            rock.GetComponent<MeshRenderer>().materials[1].SetTexture("_BaseMap", item.stickerTexture);
         }
     }
 
@@ -51,16 +56,20 @@ public class SafePuzzle: Puzzle{
     }
 
     public void SetStickers(NetworkIdentity localPlayer){
-        var player_char = (int)localPlayer.GetComponent<GamePlayer>().character;
-        var player_idx = player_char >> 1;
-        //var item_idx = chosenItems[player_idx];
+        var player = localPlayer.GetComponent<GamePlayer>();
+        if(player != null){
+            var player_char = (int) player.character;
+            var player_idx = player_char >> 1;
+            //var item_idx = chosenItems[player_idx];
 
-       // m_stickers[player_idx].GetComponent<MeshRenderer>().material.SetTexture("_BaseMap", m_items[item_idx].stickerTexture);
+            // m_stickers[player_idx].GetComponent<MeshRenderer>().material.SetTexture("_BaseMap", m_items[item_idx].stickerTexture);
+        }
+
     }
 
     public override void OnLocalPlayerReady(NetworkIdentity player)
     {
-        SetStickers(player);
+        //SetStickers(player);
         //LocalPlayerAnnouncer.RunOnLocalPlayer(SetupPuzzleAcrossClients);
         SetupPuzzleAcrossClients(player);
         
