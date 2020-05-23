@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d006eaeae80a1514497fb189ae3106e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timer: 0
   holdThreshold: 0.2
   onTouch:
     m_PersistentCalls:
@@ -55,6 +56,7 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls: []
+  movableController: {fileID: 0}
 --- !u!54 &8383475171401586972
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -1,15 +1,22 @@
 using UnityEngine;
 using UnityEngine.Events;
+using Mirror;
 
-public class MovableController{
+public class MovableController : NetworkBehaviour{
     
     public Movable currentMovable; //Current movable object being held by the controller. Is assigned by the socket on the holding phase of the touch controller
     HingeJoint hinge;
-    Socket lastSocket;
+    [SyncVar]
+    NetworkIdentity lastSocketNetIdentity;
+
     IARInteractable targetInteractable;
 
-    public void SetupController(ARTouchController touchController, HingeJoint hinge){
-        this.hinge = hinge;
+    void Start(){
+        SetupController(MainManager.Instance.ARTouchController);
+    }
+
+    public void SetupController(ARTouchController touchController){
+        this.hinge = touchController.GetComponent<HingeJoint>();
         touchController.onTouch.AddListener(TouchSocket);
         touchController.onHold.AddListener(CheckTarget);
         touchController.onRelease.AddListener(Release);
@@ -19,9 +26,18 @@ public class MovableController{
     void TouchSocket(ARTouchData touchData){
         if(touchData.selectedInteractable is Socket){
             var socket = touchData.selectedInteractable as Socket;
-            lastSocket = socket;
-            currentMovable = socket.currentObject;
+            if(!socket.busy){
+                CmdTouch(socket.netIdentity);
+            }
+            
         }
+    }
+    [Command]
+    void CmdTouch(NetworkIdentity socketNetID){
+        var socket = socketNetID.GetComponent<Socket>();
+        socket.busy = true;
+        lastSocketNetIdentity = socketNetID;
+        currentMovable = socket.currentObject;
     }
 
     void CheckTarget(ARTouchData touchData){
@@ -32,7 +48,6 @@ public class MovableController{
         RaycastHit[] hits;
         hits = Physics.RaycastAll(touchData.ray);
         if(hits.Length>0){
-            IARInteractable targetInteractable = null;
             foreach(var hit in hits){
                 targetInteractable = hit.transform.GetComponent<IARInteractable>();
                 if(targetInteractable!= null) break;
@@ -41,6 +56,7 @@ public class MovableController{
             targetInteractable?.onTarget(currentMovable);
         }else{
             targetInteractable?.onUntarget(currentMovable);
+            targetInteractable = null;
         }
     }
 
@@ -69,7 +85,7 @@ public class MovableController{
     }
 
     public void HoldMovable(Movable movable){
-        currentMovable = movable;
+        //currentMovable = movable;
         hinge.connectedBody = movable.rb;
         movable.transform.parent = null;
     }
@@ -77,6 +93,7 @@ public class MovableController{
     public void ReleaseMovable(Socket target){
         currentMovable.rb.isKinematic = true;
         bool placed = false;
+        var lastSocket = lastSocketNetIdentity.GetComponent<Socket>();
 
         if(target != null) placed = target.TryPlaceObject(currentMovable);
 

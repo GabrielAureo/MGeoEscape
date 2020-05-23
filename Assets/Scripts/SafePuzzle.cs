@@ -21,6 +21,7 @@ public class SafePuzzle: Puzzle{
     }
 
     private void SetupPuzzleAcrossClients(NetworkIdentity localPlayer){
+        if(localPlayer == null) return;
         var player = localPlayer.GetComponent<GamePlayer>();
         if(player != null){
             var player_idx = (int)player.character >> 1;
@@ -30,6 +31,8 @@ public class SafePuzzle: Puzzle{
             var rock = GameObject.Instantiate(m_trueRocksPrefabs[player_idx]);
             var item = GameResources.Instance.petrolCollection.items[chosenItems[player_idx]];
             rock.GetComponent<MeshRenderer>().materials[1].SetTexture("_BaseMap", item.stickerTexture);
+
+            var socket = SpawnSocket(rock.GetComponent<Movable>());
         }
     }
 
@@ -72,7 +75,14 @@ public class SafePuzzle: Puzzle{
         //SetStickers(player);
         //LocalPlayerAnnouncer.RunOnLocalPlayer(SetupPuzzleAcrossClients);
         SetupPuzzleAcrossClients(player);
-        
 
+    }
+
+    private GameObject SpawnSocket(Movable movable){
+        var obj = GameObject.Instantiate(GameResources.Instance.emptySocketPrefab);
+        var socket = obj.GetComponent<Socket>();
+        socket.TryPlaceObject(movable);
+
+        return obj;
     }
 }

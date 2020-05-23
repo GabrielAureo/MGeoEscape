@@ -16,16 +16,15 @@ public class ARTouchController : MonoBehaviour{
     [HideInInspector] public TouchEvent onTouch;
     [HideInInspector] public TouchEvent onHold;
     [HideInInspector] public TouchEvent onRelease;
-
-
     public MovableController movableController;
 
     public static ARTouchData touchData;
 
     void Awake(){
         var hinge = GetComponent<HingeJoint>();
-        movableController = new MovableController();
-        movableController.SetupController(this, hinge);
+        // movableController = new MovableController();
+        // movableController.SetupController(this, hinge);
+        // movableController = GetComponent<MovableController>();
         touchData = new ARTouchData();
         touchData.currentStatus = ARTouchData.Status.NO_TOUCH;
     }

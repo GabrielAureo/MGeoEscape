@@ -3,6 +3,7 @@ using UnityEngine;
 public class GameResources: MonoBehaviour{
     [Header("Prefabs")]
     public GameObject previewSocketPrefab;
+    public GameObject emptySocketPrefab;
     [Header("Puzzles Assets")]
     public PetrolCollection petrolCollection;
     

@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Collections;
 using Vuforia;
 using UnityEngine.Events;
+using Mirror;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Movable : MonoBehaviour
+public class Movable : NetworkBehaviour
 {
     private Transform originalParent;
     private Quaternion originalRotation;
