@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
-
+[RequireComponent(typeof(Collider))]
 public class Socket : ARNetInteractable
 {
     /// <summary>
@@ -30,6 +30,11 @@ public class Socket : ARNetInteractable
         if(movable) SetObject(movable);
         
 
+    }
+
+    public override void OnStartClient(){
+        var movable = GetComponentInChildren<Movable>();
+        if(movable) SetObject(movable);
     }
 
     private void CreateScaler(){
@@ -81,12 +86,17 @@ public class Socket : ARNetInteractable
         //print(obj.name + " set to socket " + this.name);
         if(scaler == null) CreateScaler();
         if(!exclusiveMode){
+            obj.transform.parent = scaler;
             FitObjectToSocket(obj);
             obj.transform.localPosition = Vector3.zero; // change this to offset
             obj.transform.localRotation = Quaternion.identity;
+        }else{
+            obj.transform.parent = transform;
+            obj.transform.localPosition = placementPose.position;
+            obj.transform.localScale = placementPose.scale;
+            obj.transform.localRotation = placementPose.rotation;
         }
-        obj.transform.parent = scaler;
-        
+
         currentObject = obj;
         obj.releaseAction = UnsetObject;
         
@@ -95,12 +105,18 @@ public class Socket : ARNetInteractable
 
     private void FitObjectToSocket(Movable obj){
         var model = obj.GetComponent<MeshRenderer>();
-        var boundsScale = GetComponent<CapsuleCollider>().bounds.size;
+        var collider =  GetComponent<Collider>();
+     
+        var boundsScale = collider.bounds.size;
 
         var modelScale = model.bounds.size;
         var ratio = boundsScale.magnitude/modelScale.magnitude;
         print(gameObject.name + ", " + boundsScale + ", " + modelScale);
         scaler.transform.localScale *= ratio;
+        print(collider.bounds.extents);
+        var socketOffset = collider.bounds.center - transform.localPosition;
+        //var movableOffset = model.bounds.center - model.transform.localPosition;
+        scaler.transform.localPosition = Vector3.up * (socketOffset.y - collider.bounds.extents.y + (model.bounds.extents.y));
     }
 
     private void UnsetObject(IARInteractable oldInteractable, IARInteractable newInteractable){
