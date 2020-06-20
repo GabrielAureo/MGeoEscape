@@ -40,6 +40,7 @@ public class Socket : ARNetInteractable
     private void CreateScaler(){
         scaler = Instantiate(new GameObject("Scaler"), transform).transform;
         scaler.localPosition = Vector3.zero;
+        
     }
 
     void Start(){
@@ -88,7 +89,7 @@ public class Socket : ARNetInteractable
         if(!exclusiveMode){
             obj.transform.parent = scaler;
             FitObjectToSocket(obj);
-            obj.transform.localPosition = Vector3.zero; // change this to offset
+            obj.transform.localPosition = Vector3.zero;
             obj.transform.localRotation = Quaternion.identity;
         }else{
             obj.transform.parent = transform;
@@ -99,9 +100,8 @@ public class Socket : ARNetInteractable
 
         currentObject = obj;
         obj.releaseAction = UnsetObject;
-        
-        
     }
+
 
     private void FitObjectToSocket(Movable obj){
         var model = obj.GetComponent<MeshRenderer>();

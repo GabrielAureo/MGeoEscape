@@ -7,7 +7,7 @@ using UnityEngine.Events;
 using Mirror;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Movable : NetworkBehaviour
+public class Movable : MonoBehaviour
 {
     private Transform originalParent;
     private Quaternion originalRotation;

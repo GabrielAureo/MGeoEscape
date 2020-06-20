@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using Mirror;
+using UnityEngine.Networking.Types;
 
 public class MovableController : NetworkBehaviour{
     
@@ -8,7 +9,6 @@ public class MovableController : NetworkBehaviour{
     HingeJoint hinge;
     [SyncVar]
     NetworkIdentity lastSocketNetIdentity;
-
     IARInteractable targetInteractable;
 
     void Start(){
@@ -27,24 +27,43 @@ public class MovableController : NetworkBehaviour{
         if(touchData.selectedInteractable is Socket){
             var socket = touchData.selectedInteractable as Socket;
             if(!socket.busy){
-                CmdTouch(socket.netIdentity);
+                CmdTouch(socket.gameObject);
             }
             
         }
     }
     [Command]
-    void CmdTouch(NetworkIdentity socketNetID){
-        var socket = socketNetID.GetComponent<Socket>();
+    void CmdTouch(GameObject socketObj){
+        Debug.LogError("Called Command");
+        var socket = socketObj.GetComponent<Socket>();
         socket.busy = true;
-        lastSocketNetIdentity = socketNetID;
+        //lastSocketNetIdentity = socketObj;
         currentMovable = socket.currentObject;
+        RpcEmptySocket(socketObj);
+        TargetGrab(connectionToClient, socketObj);
     }
+    
+    [TargetRpc]
+    void TargetGrab(NetworkConnection target, GameObject socketObj)
+	{
+        var socket = socketObj.GetComponent<Socket>();
+        var movable = socket.currentObject;
+        movable.gameObject.SetActive(true);
+        HoldMovable(movable);
+
+    }
+
+    [ClientRpc]
+    void RpcEmptySocket(GameObject socketObj)
+	{
+        var socket = socketObj.GetComponent<Socket>();
+        socket.currentObject.gameObject.SetActive(false);
+        socket.gameObject.SetActive(false);
+        Debug.LogError("Disabled movable " + socket.currentObject.name + "from " + socket.name);
+	}
 
     void CheckTarget(ARTouchData touchData){
         if(currentMovable == null) return;
-
-        HoldMovable(currentMovable);
-
         RaycastHit[] hits;
         hits = Physics.RaycastAll(touchData.ray);
         if(hits.Length>0){
