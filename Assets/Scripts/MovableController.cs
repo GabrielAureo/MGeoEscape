@@ -1,4 +1,4 @@
-using UnityEngine;
+ using UnityEngine;
 using UnityEngine.Events;
 using Mirror;
 using UnityEngine.Networking.Types;
@@ -7,8 +7,7 @@ public class MovableController : NetworkBehaviour{
     
     public Movable currentMovable; //Current movable object being held by the controller. Is assigned by the socket on the holding phase of the touch controller
     HingeJoint hinge;
-    [SyncVar]
-    NetworkIdentity lastSocketNetIdentity;
+    GameObject lastSocketObj; //Sender 
     IARInteractable targetInteractable;
 
     void Start(){
@@ -17,13 +16,13 @@ public class MovableController : NetworkBehaviour{
 
     public void SetupController(ARTouchController touchController){
         this.hinge = touchController.GetComponent<HingeJoint>();
-        touchController.onTouch.AddListener(TouchSocket);
-        touchController.onHold.AddListener(CheckTarget);
+        touchController.onTouch.AddListener(Touch);
+        touchController.onHold.AddListener(Grab);
         touchController.onRelease.AddListener(Release);
 
     }
 
-    void TouchSocket(ARTouchData touchData){
+    void Touch(ARTouchData touchData){
         if(touchData.selectedInteractable is Socket){
             var socket = touchData.selectedInteractable as Socket;
             if(!socket.busy){
@@ -39,8 +38,7 @@ public class MovableController : NetworkBehaviour{
         socket.busy = true;
         //lastSocketNetIdentity = socketObj;
         currentMovable = socket.currentObject;
-        RpcEmptySocket(socketObj);
-        TargetGrab(connectionToClient, socketObj);
+        
     }
     
     [TargetRpc]
@@ -49,7 +47,7 @@ public class MovableController : NetworkBehaviour{
         var socket = socketObj.GetComponent<Socket>();
         var movable = socket.currentObject;
         movable.gameObject.SetActive(true);
-        HoldMovable(movable);
+        ConnectToHinge(movable);
 
     }
 
@@ -58,9 +56,28 @@ public class MovableController : NetworkBehaviour{
 	{
         var socket = socketObj.GetComponent<Socket>();
         socket.currentObject.gameObject.SetActive(false);
-        socket.gameObject.SetActive(false);
+
         Debug.LogError("Disabled movable " + socket.currentObject.name + "from " + socket.name);
 	}
+    void Grab(ARTouchData touchData){
+        if(touchData.selectedInteractable is Socket){
+            var socket = touchData.selectedInteractable as Socket;
+            CmdGrab(socket.gameObject);
+        }
+    }
+    [Command]
+    void CmdGrab(GameObject socketObj){
+        Debug.LogError(socketObj.name);
+        lastSocketObj = socketObj;
+        RpcEmptySocket(socketObj);
+        TargetGrab(connectionToClient, socketObj);
+    }
+    [ClientCallback]
+    void Update(){
+        if(currentMovable && ARTouchController.touchData.currentStatus == ARTouchData.Status.HOLDING){
+            CheckTarget(ARTouchController.touchData);
+        }
+    }
 
     void CheckTarget(ARTouchData touchData){
         if(currentMovable == null) return;
@@ -98,25 +115,26 @@ public class MovableController : NetworkBehaviour{
                 }
             }
 
-            ReleaseMovable(target);            
+            CmdPlace(target.gameObject);            
             
         }
     }
 
-    public void HoldMovable(Movable movable){
+    public void ConnectToHinge(Movable movable){
         //currentMovable = movable;
         hinge.connectedBody = movable.rb;
         movable.transform.parent = null;
     }
-
-    public void ReleaseMovable(Socket target){
+    [Command]
+    public void CmdPlace(GameObject targetObj){
+        var target = targetObj.GetComponent<Socket>();
         currentMovable.rb.isKinematic = true;
         bool placed = false;
-        var lastSocket = lastSocketNetIdentity.GetComponent<Socket>();
+        var lastSocket = lastSocketObj.GetComponent<Socket>();
 
-        if(target != null) placed = target.TryPlaceObject(currentMovable);
+        if(target != null) placed = target.TryPlaceObject(targetObj);
 
-        if(!placed) lastSocket.TryPlaceObject(currentMovable);
+        if(!placed) lastSocket.TryPlaceObject(targetObj);
 
         lastSocket.FreeSocket();
         

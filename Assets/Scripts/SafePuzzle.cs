@@ -81,7 +81,7 @@ public class SafePuzzle: Puzzle{
     private GameObject SpawnSocket(Movable movable){
         var obj = GameObject.Instantiate(GameResources.Instance.emptySocketPrefab);
         var socket = obj.GetComponent<Socket>();
-        socket.TryPlaceObject(movable);
+        //socket.TryPlaceObject(movable);
 
         return obj;
     }

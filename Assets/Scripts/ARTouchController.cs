@@ -102,12 +102,12 @@ public class ARTouchController : MonoBehaviour{
                 }catch(System.Exception e){
                     Debug.LogError("ARTouchController: " + e.GetType().ToString() + " caught on " + touchData.selectedInteractable?.ToString() +" Hold Event");
                 }
-
+                onHold.Invoke(touchData);
                 ChangeStatus(ARTouchData.Status.HOLDING);                
             }
             Debug.DrawRay(ray.origin, ray.direction, Color.green);
 
-            onHold.Invoke(touchData);
+            
             
             /*if(currentMovable){
                 if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){

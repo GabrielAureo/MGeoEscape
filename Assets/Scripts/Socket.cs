@@ -28,9 +28,8 @@ public class Socket : ARNetInteractable
         //if(previewRenderer != null) previewRenderer.enabled = false;
         var movable = GetComponentInChildren<Movable>();
         if(movable) SetObject(movable);
-        
-
     }
+
 
     public override void OnStartClient(){
         var movable = GetComponentInChildren<Movable>();
@@ -75,12 +74,17 @@ public class Socket : ARNetInteractable
         previewRenderer.enabled = false;
     }
 
-    public bool TryPlaceObject(Movable obj){
+    public bool TryPlaceObject(GameObject otherSocketObj){
+        var movable = otherSocketObj.GetComponent<Socket>().currentObject;
         if(currentObject != null) return false;
-        if(exclusiveMode && obj != exclusiveObject) return false;
-        if(busy && obj != lastObject) return false;
-        SetObject(obj);
+        if(exclusiveMode && movable != exclusiveObject) return false;
+        if(busy && movable != lastObject) return false;
+        SetObject(movable);
         return true;
+    }
+    [ClientRpc]
+    private void RpcSetObject(GameObject otherSocketObj){
+
     }
 
     private void SetObject(Movable obj){
@@ -136,7 +140,7 @@ public class Socket : ARNetInteractable
         currentObject.rb.isKinematic = false;
         //controller.movableController.HoldMovable(currentObject);
         lastObject = currentObject;
-        currentObject = null;
+        //currentObject = null;
         busy = true;
     }
 
