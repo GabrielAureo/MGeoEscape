@@ -2,8 +2,9 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.Events;
+using Mirror;
 
-public class ARTouchController : MonoBehaviour{
+public class ARTouchController : NetworkBehaviour{
     [System.Serializable]
     public sealed class TouchEvent : UnityEvent<ARTouchData>{}
     //public ARTouchData.Status currentStatus;
@@ -17,16 +18,18 @@ public class ARTouchController : MonoBehaviour{
     [HideInInspector] public TouchEvent onHold;
     [HideInInspector] public TouchEvent onRelease;
     public MovableController movableController;
+    public HingeJoint hinge = null;
 
     public static ARTouchData touchData;
 
     void Awake(){
-        var hinge = GetComponent<HingeJoint>();
         // movableController = new MovableController();
         // movableController.SetupController(this, hinge);
         // movableController = GetComponent<MovableController>();
         touchData = new ARTouchData();
         touchData.currentStatus = ARTouchData.Status.NO_TOUCH;
+
+        movableController.SetupController(this);
     }
     /*public ARInteractable GetCurrentObject(){
         if(touchData.currentStatus == ARTouchData.Status.HOLDING){
@@ -36,6 +39,7 @@ public class ARTouchController : MonoBehaviour{
     }*/
 
     void Update(){
+        if(!isLocalPlayer) return;
         HandleInput();
         transform.position = Camera.main.transform.position;
         transform.rotation = Camera.main.transform.rotation;

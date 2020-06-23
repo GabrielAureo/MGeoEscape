@@ -7,7 +7,6 @@ public class MainManager: MonoBehaviour{
     public static MainManager Instance { get { return _instance; } }
 
     public PuzzlesManager puzzlesManager;
-    public ARTouchController ARTouchController;
 
     
     

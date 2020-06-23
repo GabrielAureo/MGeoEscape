@@ -75,20 +75,25 @@ public class Socket : ARNetInteractable
     }
 
     public bool TryPlaceObject(GameObject otherSocketObj){
-        var movable = otherSocketObj.GetComponent<Socket>().currentObject;
         if(currentObject != null) return false;
+        var movable = otherSocketObj.GetComponent<Socket>().currentObject;
         if(exclusiveMode && movable != exclusiveObject) return false;
         if(busy && movable != lastObject) return false;
-        SetObject(movable);
+        
+        RpcSetObject(otherSocketObj);
         return true;
     }
     [ClientRpc]
     private void RpcSetObject(GameObject otherSocketObj){
-
+        var movable = otherSocketObj.GetComponent<Socket>().currentObject;
+        Debug.LogError("Socket: " + otherSocketObj + ", Movable: " + movable);
+        SetObject(movable);
     }
 
     private void SetObject(Movable obj){
         //print(obj.name + " set to socket " + this.name);
+        obj.gameObject.SetActive(true);
+        obj.GetComponent<Rigidbody>().isKinematic = true;
         if(scaler == null) CreateScaler();
         if(!exclusiveMode){
             obj.transform.parent = scaler;

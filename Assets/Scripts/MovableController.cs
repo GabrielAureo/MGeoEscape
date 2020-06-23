@@ -10,12 +10,9 @@ public class MovableController : NetworkBehaviour{
     GameObject lastSocketObj; //Sender 
     IARInteractable targetInteractable;
 
-    void Start(){
-        SetupController(MainManager.Instance.ARTouchController);
-    }
-
+    
     public void SetupController(ARTouchController touchController){
-        this.hinge = touchController.GetComponent<HingeJoint>();
+        this.hinge = touchController.hinge;
         touchController.onTouch.AddListener(Touch);
         touchController.onHold.AddListener(Grab);
         touchController.onRelease.AddListener(Release);
@@ -83,13 +80,18 @@ public class MovableController : NetworkBehaviour{
         if(currentMovable == null) return;
         RaycastHit[] hits;
         hits = Physics.RaycastAll(touchData.ray);
+        IARInteractable newTargetInteractable = null;
         if(hits.Length>0){
             foreach(var hit in hits){
-                targetInteractable = hit.transform.GetComponent<IARInteractable>();
-                if(targetInteractable!= null) break;
+                newTargetInteractable = hit.transform.GetComponent<IARInteractable>();
+                if(newTargetInteractable!= null) break;
+            }
+            if(newTargetInteractable != targetInteractable){
+                targetInteractable?.onTarget(currentMovable);
+                targetInteractable?.onUntarget(currentMovable);
+                targetInteractable = newTargetInteractable;
             }
             
-            targetInteractable?.onTarget(currentMovable);
         }else{
             targetInteractable?.onUntarget(currentMovable);
             targetInteractable = null;
@@ -102,7 +104,7 @@ public class MovableController : NetworkBehaviour{
         }
         
 
-        if(currentMovable){
+        //if(currentMovable){
             Socket target = (Socket)touchData.selectedInteractable;
 
             RaycastHit[] hits;
@@ -115,9 +117,9 @@ public class MovableController : NetworkBehaviour{
                 }
             }
 
-            CmdPlace(target.gameObject);            
+            CmdPlace(target?.gameObject);            
             
-        }
+        //}
     }
 
     public void ConnectToHinge(Movable movable){
@@ -128,13 +130,13 @@ public class MovableController : NetworkBehaviour{
     [Command]
     public void CmdPlace(GameObject targetObj){
         var target = targetObj.GetComponent<Socket>();
-        currentMovable.rb.isKinematic = true;
+        
         bool placed = false;
         var lastSocket = lastSocketObj.GetComponent<Socket>();
 
-        if(target != null) placed = target.TryPlaceObject(targetObj);
+        if(target != null) placed = target.TryPlaceObject(lastSocketObj);
 
-        if(!placed) lastSocket.TryPlaceObject(targetObj);
+        if(!placed) lastSocket.TryPlaceObject(lastSocketObj);
 
         lastSocket.FreeSocket();
         

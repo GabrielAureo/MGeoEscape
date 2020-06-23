@@ -12,9 +12,6 @@ public class GamePlayer: NetworkBehaviour{
     //     GameObject.FindObjectOfType<PuzzlesManager>().RpcSceneSetup(netIdentity);
     // }
 
-    // public override void OnStartLocalPlayer(){
-    //     CmdPlayerReady();
-    // }
     void RenameGameObject(string oldName, string newName){
         gameObject.name = "Game Player " + name;
     }
