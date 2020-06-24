@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -527,13 +527,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 394773273}
-    characterCount: 0
+    characterCount: 29
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 4
+    wordCount: 5
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 2
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -707,6 +707,7 @@ MonoBehaviour:
   sceneId: 3365781870
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &455468756
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,6 +821,7 @@ MonoBehaviour:
   sceneId: 2612793520
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &473615582
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,6 +999,7 @@ MonoBehaviour:
   sceneId: 949906831
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &598803719
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,13 +1134,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 598803721}
-    characterCount: 0
+    characterCount: 767
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 134
+    wordCount: 135
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 16
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -1286,13 +1289,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 621659737}
-    characterCount: 0
+    characterCount: 1
     spriteCount: 0
     spaceCount: 0
-    wordCount: 0
+    wordCount: 1
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -1490,13 +1493,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 715711616}
-    characterCount: 0
+    characterCount: 6
     spriteCount: 0
     spaceCount: 0
-    wordCount: 0
+    wordCount: 1
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -1808,7 +1811,9 @@ MonoBehaviour:
   port: 7777
   NoDelay: 1
   serverMaxMessageSize: 16384
+  serverMaxReceivesPerTick: 10000
   clientMaxMessageSize: 16384
+  clientMaxReceivesPerTick: 1000
 --- !u!114 &950639390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1831,6 +1836,8 @@ MonoBehaviour:
   transport: {fileID: 950639389}
   networkAddress: localhost
   maxConnections: 3
+  disconnectInactiveConnections: 0
+  disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 2244715815718480842, guid: 3d23f9815299dc34089f4d2b572fbaec,
     type: 3}
@@ -1843,8 +1850,8 @@ MonoBehaviour:
     type: 3}
   RoomScene: Lobby
   GameplayScene: Main
+  _allPlayersReady: 0
   roomSlots: []
-  allPlayersReady: 0
   m_characterSelection: {fileID: 1912756803}
 --- !u!114 &950639391
 MonoBehaviour:
@@ -1989,6 +1996,7 @@ MonoBehaviour:
   sceneId: 2057428232
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &1378561039
 GameObject:
   m_ObjectHideFlags: 0
@@ -2225,13 +2233,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1460821722}
-    characterCount: 0
+    characterCount: 8
     spriteCount: 0
     spaceCount: 0
-    wordCount: 0
+    wordCount: 1
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -2555,6 +2563,7 @@ MonoBehaviour:
   sceneId: 1877380886
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
 --- !u!225 &1912756805
 CanvasGroup:
   m_ObjectHideFlags: 0

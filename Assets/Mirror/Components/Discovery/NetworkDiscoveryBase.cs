@@ -1,8 +1,8 @@
-using UnityEngine;
+using System;
 using System.Net;
 using System.Net.Sockets;
-using System;
 using System.Threading.Tasks;
+using UnityEngine;
 
 // Based on https://github.com/EnlightenedOne/MirrorNetworkDiscovery
 // forked from https://github.com/in0finite/MirrorNetworkDiscovery
@@ -13,7 +13,7 @@ namespace Mirror.Discovery
     /// <summary>
     /// Base implementation for Network Discovery.  Extend this component
     /// to provide custom discovery with game specific data
-    /// <see cref="NetworkDiscovery"/> for a sample implementation
+    /// <see cref="NetworkDiscovery">NetworkDiscovery</see> for a sample implementation
     /// </summary>
     [DisallowMultipleComponent]
     [HelpURL("https://mirror-networking.com/docs/Components/NetworkDiscovery.html")]
@@ -36,8 +36,8 @@ namespace Mirror.Discovery
         [Range(1, 60)]
         float ActiveDiscoveryInterval = 3;
 
-        protected UdpClient serverUdpClient = null;
-        protected UdpClient clientUdpClient = null;
+        protected UdpClient serverUdpClient;
+        protected UdpClient clientUdpClient;
 
 #if UNITY_EDITOR
         void OnValidate()
@@ -77,7 +77,6 @@ namespace Mirror.Discovery
 
         void Shutdown()
         {
-            print("Shutdown Discovery");
             if (serverUdpClient != null)
             {
                 try
@@ -147,7 +146,6 @@ namespace Mirror.Discovery
                 }
                 catch (Exception)
                 {
-                    continue;
                 }
             }
         }
@@ -232,7 +230,6 @@ namespace Mirror.Discovery
         /// </summary>
         public void StartDiscovery()
         {
-            
             if (!SupportedOnThisPlatform)
                 throw new PlatformNotSupportedException("Network discovery not supported in this platform");
 

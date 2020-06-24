@@ -35,15 +35,6 @@ namespace Mirror
         protected override bool DeserializeItem(NetworkReader reader) => reader.ReadBoolean();
     }
 
-    // Original UNET name is SyncListStruct and original Weaver weavers anything
-    // that contains the name 'SyncListStruct', without considering the namespace.
-    // Deprecated 03/20/2019
-    [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use SyncList<MyStruct> instead")]
-    public class SyncListSTRUCT<T> : SyncList<T> where T : struct
-    {
-        public T GetItem(int i) => base[i];
-    }
-
     [EditorBrowsable(EditorBrowsableState.Never)]
     public abstract class SyncList<T> : IList<T>, IReadOnlyList<T>, SyncObject
     {
@@ -61,14 +52,8 @@ namespace Mirror
             OP_ADD,
             OP_CLEAR,
             OP_INSERT,
-            // Deprecated 10/21/2019
-            [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Lists now pass OP_REMOVEAT")]
-            OP_REMOVE,
             OP_REMOVEAT,
-            OP_SET,
-            // Deprecated 12/03/2019
-            [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Lists now use OP_SET instead of OP_DIRTY")]
-            OP_DIRTY
+            OP_SET
         }
 
         struct Change
@@ -105,6 +90,14 @@ namespace Mirror
         // throw away all the changes
         // this should be called after a successfull sync
         public void Flush() => changes.Clear();
+
+        public void Reset()
+        {
+            IsReadOnly = false;
+            changes.Clear();
+            changesAhead = 0;
+            objects.Clear();
+        }
 
         void AddOperation(Operation op, int itemIndex, T oldItem, T newItem)
         {
@@ -281,6 +274,14 @@ namespace Mirror
             AddOperation(Operation.OP_ADD, objects.Count - 1, default, item);
         }
 
+        public void AddRange(IEnumerable<T> range)
+        {
+            foreach (T entry in range)
+            {
+                Add(entry);
+            }
+        }
+
         public void Clear()
         {
             objects.Clear();
@@ -307,10 +308,34 @@ namespace Mirror
             return -1;
         }
 
+        public T Find(Predicate<T> match)
+        {
+            int i = FindIndex(match);
+            return (i != -1) ? objects[i] : default;
+        }
+
+        public List<T> FindAll(Predicate<T> match)
+        {
+            List<T> results = new List<T>();
+            for (int i = 0; i < objects.Count; ++i)
+                if (match(objects[i]))
+                    results.Add(objects[i]);
+            return results;
+        }
+
         public void Insert(int index, T item)
         {
             objects.Insert(index, item);
             AddOperation(Operation.OP_INSERT, index, default, item);
+        }
+
+        public void InsertRange(int index, IEnumerable<T> range)
+        {
+            foreach (T entry in range)
+            {
+                Insert(index, entry);
+                index++;
+            }
         }
 
         public bool Remove(T item)
@@ -329,6 +354,21 @@ namespace Mirror
             T oldItem = objects[index];
             objects.RemoveAt(index);
             AddOperation(Operation.OP_REMOVEAT, index, oldItem, default);
+        }
+
+        public int RemoveAll(Predicate<T> match)
+        {
+            List<T> toRemove = new List<T>();
+            for (int i = 0; i < objects.Count; ++i)
+                if (match(objects[i]))
+                    toRemove.Add(objects[i]);
+
+            foreach (T entry in toRemove)
+            {
+                Remove(entry);
+            }
+
+            return toRemove.Count;
         }
 
         public T this[int i]
