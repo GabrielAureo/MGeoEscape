@@ -136,8 +136,12 @@ public class MovableController : NetworkBehaviour{
 
         if(target != null) placed = target.TryPlaceObject(lastSocketObj);
 
-        if(!placed) lastSocket.TryPlaceObject(lastSocketObj);
-
+        if(!placed){
+            lastSocket.TryPlaceObject(lastSocketObj);
+        }else{
+            lastSocket.currentObject = null;
+        }
+        
         lastSocket.FreeSocket();
         
 
