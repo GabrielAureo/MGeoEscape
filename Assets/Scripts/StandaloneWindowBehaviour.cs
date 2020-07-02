@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 public class StandaloneWindowBehaviour : MonoBehaviour{
+    public bool skipNameScreen = true;
 #if UNITY_STANDALONE && !UNITY_EDITOR
 
     #region DLL Imports
@@ -37,7 +38,13 @@ public class StandaloneWindowBehaviour : MonoBehaviour{
     private const UInt32 SWP_NOMOVE = 0x0002;
     private const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
     #endregion
+#endif
     void Start(){
+        WindowManagement();
+    }
+
+    void WindowManagement(){
+        #if UNITY_STANDALONE && !UNITY_EDITOR
         uint threadId = GetCurrentThreadId();
         EnumThreadWindows(threadId, (hWnd, lParam) =>
         {
@@ -57,8 +64,9 @@ public class StandaloneWindowBehaviour : MonoBehaviour{
         SetWindowText(windowHandle, string.Format("Player {0} GUID: {1}", args[1], args[2]));
         int p = 1920/3;
         SetWindowPos(windowHandle,  HWND_TOPMOST, (int.Parse(args[1]) - 1) * p, 200, 0, 0, SWP_NOSIZE);
+        #endif
     }
     
-#endif
+
 }
 

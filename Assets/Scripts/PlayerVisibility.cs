@@ -1,30 +1,31 @@
 using UnityEngine;
 using Mirror;
+using System.Collections.Generic;
 
-public class PlayerVisibility: MonoBehaviour{
-    [EnumFlag]
-    [SerializeField] Character character = 0;
+public class PlayerVisibility : NetworkVisibility
+{
+    [EnumFlag] [SerializeField]
+    Character characterObservers;
     
-    public void Awake(){
-        CheckFlag(ClientScene.localPlayer);
-
-        LocalPlayerAnnouncer.OnLocalPlayerUpdated += (CheckFlag);
-        
-        //CheckFlag(ClientScene.localPlayer);
+    [Server]
+    public void SetObserverFlag(int flag){
+        characterObservers = (Character) flag;
+        GetComponent<NetworkIdentity>().RebuildObservers(false);
     }
 
-    private void CheckFlag(NetworkIdentity localPlayer){
-        if(localPlayer != null){
-            var player = localPlayer.GetComponent<GamePlayer>();
-            Debug.Log("Setting Visibility of " + gameObject.name + "for player:" + player);
-            if(player!= null && !character.HasFlag(player.character)){
-                gameObject.SetActive(false);
+    public override bool OnCheckObserver(NetworkConnection conn)
+    {
+        var character = conn.identity.GetComponent<GamePlayer>().character;
+        return (characterObservers & character) != 0;
+    }
+
+    public override void OnRebuildObservers(HashSet<NetworkConnection> observers, bool initialize)
+    {
+        foreach (NetworkConnectionToClient conn in NetworkServer.connections.Values){
+            var character = conn.identity.GetComponent<GamePlayer>().character;
+            if((characterObservers & character) != 0){
+                observers.Add(conn);
             }
         }
-        
-    }
-
-    private void OnDestroy(){
-        LocalPlayerAnnouncer.OnLocalPlayerUpdated -= (CheckFlag);
     }
 }

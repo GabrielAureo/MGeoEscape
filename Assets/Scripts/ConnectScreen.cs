@@ -9,6 +9,7 @@ using DG.Tweening;
 
 public class ConnectScreen : NetworkBehaviour
 {
+    public bool skipNameScreen = true;
     [SerializeField] CanvasGroup nameScreen = null;
     CanvasGroup selectionScreen;
     [SerializeField] TMP_InputField inputField = null;
@@ -29,6 +30,10 @@ public class ConnectScreen : NetworkBehaviour
         var submit = new TMP_InputField.SubmitEvent();
         submit.AddListener(ConfirmName);
         inputField.onSubmit = submit;
+
+        if(skipNameScreen){
+            ConfirmName("Johnny Test");
+        }
         
     }
 
@@ -59,6 +64,6 @@ public class ConnectScreen : NetworkBehaviour
         nameScreen.DOFade(0f, .2f).onComplete += ()=> nameScreen.interactable = false;
         selectionScreen.DOFade(1f, .2f).onComplete += ()=> selectionScreen.interactable = true;
         //GameLobbyManager.playerName = inputField.text;
-        GameManager.localLobbyPlayer.CmdChangeName(inputField.text);
+        //GameManager.localLobbyPlayer.CmdChangeName(inputField.text);
     }
 }

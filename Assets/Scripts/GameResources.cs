@@ -4,6 +4,7 @@ public class GameResources: MonoBehaviour{
     [Header("Prefabs")]
     public GameObject previewSocketPrefab;
     public GameObject emptySocketPrefab;
+    public GameObject movableContainer;
     [Header("Puzzles Assets")]
     public PetrolCollection petrolCollection;
     

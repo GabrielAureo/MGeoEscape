@@ -1843,13 +1843,15 @@ MonoBehaviour:
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 7106526147572300643, guid: 4375391147703ed47afc83a028cd8b05, type: 3}
+  - {fileID: 6176073777405573102, guid: 380e8c22a8779cc42b6964ed3adc1243, type: 3}
   showRoomGUI: 0
   minPlayers: 3
   roomPlayerPrefab: {fileID: 7571584967546881626, guid: ee119e7fac2df2d44ba7e8921cee1efb,
     type: 3}
-  RoomScene: Lobby
-  GameplayScene: Main
+  RoomScene: Assets/Scenes/Lobby.unity
+  GameplayScene: Assets/Scenes/Main.unity
   _allPlayersReady: 0
   roomSlots: []
   m_characterSelection: {fileID: 1912756803}

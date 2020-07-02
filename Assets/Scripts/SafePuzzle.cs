@@ -28,12 +28,22 @@ public class SafePuzzle: Puzzle{
             if(player.character != Character.Detective){
                 if(m_safe.isActiveAndEnabled) GameObject.Destroy(m_safe.gameObject);
             }
-            var rock = GameObject.Instantiate(m_trueRocksPrefabs[player_idx]);
-            var item = GameResources.Instance.petrolCollection.items[chosenItems[player_idx]];
-            rock.GetComponent<MeshRenderer>().materials[1].SetTexture("_BaseMap", item.stickerTexture);
+            
 
-            var socket = SpawnSocket(rock.GetComponent<Movable>());
+            CmdSpawnRock(player_idx, localPlayer);
         }
+    }
+    [Command(ignoreAuthority=true)]
+    void CmdSpawnRock(int player_idx, NetworkIdentity playerIdentity){
+        var rock = GameObject.Instantiate(m_trueRocksPrefabs[player_idx]);
+        var item = GameResources.Instance.petrolCollection.items[chosenItems[player_idx]];
+        rock.GetComponent<MeshRenderer>().materials[1].SetTexture("_BaseMap", item.stickerTexture);
+
+        var obj = GameObject.Instantiate(GameResources.Instance.emptySocketPrefab);
+        var socket = obj.GetComponent<Socket>();
+        //socket.TryPlaceObject(movable);
+
+        NetworkServer.Spawn(obj, playerIdentity.connectionToClient);
     }
 
     private void GeneratePassword(){
@@ -77,12 +87,5 @@ public class SafePuzzle: Puzzle{
         SetupPuzzleAcrossClients(player);
 
     }
-
-    private GameObject SpawnSocket(Movable movable){
-        var obj = GameObject.Instantiate(GameResources.Instance.emptySocketPrefab);
-        var socket = obj.GetComponent<Socket>();
-        //socket.TryPlaceObject(movable);
-
-        return obj;
-    }
+    
 }

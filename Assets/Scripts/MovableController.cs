@@ -10,6 +10,7 @@ public class MovableController : NetworkBehaviour{
     GameObject lastSocketObj; //Sender 
     IARInteractable targetInteractable;
 
+
     
     public void SetupController(ARTouchController touchController){
         this.hinge = touchController.hinge;
@@ -37,15 +38,43 @@ public class MovableController : NetworkBehaviour{
         currentMovable = socket.currentObject;
         
     }
+    void Grab(ARTouchData touchData){
+        if(touchData.selectedInteractable is Socket){
+            var socket = touchData.selectedInteractable as Socket;
+            currentMovable = socket.currentObject;
+            CmdGrab(socket.gameObject);
+        }
+    }
+    [Command]
+    void CmdGrab(GameObject socketObj){
+        var containerObj = Instantiate(GameResources.Instance.movableContainer);
+        Debug.LogError("Container: " + containerObj);
+
+        var container = containerObj.GetComponent<NetMovable>();
+        var movable = socketObj.GetComponent<Socket>().TryTake();
+        if(movable){
+            container.SetMovable(movable.gameObject);
+            Debug.LogError(socketObj.name);
+            lastSocketObj = socketObj;
+            
+            RpcEmptySocket(socketObj);
+            TargetGrab(true);
+        }else{
+            TargetGrab(false);
+        }       
+        
+    }
     
     [TargetRpc]
-    void TargetGrab(NetworkConnection target, GameObject socketObj)
+    void TargetGrab(bool grabbed)
 	{
-        var socket = socketObj.GetComponent<Socket>();
-        var movable = socket.currentObject;
-        movable.gameObject.SetActive(true);
-        ConnectToHinge(movable);
-
+        if(grabbed){
+           currentMovable.gameObject.SetActive(true);
+            ConnectToHinge(currentMovable); 
+        }else{
+            currentMovable = null;
+        }
+        
     }
 
     [ClientRpc]
@@ -56,19 +85,7 @@ public class MovableController : NetworkBehaviour{
 
         Debug.LogError("Disabled movable " + socket.currentObject.name + "from " + socket.name);
 	}
-    void Grab(ARTouchData touchData){
-        if(touchData.selectedInteractable is Socket){
-            var socket = touchData.selectedInteractable as Socket;
-            CmdGrab(socket.gameObject);
-        }
-    }
-    [Command]
-    void CmdGrab(GameObject socketObj){
-        Debug.LogError(socketObj.name);
-        lastSocketObj = socketObj;
-        RpcEmptySocket(socketObj);
-        TargetGrab(connectionToClient, socketObj);
-    }
+    
     [ClientCallback]
     void Update(){
         if(currentMovable && ARTouchController.touchData.currentStatus == ARTouchData.Status.HOLDING){

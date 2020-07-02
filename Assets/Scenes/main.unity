@@ -376,6 +376,7 @@ GameObject:
   - component: {fileID: 425389480}
   - component: {fileID: 425389482}
   - component: {fileID: 425389481}
+  - component: {fileID: 425389483}
   m_Layer: 0
   m_Name: Socket (2)
   m_TagString: Untagged
@@ -449,6 +450,22 @@ MonoBehaviour:
   sceneId: 1989837657
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &425389483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 425389478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e5110c8f7c455342a6fa0201185c92d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  characterObservers: 3
 --- !u!43 &430982769
 Mesh:
   m_ObjectHideFlags: 0
@@ -645,6 +662,8 @@ MonoBehaviour:
     type: 3}
   emptySocketPrefab: {fileID: 7106526147572300643, guid: 4375391147703ed47afc83a028cd8b05,
     type: 3}
+  movableContainer: {fileID: 6176073777405573102, guid: 380e8c22a8779cc42b6964ed3adc1243,
+    type: 3}
   petrolCollection: {fileID: 11400000, guid: bab4dc4bc475b024bad6bb0ef6d07a21, type: 2}
 --- !u!4 &546079641
 Transform:
@@ -704,7 +723,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puzzlesManager: {fileID: 1260519312}
-  ARTouchController: {fileID: 0}
 --- !u!1 &573489464
 GameObject:
   m_ObjectHideFlags: 0
@@ -1527,6 +1545,7 @@ MonoBehaviour:
   sceneId: 1346127903
   serverOnly: 0
   m_AssetId: 7f17df1a66f362447be90d8f6cc4b8a9
+  hasSpawned: 0
 --- !u!114 &653325787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1542,6 +1561,7 @@ MonoBehaviour:
   sceneId: 1767420930
   serverOnly: 0
   m_AssetId: 7f17df1a66f362447be90d8f6cc4b8a9
+  hasSpawned: 0
 --- !u!114 &653325788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1557,6 +1577,7 @@ MonoBehaviour:
   sceneId: 1060942048
   serverOnly: 0
   m_AssetId: 7f17df1a66f362447be90d8f6cc4b8a9
+  hasSpawned: 0
 --- !u!1 &669377071
 GameObject:
   m_ObjectHideFlags: 0
@@ -1994,6 +2015,7 @@ MonoBehaviour:
   sceneId: 3403925950
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
 --- !u!4 &1260519314
 Transform:
   m_ObjectHideFlags: 0
@@ -2382,6 +2404,7 @@ MonoBehaviour:
   sceneId: 4088979622
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
 --- !u!114 &1651798796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2639,6 +2662,7 @@ MonoBehaviour:
   sceneId: 2334049831
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &1709692403 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8694649042311931699, guid: 3e21e79d07be66041bf60663ac0d6def,
@@ -2718,7 +2742,9 @@ MonoBehaviour:
   port: 7777
   NoDelay: 1
   serverMaxMessageSize: 16384
+  serverMaxReceivesPerTick: 10000
   clientMaxMessageSize: 16384
+  clientMaxReceivesPerTick: 1000
 --- !u!4 &1841454184
 Transform:
   m_ObjectHideFlags: 0
@@ -2755,6 +2781,8 @@ MonoBehaviour:
   transport: {fileID: 1841454183}
   networkAddress: localhost
   maxConnections: 4
+  disconnectInactiveConnections: 0
+  disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 2244715815718480842, guid: 3d23f9815299dc34089f4d2b572fbaec,
     type: 3}

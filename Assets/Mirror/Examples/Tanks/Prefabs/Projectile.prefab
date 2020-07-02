@@ -54,6 +54,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -91,6 +92,7 @@ GameObject:
   - component: {fileID: 2355290524794870353}
   - component: {fileID: 4629190479245867726}
   - component: {fileID: 7082621516996595528}
+  - component: {fileID: 6368190700865416439}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -179,6 +181,23 @@ MonoBehaviour:
   force: 1000
   damage: 33
   source: {fileID: 0}
+--- !u!114 &6368190700865416439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890560936853567077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1731d8de2d0c84333b08ebe1e79f4118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  visRange: 10
+  visUpdateInterval: 1
+  forceHidden: 0
 --- !u!1 &9126921595194253319
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,8 +237,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9126921595194253319}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 2
+  m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 5
   m_Range: 2

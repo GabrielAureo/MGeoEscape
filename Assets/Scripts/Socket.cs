@@ -48,7 +48,7 @@ public class Socket : ARNetInteractable
         previewFilter = preview.GetComponent<MeshFilter>();
     }
 
-    public bool TryTarget(Movable obj){
+    public virtual bool TryTarget(Movable obj){
         if(currentObject != null) return false;
 
         if(obj.mesh != lastMesh){
@@ -60,17 +60,17 @@ public class Socket : ARNetInteractable
         return true;
     }
 
-    public bool TryTake(){
-        if(currentObject == null) return false;
+    public Movable TryTake(){
+        if(currentObject == null) return null;
         currentObject = null;
-        return true;
+        return currentObject;
     }
 
     float GetMeshOffset(Mesh mesh){
         return mesh.bounds.extents.y/2;
     }
 
-    public void Untarget(){
+    public virtual void Untarget(){
         previewRenderer.enabled = false;
     }
 
