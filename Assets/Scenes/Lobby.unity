@@ -689,6 +689,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  skipNameScreen: 1
   nameScreen: {fileID: 407836445}
   inputField: {fileID: 2122267682}
   acceptButton: {fileID: 906603760}
@@ -2309,6 +2310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92c9595304c315542a2857624c7ff135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skipNameScreen: 1
 --- !u!1 &1806117350
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,7 +4,6 @@ using Mirror;
 using System.Collections.Generic;
 
 public class DebugMenu: MonoBehaviour{
-
     private Action func;
     private Socket[] sockets;
     

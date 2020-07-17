@@ -31,7 +31,6 @@ public class MovableController : NetworkBehaviour{
     }
     [Command]
     void CmdTouch(GameObject socketObj){
-        Debug.LogError("Called Command");
         var socket = socketObj.GetComponent<Socket>();
         socket.busy = true;
         //lastSocketNetIdentity = socketObj;
@@ -49,32 +48,34 @@ public class MovableController : NetworkBehaviour{
     void CmdGrab(GameObject socketObj){
         var containerObj = Instantiate(GameResources.Instance.movableContainer);
         Debug.LogError("Container: " + containerObj);
+        var playerCharacter = connectionToClient.identity.GetComponent<GamePlayer>().character;
 
-        var container = containerObj.GetComponent<NetMovable>();
         var movable = socketObj.GetComponent<Socket>().TryTake();
-        if(movable){
-            container.SetMovable(movable.gameObject);
+        Debug.LogError(movable);
+
+        //if(movable){
             Debug.LogError(socketObj.name);
             lastSocketObj = socketObj;
-            
+
+            NetworkServer.Spawn(containerObj);
+                        
             RpcEmptySocket(socketObj);
-            TargetGrab(true);
-        }else{
-            TargetGrab(false);
-        }       
+            //TargetGrab(socketObj);
+        //} 
         
     }
     
+    [ClientRpc]
+    void RpcGrab(){
+
+    }
     [TargetRpc]
-    void TargetGrab(bool grabbed)
+    void TargetGrab(GameObject socketObj)
 	{
-        if(grabbed){
-           currentMovable.gameObject.SetActive(true);
-            ConnectToHinge(currentMovable); 
-        }else{
-            currentMovable = null;
-        }
-        
+        var socket = socketObj.GetComponent<Socket>();
+        var movable = socket.currentObject;
+        movable.gameObject.SetActive(true);
+        ConnectToHinge(movable);
     }
 
     [ClientRpc]

@@ -4,21 +4,18 @@ using System.Collections.Generic;
 using System.Collections;
 using Vuforia;
 using UnityEngine.Events;
+using UnityEngine.Animations;
 using Mirror;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Movable : MonoBehaviour
-{
-    private Transform originalParent;
-    private Quaternion originalRotation;
-    private Vector3 originalPosition;
+public class Movable : NetworkBehaviour{
+    public Vector3 bottomAnchor;
+    public Quaternion placementRotation = Quaternion.identity;
     [HideInInspector] public Rigidbody rb;
     
-    [HideInInspector]
-    public Mesh mesh;
+    [HideInInspector] public Mesh mesh;
     public UnityAction<IARInteractable, IARInteractable> releaseAction;
-    [HideInInspector]
-    public bool released;
+    [HideInInspector] public bool released;
     [SerializeField] Material opaqueMaterial = null;
     [SerializeField] Material transparentMaterial = null;
     private MeshRenderer meshRenderer;
@@ -31,11 +28,7 @@ public class Movable : MonoBehaviour
     }
 
 
-    void Start(){
-        originalParent = transform.parent;
-        originalRotation = transform.localRotation;
-        originalPosition = transform.localPosition;
-        
+    void Start(){        
         released = false;
     }
 

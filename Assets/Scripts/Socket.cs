@@ -37,7 +37,8 @@ public class Socket : ARNetInteractable
     }
 
     private void CreateScaler(){
-        scaler = Instantiate(new GameObject("Scaler"), transform).transform;
+        var scalerObj = Instantiate(new GameObject(gameObject.name + " Scaler"));
+        scaler = scalerObj.transform;
         scaler.localPosition = Vector3.zero;
         
     }
@@ -62,8 +63,9 @@ public class Socket : ARNetInteractable
 
     public Movable TryTake(){
         if(currentObject == null) return null;
+        var obj = currentObject;
         currentObject = null;
-        return currentObject;
+        return obj;
     }
 
     float GetMeshOffset(Mesh mesh){
