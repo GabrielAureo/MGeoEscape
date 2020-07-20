@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Collections;
 using Vuforia;
 using UnityEngine.Events;
-using UnityEngine.Animations;
 using Mirror;
+
+//Instead of making abstract classes, use events. So that the custom editor can still be used;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Movable : NetworkBehaviour{

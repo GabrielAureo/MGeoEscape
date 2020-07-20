@@ -124,6 +124,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f07a4647e8260f4db27e98138aabfb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  bottomAnchor: {x: 0, y: -0.4410981, z: 0}
+  placementRotation: {x: 0, y: 0, z: 0, w: 1}
   rb: {fileID: 0}
   mesh: {fileID: 0}
   released: 0

@@ -143,7 +143,6 @@ public class MovableController : NetworkBehaviour{
     public void ConnectToHinge(Movable movable){
         //currentMovable = movable;
         hinge.connectedBody = movable.rb;
-        movable.transform.parent = null;
     }
     [Command]
     public void CmdPlace(GameObject targetObj){

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System;
+using System.Linq;
 using UnityEditor.EditorTools;
 
 [CustomEditor(typeof(Movable))]
@@ -11,6 +12,7 @@ public class MovableEditor: Editor{
 
     GUIContent[] tools;
     Action[] toolsActions;
+    SerializedProperty[] toolsProperties;
 
     SerializedProperty m_anchorProperty;
     SerializedProperty m_rotationProperty;
@@ -28,6 +30,7 @@ public class MovableEditor: Editor{
 
         tools = new GUIContent[2];
         toolsActions = new Action[2];
+        toolsProperties = new SerializedProperty[2];
         var index = 0;
 
         tools[index++] = EditorGUIUtility.TrIconContent("MoveTool", "Move Tool");
@@ -35,6 +38,9 @@ public class MovableEditor: Editor{
         index = 0;
         toolsActions[index++] = MoveTool;
         toolsActions[index++] = RotateTool;
+        index = 0;
+        toolsProperties[index++] = m_anchorProperty;
+        toolsProperties[index++] = m_rotationProperty;
 
         m_selectedTool = -1;
     }
@@ -43,28 +49,12 @@ public class MovableEditor: Editor{
         var editStyle = new GUIStyle(GUI.skin.button);
         
         DrawToolbar();
-        
-        
-        DrawPropertiesExcluding(serializedObject, "bottomAnchor");
+        if(m_selectedTool >=0 && m_selectedTool < toolsProperties.Length) EditorGUILayout.PropertyField(toolsProperties[m_selectedTool]);
+        var exclusionArray = toolsProperties.Select( x => x.name).Append("m_Script").ToArray();
 
-        EditorGUILayout.EditorToolbar();
-        EditorGUILayout.BeginHorizontal();
-        
-        isEditing = GUILayout.Toggle(isEditing, editString, editStyle);
-        if(!isEditing){
-            editString = "Show Anchor Gizmo";
-            GUILayout.Button("Find Mesh Bottom");
-        }else{
-            editString = "Hide Anchor Gizmo";
-        }
-        
-        //TODO: dISCOVER WHY I can't change values on inspector
-        
+        DrawPropertiesExcluding(serializedObject, exclusionArray);
 
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.PropertyField(m_anchorProperty);
-        //serializedObject.ApplyModifiedProperties();  
+        serializedObject.ApplyModifiedProperties();  
         lastEditState = isEditing;
         
     }
@@ -82,6 +72,7 @@ public class MovableEditor: Editor{
         {
             m_selectedTool = _selectedTool;
             //Do something since the selected button changed
+            
         }
         else if (changed)
         {
@@ -99,34 +90,10 @@ public class MovableEditor: Editor{
     }
 
     void OnSceneGUI(){
-        if(m_selectedTool >0 && m_selectedTool < toolsActions.Length) toolsActions[m_selectedTool]();
+        if(m_selectedTool >= 0 && m_selectedTool < toolsActions.Length) toolsActions[m_selectedTool]();
     }
 
     private void MoveTool(){
-        DrawPositionGizmo();
-    }
-
-    private void RotateTool(){
-        var movable = (Movable)target;
-        
-        Handles.Label(movable.transform.position, m_rotationProperty.displayName);
-        //SceneVisibilityManager.instance.ToggleVisibility(movable.gameObject, true);
-        EditorGUI.BeginChangeCheck();
-        var rotation = Handles.RotationHandle(m_rotationProperty.quaternionValue,movable.transform.position);
-        if(EditorGUI.EndChangeCheck()){
-            m_rotationProperty.quaternionValue = rotation;
-            serializedObject.ApplyModifiedProperties();
-        }
-        DrawMesh(movable.transform.position, m_rotationProperty.quaternionValue);
-        
-    }
-
-    private void CalculateMeshBottom(){
-        
-    }
-
-    private void DrawPositionGizmo()
-    {
         EditorGUI.BeginChangeCheck();
         Tools.current = Tool.None;
         var transform = ((Movable)target).transform;
@@ -140,4 +107,21 @@ public class MovableEditor: Editor{
         }
         
     }
+
+    private void RotateTool(){
+        var movable = (Movable)target;
+        Tools.current = Tool.None;
+        Handles.Label(movable.transform.position, m_rotationProperty.displayName);
+        //SceneVisibilityManager.instance.ToggleVisibility(movable.gameObject, true);
+        EditorGUI.BeginChangeCheck();
+        var rotation = Handles.RotationHandle(m_rotationProperty.quaternionValue,movable.transform.position);
+        if(EditorGUI.EndChangeCheck()){
+            m_rotationProperty.quaternionValue = rotation;
+            serializedObject.ApplyModifiedProperties();
+        }
+        DrawMesh(movable.transform.position, m_rotationProperty.quaternionValue);
+        
+    }
+
+        
 }

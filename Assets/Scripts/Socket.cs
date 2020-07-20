@@ -10,6 +10,10 @@ public class Socket : ARNetInteractable
     /// </summary>
     public bool exclusiveMode;
     public GameObject exclusiveObject;
+    /// <summary>
+    /// Anchor used to place objects in non-exclusive mode;
+    /// </summary>
+    public Vector3 placementAnchor;
     private MeshRenderer previewRenderer = null;
     private MeshFilter previewFilter = null;
     [HideInInspector] public Movable currentObject;
@@ -96,12 +100,13 @@ public class Socket : ARNetInteractable
         //print(obj.name + " set to socket " + this.name);
         obj.gameObject.SetActive(true);
         obj.GetComponent<Rigidbody>().isKinematic = true;
-        if(scaler == null) CreateScaler();
+        //if(scaler == null) CreateScaler();
         if(!exclusiveMode){
-            obj.transform.parent = scaler;
-            FitObjectToSocket(obj);
-            obj.transform.localPosition = Vector3.zero;
-            obj.transform.localRotation = Quaternion.identity;
+            // obj.transform.parent = scaler;
+            // FitObjectToSocket(obj);
+            // obj.transform.localPosition = Vector3.zero;
+            // obj.transform.localRotation = Quaternion.identity;
+            obj.transform.position = placementAnchor + obj.bottomAnchor;
         }else{
             obj.transform.parent = transform;
             obj.transform.localPosition = placementPose.position;
