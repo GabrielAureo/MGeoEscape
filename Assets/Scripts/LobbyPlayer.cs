@@ -4,11 +4,13 @@ using Mirror;
 public class LobbyPlayer: NetworkRoomPlayer{
     [SyncVar(hook = nameof(RenameGameObject))]
     public string playerName;
+   
 
     public override void OnStartLocalPlayer(){
         GameManager.localLobbyPlayer = this;
         CmdSetupUI();
     }
+
 
     [Command]
     void CmdSetupUI(){

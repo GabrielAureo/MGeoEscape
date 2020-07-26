@@ -119,23 +119,25 @@ public class SocketEditor: Editor{
                 if(GUILayout.Button("Edit placement anchor")){
                     isEditing = true;
                     Tools.hidden = true;
-                    EditorWindow view = EditorWindow.GetWindow<SceneView>();
-                    view.Repaint();
+                    RefreshSceneView();
                 }
             }else{
                 if(GUILayout.Button("Stop editing")){
                     isEditing = false;
                     Tools.hidden = false;
-                    EditorWindow view = EditorWindow.GetWindow<SceneView>();
-                    view.Repaint();
+                    RefreshSceneView();
+                    
                 }
+                EditorGUI.BeginChangeCheck();
                 EditorGUILayout.PropertyField(placementAnchor);
+                if(EditorGUI.EndChangeCheck()){
+                    RefreshSceneView();
+                }
             }
         }
 
         
         EditorGUI.BeginChangeCheck();
-        
         EditorGUILayout.ObjectField(currentObject);
         if(EditorGUI.EndChangeCheck()){
             Movable movable = (Movable)currentObject.objectReferenceValue;
@@ -162,6 +164,12 @@ public class SocketEditor: Editor{
         serializedObject.ApplyModifiedProperties();
         
         //DrawDefaultInspector();
+    }
+
+    void RefreshSceneView(){
+        EditorWindow view = EditorWindow.GetWindow<SceneView>();
+        view.Repaint();
+
     }
     
     void OnSceneGUI(){
@@ -230,12 +238,14 @@ public class SocketEditor: Editor{
         int group = Undo.GetCurrentGroup();
 
         Undo.RecordObject(targetSocket, "Set Movable on currentObject");
-        Undo.RecordObject(movable.transform, "Anchor Movable to surface");
+        
 
         targetSocket.currentObject = movable;
         EditorUtility.SetDirty(targetSocket);
-
-        movable.transform.localPosition = Vector3.zero; // change this to offset
+        if(movable != null){
+            Undo.RecordObject(movable.transform, "Anchor Movable to surface");
+            movable.transform.position = targetSocket.transform.position - (movable.bottomAnchor - targetSocket.placementAnchor);
+        }
 
         Undo.CollapseUndoOperations(group);
     }

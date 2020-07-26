@@ -14,6 +14,7 @@ public class GameManager: NetworkRoomManager{
 
     public Dictionary<byte[], GamePlayer> clientDictionary;
 
+    
     public override void OnStartServer(){
         base.OnStartServer();
         characterSelection = m_characterSelection;

@@ -7,61 +7,59 @@ public class MovableController : NetworkBehaviour{
     
     public Movable currentMovable; //Current movable object being held by the controller. Is assigned by the socket on the holding phase of the touch controller
     HingeJoint hinge;
-    GameObject lastSocketObj; //Sender 
+    //GameObject lastSocketObj; //Sender 
     IARInteractable targetInteractable;
+    Socket.ITransfer currentTransfer;
 
 
     
     public void SetupController(ARTouchController touchController){
         this.hinge = touchController.hinge;
-        touchController.onTouch.AddListener(Touch);
+        //touchController.onTouch.AddListener(Touch);
         touchController.onHold.AddListener(Grab);
         touchController.onRelease.AddListener(Release);
 
     }
 
-    void Touch(ARTouchData touchData){
-        if(touchData.selectedInteractable is Socket){
-            var socket = touchData.selectedInteractable as Socket;
-            if(!socket.busy){
-                CmdTouch(socket.gameObject);
-            }
-            
-        }
+    /*void Touch(ARTouchData touchData){
+        if(!(touchData.selectedInteractable is Socket)) return;
+
+        var socket = touchData.selectedInteractable as Socket;
+        if(socket.busy) return;
+        CmdTouch(socket.gameObject);          
     }
     [Command]
     void CmdTouch(GameObject socketObj){
-        var socket = socketObj.GetComponent<Socket>();
+        var socket = socketObj.GetComponent<Socket>();  
         socket.busy = true;
         //lastSocketNetIdentity = socketObj;
         currentMovable = socket.currentObject;
         
-    }
+    }*/
     void Grab(ARTouchData touchData){
-        if(touchData.selectedInteractable is Socket){
-            var socket = touchData.selectedInteractable as Socket;
-            currentMovable = socket.currentObject;
-            CmdGrab(socket.gameObject);
-        }
+        if(!(touchData.selectedInteractable is Socket)) return;
+        var socket = touchData.selectedInteractable as Socket;
+
+        currentMovable = socket.currentObject;
+        CmdGrab(socket.netIdentity);
+        
     }
     [Command]
-    void CmdGrab(GameObject socketObj){
-        var containerObj = Instantiate(GameResources.Instance.movableContainer);
-        Debug.LogError("Container: " + containerObj);
+    void CmdGrab(NetworkIdentity socketNetIdentity){
         var playerCharacter = connectionToClient.identity.GetComponent<GamePlayer>().character;
 
-        var movable = socketObj.GetComponent<Socket>().TryTake();
+        currentTransfer = socketNetIdentity.GetComponent<Socket>().TryTake();
+        if(currentTransfer == null) return;
+
+        var movable = currentTransfer.GetMovable();
         Debug.LogError(movable);
 
-        //if(movable){
-            Debug.LogError(socketObj.name);
-            lastSocketObj = socketObj;
-
-            NetworkServer.Spawn(containerObj);
-                        
-            RpcEmptySocket(socketObj);
-            //TargetGrab(socketObj);
-        //} 
+        if(movable){
+            Debug.LogError(socketNetIdentity.name);
+            //lastSocketObj = socketObj;                        
+            //RpcEmptySocket(socketObj);
+            TargetGrab((int)playerCharacter, socketNetIdentity);
+        } 
         
     }
     
@@ -70,23 +68,14 @@ public class MovableController : NetworkBehaviour{
 
     }
     [TargetRpc]
-    void TargetGrab(GameObject socketObj)
+    void TargetGrab(int character, NetworkIdentity socketNetIdentity)
 	{
-        var socket = socketObj.GetComponent<Socket>();
+        var socket = socketNetIdentity.GetComponent<Socket>();
         var movable = socket.currentObject;
-        movable.gameObject.SetActive(true);
+        movable.GetComponent<PlayerVisibility>().SetObserverFlag(character);
         ConnectToHinge(movable);
     }
 
-    [ClientRpc]
-    void RpcEmptySocket(GameObject socketObj)
-	{
-        var socket = socketObj.GetComponent<Socket>();
-        socket.currentObject.gameObject.SetActive(false);
-
-        Debug.LogError("Disabled movable " + socket.currentObject.name + "from " + socket.name);
-	}
-    
     [ClientCallback]
     void Update(){
         if(currentMovable && ARTouchController.touchData.currentStatus == ARTouchData.Status.HOLDING){
@@ -122,46 +111,67 @@ public class MovableController : NetworkBehaviour{
         }
         
 
-        //if(currentMovable){
-            Socket target = (Socket)touchData.selectedInteractable;
+        if(!(touchData.selectedInteractable is Socket)) return;
+        Socket lastSocket = (Socket)touchData.selectedInteractable;
 
-            RaycastHit[] hits;
-            hits = Physics.RaycastAll(touchData.ray);
+        Socket target = null;
 
-            if(hits.Length > 0){
-                foreach(var hit in hits){
-                    target = hit.transform.GetComponent<Socket>();
-                    if(target != null) break;
-                }
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(touchData.ray);
+
+        if(hits.Length > 0){
+            foreach(var hit in hits){
+                target = hit.transform.GetComponent<Socket>();
+                if(target != null) break;
             }
+        }
 
-            CmdPlace(target?.gameObject);            
+        CmdPlace(target?.netIdentity, lastSocket.netIdentity);            
             
         //}
     }
 
     public void ConnectToHinge(Movable movable){
         //currentMovable = movable;
+        movable.rb.isKinematic = false;
         hinge.connectedBody = movable.rb;
     }
+
+    [Server]
+    void ReturnToSourceSocket(Socket lastSocket){
+        if(lastSocket.ReturnMovable(currentTransfer)){
+            currentTransfer = null;
+            lastSocket = null;
+            currentMovable = null;
+        }else{
+            Debug.LogError("Could not return object to source");
+        }
+        
+        
+    }
+
     [Command]
-    public void CmdPlace(GameObject targetObj){
-        var target = targetObj.GetComponent<Socket>();
+    void CmdPlace(NetworkIdentity targetNetIdentity, NetworkIdentity lastSocketNetworkIdentity){
+        if(targetNetIdentity == null){
+            var _lastSocket = lastSocketNetworkIdentity.GetComponent<Socket>();
+            ReturnToSourceSocket(_lastSocket);
+            return;
+        }
+        var target = targetNetIdentity.GetComponent<Socket>();
         
         bool placed = false;
-        var lastSocket = lastSocketObj.GetComponent<Socket>();
+        var lastSocket = lastSocketNetworkIdentity.GetComponent<Socket>();
+        
+        Debug.Log(lastSocket.currentObject);
 
-        if(target != null) placed = target.TryPlaceObject(lastSocketObj);
+        if(target != null) placed = target.TryPlaceObject(lastSocket);
 
         if(!placed){
-            lastSocket.TryPlaceObject(lastSocketObj);
+            ReturnToSourceSocket(lastSocket);
         }else{
             lastSocket.currentObject = null;
         }
         
-        lastSocket.FreeSocket();
-        
-
         lastSocket = null;
         currentMovable = null;
         hinge.connectedBody = null;

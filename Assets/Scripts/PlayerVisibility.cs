@@ -5,12 +5,16 @@ using System.Collections.Generic;
 public class PlayerVisibility : NetworkVisibility
 {
     [EnumFlag] [SerializeField]
-    Character characterObservers;
+    Character characterObservers = (Character)111;
     
     [Server]
     public void SetObserverFlag(int flag){
         characterObservers = (Character) flag;
         GetComponent<NetworkIdentity>().RebuildObservers(false);
+    }
+    [Server]
+    public int GetObserverFlag(){
+        return (int) characterObservers;
     }
 
     public override bool OnCheckObserver(NetworkConnection conn)

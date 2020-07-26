@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+
+//Todo: Add Destructive and Supplier modes. Destructive socket destroys the object that it receives. Supplier provides infinite objects. They are mutually exclusive.
 [RequireComponent(typeof(Collider))]
 public class Socket : ARNetInteractable
 {
@@ -16,46 +18,54 @@ public class Socket : ARNetInteractable
     public Vector3 placementAnchor;
     private MeshRenderer previewRenderer = null;
     private MeshFilter previewFilter = null;
-    [HideInInspector] public Movable currentObject;
-    private Movable lastObject;
+    public Movable currentObject;
     private Mesh lastMesh;
-
+    private Transfer currentTransfer;
     [SerializeField] public MovablePlacementPose placementPose = null;
-    private Transform scaler;
-    [SyncVar]
-    public bool busy;
+    /// <summary>
+    /// Only valid on the server
+    /// </summary>
+    private bool busy;
 
-    void Awake()
-    {
-        //previewRenderer = GetComponentInChildren<MeshRenderer>();
-        //previewFilter = GetComponentInChildren<MeshFilter>();
-        //if(previewRenderer != null) previewRenderer.enabled = false;
-        var movable = GetComponentInChildren<Movable>();
-        if(movable) SetObject(movable);
+    public interface ITransfer{
+        Movable GetMovable();
+    }
+    private class Transfer: ITransfer{
+        private Movable movable;
+        public Transfer(Movable movable){
+            this.movable = movable;
+        }
+
+        public Movable GetMovable(){
+            return movable;
+        }
     }
 
-
-    public override void OnStartClient(){
-        var movable = GetComponentInChildren<Movable>();
-        if(movable) SetObject(movable);
-    }
-
-    private void CreateScaler(){
-        var scalerObj = Instantiate(new GameObject(gameObject.name + " Scaler"));
-        scaler = scalerObj.transform;
-        scaler.localPosition = Vector3.zero;
-        
+    public bool ReturnMovable(ITransfer transfer){
+        if(ReferenceEquals(transfer, currentTransfer)){
+            SetObject(transfer.GetMovable());
+            return true;
+        }
+        return false;
     }
 
     void Start(){
         var preview = GameObject.Instantiate(GameResources.Instance.previewSocketPrefab,transform);
         previewRenderer = preview.GetComponent<MeshRenderer>();
         previewFilter = preview.GetComponent<MeshFilter>();
+
+    }
+    public override void OnStartServer(){
+        base.OnStartServer();
+        busy = false;
     }
 
+    [Server]
+    public bool IsBusy(){
+        return busy;
+    }
     public virtual bool TryTarget(Movable obj){
         if(currentObject != null) return false;
-
         if(obj.mesh != lastMesh){
             lastMesh = obj.mesh;
             previewFilter.mesh = obj.mesh;
@@ -64,83 +74,52 @@ public class Socket : ARNetInteractable
         previewRenderer.enabled = true;
         return true;
     }
-
-    public Movable TryTake(){
-        if(currentObject == null) return null;
+    [Server]
+    public ITransfer TryTake(){
+        if(busy || currentObject == null) return null;
         var obj = currentObject;
-        currentObject = null;
-        return obj;
-    }
 
-    float GetMeshOffset(Mesh mesh){
-        return mesh.bounds.extents.y/2;
+        var vis = currentObject.GetComponent<PlayerVisibility>();
+        vis.SetObserverFlag(0);
+        currentTransfer = new Transfer(obj);
+        return currentTransfer;
     }
 
     public virtual void Untarget(){
         previewRenderer.enabled = false;
     }
-
-    public bool TryPlaceObject(GameObject otherSocketObj){
+    [Server]
+    public bool TryPlaceObject(Socket otherSocket){
         if(currentObject != null) return false;
-        var movable = otherSocketObj.GetComponent<Socket>().currentObject;
+        var movable = otherSocket.currentObject;
         if(exclusiveMode && movable != exclusiveObject) return false;
-        if(busy && movable != lastObject) return false;
-        
-        RpcSetObject(otherSocketObj);
+        if(busy) return false;
+
+        var flag = GetComponent<PlayerVisibility>().GetObserverFlag();
+        movable.GetComponent<PlayerVisibility>().SetObserverFlag(flag);
+        currentObject = movable;
+        Debug.LogError(movable.netIdentity);
+        RpcSetObject(currentObject.netIdentity);
         return true;
     }
     [ClientRpc]
-    private void RpcSetObject(GameObject otherSocketObj){
-        var movable = otherSocketObj.GetComponent<Socket>().currentObject;
-        Debug.LogError("Socket: " + otherSocketObj + ", Movable: " + movable);
+    private void RpcSetObject(NetworkIdentity movableNetworkIdentity){
+        var movable = movableNetworkIdentity.GetComponent<Movable>();
+        Debug.LogError(movableNetworkIdentity);
+        currentObject = movable;
         SetObject(movable);
     }
 
     private void SetObject(Movable obj){
-        //print(obj.name + " set to socket " + this.name);
         obj.gameObject.SetActive(true);
-        obj.GetComponent<Rigidbody>().isKinematic = true;
-        //if(scaler == null) CreateScaler();
+        obj.rb.isKinematic = true;
         if(!exclusiveMode){
-            // obj.transform.parent = scaler;
-            // FitObjectToSocket(obj);
-            // obj.transform.localPosition = Vector3.zero;
-            // obj.transform.localRotation = Quaternion.identity;
-            obj.transform.position = placementAnchor + obj.bottomAnchor;
+            obj.transform.position = transform.position - (obj.bottomAnchor - placementAnchor);
         }else{
-            obj.transform.parent = transform;
             obj.transform.localPosition = placementPose.position;
             obj.transform.localScale = placementPose.scale;
             obj.transform.localRotation = placementPose.rotation;
-        }
-
-        currentObject = obj;
-        obj.releaseAction = UnsetObject;
-    }
-
-
-    private void FitObjectToSocket(Movable obj){
-        var model = obj.GetComponent<MeshRenderer>();
-        var collider =  GetComponent<Collider>();
-     
-        var boundsScale = collider.bounds.size;
-
-        var modelScale = model.bounds.size;
-        var ratio = boundsScale.magnitude/modelScale.magnitude;
-        print(gameObject.name + ", " + boundsScale + ", " + modelScale);
-        scaler.transform.localScale *= ratio;
-        print(collider.bounds.extents);
-        var socketOffset = collider.bounds.center - transform.localPosition;
-        //var movableOffset = model.bounds.center - model.transform.localPosition;
-        scaler.transform.localPosition = Vector3.up * (socketOffset.y - collider.bounds.extents.y + (model.bounds.extents.y));
-    }
-
-    private void UnsetObject(IARInteractable oldInteractable, IARInteractable newInteractable){
-        print(newInteractable);
-        print(oldInteractable);
-        if(newInteractable != null && newInteractable != oldInteractable){
-            this.currentObject = null;
-        }
+        }  
     }
 
     public override void onTap(){}
@@ -149,23 +128,14 @@ public class Socket : ARNetInteractable
     {
         if(currentObject == null) return;
         currentObject.onHold();
-        currentObject.rb.isKinematic = false;
-        //controller.movableController.HoldMovable(currentObject);
-        lastObject = currentObject;
-        //currentObject = null;
-        busy = true;
     }
+
 
     public override void onRelease()
     {
         if(currentObject == null) return;
         currentObject.onRelease();
     }
-
-    public void FreeSocket(){
-        busy = false;
-    }
-
     public override void onTarget(Movable movable)
     {
         TryTarget(movable);
