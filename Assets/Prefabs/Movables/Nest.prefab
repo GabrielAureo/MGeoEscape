@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6a666b75777d4ea4e9c5053ee660fc6b, type: 2}
+  - {fileID: 2100000, guid: 3ad95896af5c37940a2af19e5446140b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -131,9 +131,6 @@ MonoBehaviour:
   placementRotation: {x: 0, y: 0, z: 0, w: 1}
   rb: {fileID: 0}
   mesh: {fileID: 0}
-  released: 0
-  opaqueMaterial: {fileID: 2100000, guid: 6a666b75777d4ea4e9c5053ee660fc6b, type: 2}
-  transparentMaterial: {fileID: 2100000, guid: 3224f1a9da88ce0459a43e158ea39640, type: 2}
 --- !u!114 &7545301053025605441
 MonoBehaviour:
   m_ObjectHideFlags: 0

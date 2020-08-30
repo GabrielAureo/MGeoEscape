@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-//[CustomPropertyDrawer(typeof(MovablePlacementPose))]
+[CustomPropertyDrawer(typeof(MovablePlacementPose))]
 public class MovablePlacementPoseDrawer: PropertyDrawer{
 
     private bool m_transf_btn = false;

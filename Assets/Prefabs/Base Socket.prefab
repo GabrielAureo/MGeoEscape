@@ -132,11 +132,18 @@ MonoBehaviour:
   exclusiveObject: {fileID: 0}
   placementAnchor: {x: 0, y: -0.45948976, z: 0}
   currentObject: {fileID: 0}
-  placementPose:
-    position: {x: -1.07, y: 0, z: 0}
+  useDefaultTargetAnimation: 0
+  useDefaultBusyAnimation: 1
+  AvailableTargetAnimation:
+    m_PersistentCalls:
+      m_Calls: []
+  BusyTargetAnimation:
+    m_PersistentCalls:
+      m_Calls: []
+  exclusivePose:
+    position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 1}
     scale: {x: 1, y: 1, z: 1}
-  busy: 0
 --- !u!114 &3307295559801277301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,4 +187,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  characterObservers: 0
+  characterObservers: 7

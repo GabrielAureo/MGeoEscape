@@ -4,8 +4,10 @@ using Mirror;
 using UnityEngine.Networking.Types;
 
 public class MovableController : NetworkBehaviour{
-    
-    public Movable currentMovable; //Current movable object being held by the controller. Is assigned by the socket on the holding phase of the touch controller
+    /// <summary>
+    /// Chached reference to the current movable object being held by the controller. Only available on the client to reduce traffic.
+    /// </summary>
+    public Movable currentMovable; 
     HingeJoint hinge;
     //GameObject lastSocketObj; //Sender 
     IARInteractable targetInteractable;
@@ -39,8 +41,6 @@ public class MovableController : NetworkBehaviour{
     void Grab(ARTouchData touchData){
         if(!(touchData.selectedInteractable is Socket)) return;
         var socket = touchData.selectedInteractable as Socket;
-
-        currentMovable = socket.currentObject;
         CmdGrab(socket.netIdentity);
         
     }
@@ -52,6 +52,9 @@ public class MovableController : NetworkBehaviour{
         if(currentTransfer == null) return;
 
         var movable = currentTransfer.GetMovable();
+        
+        var vis = movable.GetComponent<PlayerVisibility>();
+        vis.SetObserverFlag((int)playerCharacter);
         Debug.LogError(movable);
 
         if(movable){
@@ -62,17 +65,13 @@ public class MovableController : NetworkBehaviour{
         } 
         
     }
-    
-    [ClientRpc]
-    void RpcGrab(){
-
-    }
     [TargetRpc]
     void TargetGrab(int character, NetworkIdentity socketNetIdentity)
 	{
         var socket = socketNetIdentity.GetComponent<Socket>();
         var movable = socket.currentObject;
-        movable.GetComponent<PlayerVisibility>().SetObserverFlag(character);
+        currentMovable = movable;
+        movable.GrabAnimation();
         ConnectToHinge(movable);
     }
 
@@ -133,6 +132,7 @@ public class MovableController : NetworkBehaviour{
 
     public void ConnectToHinge(Movable movable){
         //currentMovable = movable;
+        movable.transform.parent = null;
         movable.rb.isKinematic = false;
         hinge.connectedBody = movable.rb;
     }
@@ -142,7 +142,6 @@ public class MovableController : NetworkBehaviour{
         if(lastSocket.ReturnMovable(currentTransfer)){
             currentTransfer = null;
             lastSocket = null;
-            currentMovable = null;
         }else{
             Debug.LogError("Could not return object to source");
         }
@@ -152,6 +151,7 @@ public class MovableController : NetworkBehaviour{
 
     [Command]
     void CmdPlace(NetworkIdentity targetNetIdentity, NetworkIdentity lastSocketNetworkIdentity){
+        TargetPlace();
         if(targetNetIdentity == null){
             var _lastSocket = lastSocketNetworkIdentity.GetComponent<Socket>();
             ReturnToSourceSocket(_lastSocket);
@@ -162,19 +162,23 @@ public class MovableController : NetworkBehaviour{
         bool placed = false;
         var lastSocket = lastSocketNetworkIdentity.GetComponent<Socket>();
         
-        Debug.Log(lastSocket.currentObject);
+       
 
         if(target != null) placed = target.TryPlaceObject(lastSocket);
 
         if(!placed){
             ReturnToSourceSocket(lastSocket);
         }else{
-            lastSocket.currentObject = null;
+            lastSocket.EndTransfer(currentTransfer);
         }
         
         lastSocket = null;
-        currentMovable = null;
         hinge.connectedBody = null;
+    }
+    [TargetRpc]
+    void TargetPlace(){
+        currentMovable.ReleaseAnimation();
+        currentMovable = null;
     }
 
 

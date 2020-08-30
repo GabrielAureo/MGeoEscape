@@ -9,8 +9,10 @@ public class SocketEditor: Editor{
     private SerializedProperty currentObject;
     private SerializedProperty exclusiveMode;
     private SerializedProperty exclusiveObject;
-    private SerializedProperty placementPose;
+    //private SerializedProperty placementPose;
     private SerializedProperty placementAnchor;
+    private SerializedProperty useDefaultBusyAnim;
+    private SerializedProperty useDefaultTargetAnim;
     Socket targetSocket;
     GameObject placementDummy;
     System.Action selectionDelegate;
@@ -20,28 +22,30 @@ public class SocketEditor: Editor{
     MovablePlacementPose handle = new MovablePlacementPose();
 
     void OnEnable(){
-        currentObject = serializedObject.FindProperty("currentObject");
+        currentObject = serializedObject.FindProperty("_currentObject");
         exclusiveMode = serializedObject.FindProperty("exclusiveMode");
         exclusiveObject = serializedObject.FindProperty("exclusiveObject");
-        placementPose = serializedObject.FindProperty("placementPose");
+        //placementPose = serializedObject.FindProperty("placementPose");
         placementAnchor = serializedObject.FindProperty("placementAnchor");
+        useDefaultBusyAnim = serializedObject.FindProperty("useDefaultBusyAnimation");
+        useDefaultTargetAnim = serializedObject.FindProperty("useDefaultTargetAnimation");
         targetSocket = (Socket)target;
         //EditorApplication.hierarchyChanged += ()=> CheckChildren();
         isEditing = false;
         if(movePose == null) movePose = new MovablePlacementPose();
         if(handle == null) handle = new MovablePlacementPose();
-        movePose = GetPose();
+        //ovePose = GetPose();
         ConvertToGlobal(ref handle, movePose, targetSocket);
 
     }
     
-    private MovablePlacementPose GetPose(){
-        var pos = placementPose.FindPropertyRelative("position").vector3Value;
-        var rot = placementPose.FindPropertyRelative("rotation").quaternionValue;
-        var scale = placementPose.FindPropertyRelative("scale").vector3Value;
+    // private MovablePlacementPose GetPose(){
+    //     var pos = placementPose.FindPropertyRelative("position").vector3Value;
+    //     var rot = placementPose.FindPropertyRelative("rotation").quaternionValue;
+    //     var scale = placementPose.FindPropertyRelative("scale").vector3Value;
 
-        return new MovablePlacementPose(pos, rot, scale);
-    }
+    //     return new MovablePlacementPose(pos, rot, scale);
+    // }
 
     private void ConvertToLocal(MovablePlacementPose global, ref MovablePlacementPose local, Socket target){
         local.position = target.transform.InverseTransformPoint(global.position);
@@ -152,18 +156,18 @@ public class SocketEditor: Editor{
             SetObject(movable);
         }
 
-        EditorGUI.BeginChangeCheck();
-        EditorGUILayout.PropertyField(placementPose);
+        // EditorGUI.BeginChangeCheck();
+        // EditorGUILayout.PropertyField(placementPose);
         
-        if(EditorGUI.EndChangeCheck()){
-            
-            SetDummyPose();
-            ConvertToGlobal(ref handle, movePose, targetSocket);
-        }
-        
+        // if(EditorGUI.EndChangeCheck()){
+        //     SetDummyPose();
+        //     ConvertToGlobal(ref handle, movePose, targetSocket);
+        // }
+        EditorGUILayout.PropertyField(useDefaultTargetAnim);
+        EditorGUILayout.PropertyField(useDefaultBusyAnim);
         serializedObject.ApplyModifiedProperties();
         
-        //DrawDefaultInspector();
+        
     }
 
     void RefreshSceneView(){
@@ -192,7 +196,7 @@ public class SocketEditor: Editor{
             Undo.RecordObject(targetSocket, "Changed Placement Pose");
             ConvertToLocal(handle, ref movePose, socket);
             movePose.SetToTransform(placementDummy.transform);
-            socket.placementPose = movePose;
+            socket.exclusivePose = movePose;
         } 
     }
     private void MoveTool(){
@@ -215,23 +219,23 @@ public class SocketEditor: Editor{
         return new Vector3(v.x/u.x, v.y/u.y, v.z/u.z);
     }
 
-    public void SetDummyPose(){
-        movePose.position = placementPose.FindPropertyRelative("position").vector3Value;
-        movePose.rotation = placementPose.FindPropertyRelative("rotation").quaternionValue;
-        movePose.scale = placementPose.FindPropertyRelative("scale").vector3Value;
-        if(!placementDummy) return;
-        placementDummy.transform.localPosition = movePose.position;
-        placementDummy.transform.localRotation = movePose.rotation;
-        placementDummy.transform.localScale = movePose.scale;
-    }
+    // public void SetDummyPose(){
+    //     movePose.position = placementPose.FindPropertyRelative("position").vector3Value;
+    //     movePose.rotation = placementPose.FindPropertyRelative("rotation").quaternionValue;
+    //     movePose.scale = placementPose.FindPropertyRelative("scale").vector3Value;
+    //     if(!placementDummy) return;
+    //     placementDummy.transform.localPosition = movePose.position;
+    //     placementDummy.transform.localRotation = movePose.rotation;
+    //     placementDummy.transform.localScale = movePose.scale;
+    // }
 
-    private void CheckChildren(){
-        if(Application.isPlaying) return;
-        var childMovable = targetSocket.transform.GetComponentInChildren<Movable>();
-        if(childMovable == null && targetSocket.currentObject != null){
-            UnsetObject(targetSocket);
-        }
-    }
+    // private void CheckChildren(){
+    //     if(Application.isPlaying) return;
+    //     var childMovable = targetSocket.transform.GetComponentInChildren<Movable>();
+    //     if(childMovable == null && targetSocket.currentObject != null){
+    //         UnsetObject(targetSocket);
+    //     }
+    // }
 
     private void SetObject(Movable movable){
         Undo.SetCurrentGroupName("Set Movable to Socket");
@@ -240,8 +244,8 @@ public class SocketEditor: Editor{
         Undo.RecordObject(targetSocket, "Set Movable on currentObject");
         
 
-        targetSocket.currentObject = movable;
-        EditorUtility.SetDirty(targetSocket);
+        //targetSocket.currentObject = movable;
+        currentObject.objectReferenceValue = movable;
         if(movable != null){
             Undo.RecordObject(movable.transform, "Anchor Movable to surface");
             movable.transform.position = targetSocket.transform.position - (movable.bottomAnchor - targetSocket.placementAnchor);
@@ -255,7 +259,8 @@ public class SocketEditor: Editor{
         int group = Undo.GetCurrentGroup();
 
         Undo.RecordObject(socket, "Remove Movable reference from socket object");
-        socket.currentObject = null;
+        //socket.currentObject = null;
+        currentObject.objectReferenceValue = null;
         EditorUtility.SetDirty(socket);
 
         Undo.CollapseUndoOperations(group);

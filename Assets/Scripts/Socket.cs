@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Mirror;
 
 //Todo: Add Destructive and Supplier modes. Destructive socket destroys the object that it receives. Supplier provides infinite objects. They are mutually exclusive.
@@ -18,10 +19,17 @@ public class Socket : ARNetInteractable
     public Vector3 placementAnchor;
     private MeshRenderer previewRenderer = null;
     private MeshFilter previewFilter = null;
-    public Movable currentObject;
+    public Movable currentObject {get{return _currentObject;} private set{_currentObject = value;}}
+    [SerializeField] private Movable _currentObject;
     private Mesh lastMesh;
     private Transfer currentTransfer;
-    [SerializeField] public MovablePlacementPose placementPose = null;
+    [SerializeField] private bool useDefaultTargetAnimation;
+    [SerializeField] private bool useDefaultBusyAnimation;
+    [SerializeField] private UnityEvent AvailableTargetAnimation;
+    [SerializeField] private UnityEvent BusyTargetAnimation;
+    [SerializeField] public MovablePlacementPose exclusivePose = null;
+
+    private GameObject busyPreviewObject;
     /// <summary>
     /// Only valid on the server
     /// </summary>
@@ -44,6 +52,16 @@ public class Socket : ARNetInteractable
     public bool ReturnMovable(ITransfer transfer){
         if(ReferenceEquals(transfer, currentTransfer)){
             SetObject(transfer.GetMovable());
+            if(busyPreviewObject) busyPreviewObject.SetActive(false);
+            return true;
+        }
+        return false;
+    }
+
+    public bool EndTransfer(ITransfer transfer){
+        if(ReferenceEquals(transfer, currentTransfer)){
+            currentObject = null;
+            if(busyPreviewObject) busyPreviewObject.SetActive(false);
             return true;
         }
         return false;
@@ -60,10 +78,7 @@ public class Socket : ARNetInteractable
         busy = false;
     }
 
-    [Server]
-    public bool IsBusy(){
-        return busy;
-    }
+
     public virtual bool TryTarget(Movable obj){
         if(currentObject != null) return false;
         if(obj.mesh != lastMesh){
@@ -79,10 +94,22 @@ public class Socket : ARNetInteractable
         if(busy || currentObject == null) return null;
         var obj = currentObject;
 
-        var vis = currentObject.GetComponent<PlayerVisibility>();
-        vis.SetObserverFlag(0);
         currentTransfer = new Transfer(obj);
+        RpcPlayBusyAnimation();
         return currentTransfer;
+    }
+
+    [ClientRpc]
+    void RpcPlayBusyAnimation(){
+        if(useDefaultBusyAnimation){
+            if(!busyPreviewObject){
+                busyPreviewObject = Instantiate(GameResources.Instance.busyPreviewPrefab);
+                SetPosition(busyPreviewObject, currentObject); 
+            }else{
+                busyPreviewObject.SetActive(true);
+            }
+            
+        }
     }
 
     public virtual void Untarget(){
@@ -98,6 +125,7 @@ public class Socket : ARNetInteractable
         var flag = GetComponent<PlayerVisibility>().GetObserverFlag();
         movable.GetComponent<PlayerVisibility>().SetObserverFlag(flag);
         currentObject = movable;
+        movable.transform.parent = transform.parent;
         Debug.LogError(movable.netIdentity);
         RpcSetObject(currentObject.netIdentity);
         return true;
@@ -113,28 +141,39 @@ public class Socket : ARNetInteractable
     private void SetObject(Movable obj){
         obj.gameObject.SetActive(true);
         obj.rb.isKinematic = true;
+        SetPosition(obj);
+    }
+
+    private void SetPosition(Movable obj){
         if(!exclusiveMode){
             obj.transform.position = transform.position - (obj.bottomAnchor - placementAnchor);
+            obj.transform.rotation = obj.placementRotation;
         }else{
-            obj.transform.localPosition = placementPose.position;
-            obj.transform.localScale = placementPose.scale;
-            obj.transform.localRotation = placementPose.rotation;
+            obj.transform.localPosition = exclusivePose.position;
+            obj.transform.localScale = exclusivePose.scale;
+            obj.transform.localRotation = exclusivePose.rotation;
         }  
+    }
+
+    private void SetPosition(GameObject obj, Movable guide){
+        if(!exclusiveMode){
+            obj.transform.position = transform.position - (guide.bottomAnchor - placementAnchor);
+            obj.transform.rotation = guide.placementRotation;
+        }else{
+            obj.transform.localPosition = exclusivePose.position;
+            obj.transform.localScale = exclusivePose.scale;
+            obj.transform.localRotation = exclusivePose.rotation;
+        }
     }
 
     public override void onTap(){}
 
     public override void onHold()
     {
-        if(currentObject == null) return;
-        currentObject.onHold();
     }
-
 
     public override void onRelease()
     {
-        if(currentObject == null) return;
-        currentObject.onRelease();
     }
     public override void onTarget(Movable movable)
     {

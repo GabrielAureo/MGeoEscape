@@ -23,26 +23,16 @@ public class ARTouchController : NetworkBehaviour{
     public static ARTouchData touchData;
 
     void Awake(){
-        // movableController = new MovableController();
-        // movableController.SetupController(this, hinge);
-        // movableController = GetComponent<MovableController>();
         touchData = new ARTouchData();
         touchData.currentStatus = ARTouchData.Status.NO_TOUCH;
 
         movableController.SetupController(this);
     }
-    /*public ARInteractable GetCurrentObject(){
-        if(touchData.currentStatus == ARTouchData.Status.HOLDING){
-            return selectedInteractable;
-        }
-        return null;
-    }*/
+
 
     void Update(){
         if(!isLocalPlayer) return;
         HandleInput();
-        transform.position = Camera.main.transform.position;
-        transform.rotation = Camera.main.transform.rotation;
     }
 
    
@@ -92,9 +82,7 @@ public class ARTouchController : NetworkBehaviour{
                 touchData.selectedInteractable = selectedInteractable;
                 onTouch.Invoke(touchData);
                 
-                /*if(selectedInteractable is Socket){
-                    lastSocket = (Socket)selectedInteractable;
-                }*/
+
             }
             ChangeStatus(ARTouchData.Status.WAITING);
         }
@@ -111,16 +99,6 @@ public class ARTouchController : NetworkBehaviour{
             }
             Debug.DrawRay(ray.origin, ray.direction, Color.green);
 
-            
-            
-            /*if(currentMovable){
-                if(Physics.Raycast(ray,out hit, Mathf.Infinity,1<<LayerMask.NameToLayer("Sockets"))){
-                    targetInteractable = hit.transform.GetComponent<ARInteractable>();
-                    targetInteractable?.onTarget(this, currentMovable);
-                }else{
-                    targetInteractable?.onUntarget(this,currentMovable);
-                }
-            }*/
         }
 
         if(touchData.currentStatus == ARTouchData.Status.WAITING){
@@ -137,7 +115,10 @@ public class ARTouchController : NetworkBehaviour{
             inputPosition = Input.touches[0].position;
         #endif
 
+        
+
         var wrldPos = Camera.main.ScreenToWorldPoint(new Vector3(inputPosition.x, inputPosition.y, 1.35f));
+        Debug.Log(wrldPos);
         transform.position = new Vector3(wrldPos.x, wrldPos.y, wrldPos.z);
         Ray ray = Camera.main.ScreenPointToRay(inputPosition);
         return ray;

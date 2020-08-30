@@ -16,12 +16,12 @@ public class GamePlayer: NetworkBehaviour{
         gameObject.name = "Game Player " + name;
     }
 
-    void Update(){
-        if(!isLocalPlayer) return;
-        //touchController.HandleInput();
-        transform.position = Camera.main.transform.position;
-        transform.rotation = Camera.main.transform.rotation;
+    // void Update(){
+    //     if(!isLocalPlayer) return;
+    //     //touchController.HandleInput();
+    //     transform.position = Camera.main.transform.position;
+    //     transform.rotation = Camera.main.transform.rotation;
 
-    }
+    // }
     
 }

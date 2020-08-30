@@ -16,30 +16,25 @@ public class Movable : NetworkBehaviour{
     
     [HideInInspector] public Mesh mesh;
     public UnityAction<IARInteractable, IARInteractable> releaseAction;
-    [SerializeField] Material opaqueMaterial = null;
-    [SerializeField] Material transparentMaterial = null;
-    private MeshRenderer meshRenderer;
+    private Material materialInstance;
+    private Tweener fade;
 
     void Awake(){
         rb = GetComponent<Rigidbody>();
         mesh = GetComponent<MeshFilter>().sharedMesh;
-        meshRenderer = GetComponent<MeshRenderer>();
-        opaqueMaterial = meshRenderer.materials[0];
-    }
+        materialInstance = GetComponent<MeshRenderer>().material;
 
-    public void onHold(){
-        var mats = meshRenderer.materials;
-        mats[0] = transparentMaterial;
-        meshRenderer.materials = mats;
-        transparentMaterial.DOFade(0.5f,"_BaseColor", .2f);
     }
-
-    public void onRelease()
+    [Client]
+    public void GrabAnimation(){
+        if(fade!= null && fade.IsActive()) fade.Kill();
+        fade = materialInstance.DOFloat(.5f, "Opacity", .1f);
+    }
+    [Client]
+    public void ReleaseAnimation()
     {
-        transparentMaterial.DOFade(1f,"_BaseColor", .2f);
-        var mats = meshRenderer.materials;
-        mats[0] = opaqueMaterial;
-        meshRenderer.materials = mats;   
+        if(fade!= null && fade.IsActive()) fade.Kill();
+        fade = materialInstance.DOFloat(1f, "Opacity", .1f);
     }
 
     

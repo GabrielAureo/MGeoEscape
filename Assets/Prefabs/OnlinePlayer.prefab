@@ -52,6 +52,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
 --- !u!114 &7678060925501688504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,17 +155,17 @@ PrefabInstance:
     - target: {fileID: 8383475171401586969, guid: 521c901808274a6489ec6c2ea81b5ffe,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.448
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8383475171401586969, guid: 521c901808274a6489ec6c2ea81b5ffe,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.431
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8383475171401586969, guid: 521c901808274a6489ec6c2ea81b5ffe,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.459
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8383475171401586969, guid: 521c901808274a6489ec6c2ea81b5ffe,
         type: 3}
@@ -204,6 +205,11 @@ PrefabInstance:
     - target: {fileID: 8383475171401586969, guid: 521c901808274a6489ec6c2ea81b5ffe,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8383475171401586971, guid: 521c901808274a6489ec6c2ea81b5ffe,
+        type: 3}
+      propertyPath: m_Axis.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8383475171401586983, guid: 521c901808274a6489ec6c2ea81b5ffe,

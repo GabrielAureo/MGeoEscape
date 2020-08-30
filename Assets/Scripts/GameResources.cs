@@ -3,6 +3,7 @@ using UnityEngine;
 public class GameResources: MonoBehaviour{
     [Header("Prefabs")]
     public GameObject previewSocketPrefab;
+    public GameObject busyPreviewPrefab;
     public GameObject emptySocketPrefab;
     public GameObject movableContainer;
     [Header("Puzzles Assets")]
