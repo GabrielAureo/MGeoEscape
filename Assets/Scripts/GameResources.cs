@@ -1,6 +1,9 @@
 using UnityEngine;
 
 public class GameResources: MonoBehaviour{
+    [Header("Data")]
+    //public CharacterData characterData;
+    
     [Header("Prefabs")]
     public GameObject previewSocketPrefab;
     public GameObject busyPreviewPrefab;

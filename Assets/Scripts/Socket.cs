@@ -50,23 +50,32 @@ public class Socket : ARNetInteractable
     }
 
     public bool ReturnMovable(ITransfer transfer){
+        Debug.LogError(transfer.GetMovable());
         if(ReferenceEquals(transfer, currentTransfer)){
-            SetObject(transfer.GetMovable());
-            if(busyPreviewObject) busyPreviewObject.SetActive(false);
+            RpcReturnMovable();
             return true;
         }
         return false;
+    }
+    [ClientRpc]
+    private void RpcReturnMovable(){
+
+        if(busyPreviewObject) busyPreviewObject.SetActive(false);
+        SetObject(_currentObject);
     }
 
     public bool EndTransfer(ITransfer transfer){
         if(ReferenceEquals(transfer, currentTransfer)){
             currentObject = null;
-            if(busyPreviewObject) busyPreviewObject.SetActive(false);
+            RpcEndTransfer();
             return true;
         }
         return false;
     }
-
+    [ClientRpc]
+    private void RpcEndTransfer(){
+        if(busyPreviewObject) busyPreviewObject.SetActive(false);
+    }
     void Start(){
         var preview = GameObject.Instantiate(GameResources.Instance.previewSocketPrefab,transform);
         previewRenderer = preview.GetComponent<MeshRenderer>();
@@ -134,10 +143,10 @@ public class Socket : ARNetInteractable
     private void RpcSetObject(NetworkIdentity movableNetworkIdentity){
         var movable = movableNetworkIdentity.GetComponent<Movable>();
         Debug.LogError(movableNetworkIdentity);
-        currentObject = movable;
+        currentObject = movable; 
         SetObject(movable);
     }
-
+    [Client]
     private void SetObject(Movable obj){
         obj.gameObject.SetActive(true);
         obj.rb.isKinematic = true;

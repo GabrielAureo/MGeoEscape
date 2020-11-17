@@ -22,22 +22,6 @@ public class MovableController : NetworkBehaviour{
         touchController.onRelease.AddListener(Release);
 
     }
-
-    /*void Touch(ARTouchData touchData){
-        if(!(touchData.selectedInteractable is Socket)) return;
-
-        var socket = touchData.selectedInteractable as Socket;
-        if(socket.busy) return;
-        CmdTouch(socket.gameObject);          
-    }
-    [Command]
-    void CmdTouch(GameObject socketObj){
-        var socket = socketObj.GetComponent<Socket>();  
-        socket.busy = true;
-        //lastSocketNetIdentity = socketObj;
-        currentMovable = socket.currentObject;
-        
-    }*/
     void Grab(ARTouchData touchData){
         if(!(touchData.selectedInteractable is Socket)) return;
         var socket = touchData.selectedInteractable as Socket;
@@ -151,34 +135,33 @@ public class MovableController : NetworkBehaviour{
 
     [Command]
     void CmdPlace(NetworkIdentity targetNetIdentity, NetworkIdentity lastSocketNetworkIdentity){
-        TargetPlace();
-        if(targetNetIdentity == null){
-            var _lastSocket = lastSocketNetworkIdentity.GetComponent<Socket>();
-            ReturnToSourceSocket(_lastSocket);
-            return;
-        }
-        var target = targetNetIdentity.GetComponent<Socket>();
         
-        bool placed = false;
         var lastSocket = lastSocketNetworkIdentity.GetComponent<Socket>();
-        
-       
-
-        if(target != null) placed = target.TryPlaceObject(lastSocket);
-
-        if(!placed){
+        if(targetNetIdentity == null){
+            
             ReturnToSourceSocket(lastSocket);
         }else{
-            lastSocket.EndTransfer(currentTransfer);
+            var target = targetNetIdentity.GetComponent<Socket>();
+            bool can_place = false;
+            
+
+            if(target != null) can_place = target.TryPlaceObject(lastSocket);
+
+            if(!can_place){
+                ReturnToSourceSocket(lastSocket);
+            }else{
+                lastSocket.EndTransfer(currentTransfer);
+            }
         }
-        
-        lastSocket = null;
-        hinge.connectedBody = null;
+
+        lastSocket = null;        
+        TargetPlace();
     }
     [TargetRpc]
     void TargetPlace(){
         currentMovable.ReleaseAnimation();
         currentMovable = null;
+        hinge.connectedBody = null;
     }
 
 
