@@ -7,13 +7,15 @@ public class SupplierSocket : BaseSocket
     public bool randomPick;
     [SyncVar]
     private int currentPick;
-    private SyncList<int> picks;
+    readonly SyncList<int> picks = new SyncList<int>();
 
     public override void OnStartServer()
     {
         base.OnStartServer();
-        foreach(var product in products){
-            product.GetComponent<PlayerVisibility>().SetObserverFlag(0);
+        for(int i =0; i < products.Count; i++){
+            var product = products[i];
+            picks.Add(i);
+            //product.GetComponent<PlayerVisibility>().SetObserverFlag(0);
         }
     }
     public override Movable ClientGetMovable()
@@ -31,7 +33,7 @@ public class SupplierSocket : BaseSocket
     private void DiscardTransfer(SocketTransfer.Status status){
         switch(status){
             case SocketTransfer.Status.Success:
-                products.RemoveAt(currentPick);
+                picks.Remove(currentPick);
                 break;
             case SocketTransfer.Status.Failure:
                 products[currentPick].GetComponent<PlayerVisibility>().SetObserverFlag(0);
@@ -41,10 +43,13 @@ public class SupplierSocket : BaseSocket
     
     public override SocketTransfer TryTake()
     {
-        var movable_idx = (randomPick)?Random.Range(0, products.Count - 1):0;
+        if(picks.Count == 0) return null;
+        var pick = (randomPick)?Random.Range(0, picks.Count):0;
+        var movable_idx = picks[pick];
         currentPick = movable_idx;
-        //RpcShowMovable(movable_idx);
-        //need to use spawn
+        print(pick);
+        foreach( var x in picks) Debug.Log( x.ToString());
+
         return new SocketTransfer(products[movable_idx], DiscardTransfer);
     }
 }

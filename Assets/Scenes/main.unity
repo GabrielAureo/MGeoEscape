@@ -1944,6 +1944,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2216,6 +2217,90 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63996de4a77122c46a13899e340640df, type: 3}
+--- !u!1001 &882413331
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3307295559801277300, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: characterObservers
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277301, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: sceneId
+      value: 3403906230
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277303, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: currentObject
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277304, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277304, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277304, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.573
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277304, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277304, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277304, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277304, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277304, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277304, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277304, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277304, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3307295559801277305, guid: aef51de565a289b429edb6b3be72bacd,
+        type: 3}
+      propertyPath: m_Name
+      value: Base Socket (5)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: aef51de565a289b429edb6b3be72bacd, type: 3}
 --- !u!23 &888386264
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3157,30 +3242,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnClientConnected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnClientDataReceived:
-    m_PersistentCalls:
-      m_Calls: []
-  OnClientError:
-    m_PersistentCalls:
-      m_Calls: []
-  OnClientDisconnected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnServerConnected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnServerDataReceived:
-    m_PersistentCalls:
-      m_Calls: []
-  OnServerError:
-    m_PersistentCalls:
-      m_Calls: []
-  OnServerDisconnected:
-    m_PersistentCalls:
-      m_Calls: []
   port: 7777
   NoDelay: 1
   serverMaxMessageSize: 16384
@@ -3215,7 +3276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
   runInBackground: 1
-  startOnHeadless: 1
+  autoStartServerBuild: 1
   showDebugMessages: 0
   serverTickRate: 30
   offlineScene: 

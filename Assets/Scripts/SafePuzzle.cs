@@ -9,8 +9,8 @@ public class SafePuzzle: Puzzle{
     [SerializeField] List<GameObject> m_trueRocksPrefabs = null;
     [SerializeField] List<GameObject> m_fakeRocksPrefabs = null;
     [SerializeField] Vuforia.ImageTargetBehaviour m_target = null;
-    public SyncListFloat generatedPassword = new SyncListFloat();
-    public SyncListInt chosenItems = new SyncListInt();
+    public SyncList<float> generatedPassword = new SyncList<float>();
+    public SyncList<int> chosenItems = new SyncList<int>();
 
     void Awake(){
     }

@@ -19,16 +19,9 @@ public class GameManager: NetworkRoomManager{
         base.OnStartServer();
         characterSelection = m_characterSelection;
         clientDictionary = new Dictionary<byte[], GamePlayer>();
-        NetworkServer.RegisterHandler<GUIDMessage>(LookupDevice, false);
         gameStarted = false;
     }
 
-    private void LookupDevice(NetworkConnection conn, GUIDMessage msg){
-        var guid = new System.Guid(msg.guid);
-        GamePlayer player;
-        clientDictionary.TryGetValue(msg.guid, out player);
-        print(guid.ToString());
-    }
     /*TBD aparentemente, o cliente se conecta automaticamente pra cena que o servidor está. Posso aproveitar isso e verificar se a cena atual não é o Lobby e
     e já começar a rotina de reconexão*/
     /*public override void OnClientConnect(NetworkConnection conn){

@@ -7,12 +7,26 @@
 //   now:
 //     0.0% CPU time,  32KB memory, 0.02ms
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace Mirror
 {
+    /// <summary>
+    /// a class that holds readers for the different types
+    /// Note that c# creates a different static variable for each
+    /// type
+    /// This will be populated by the weaver
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public static class Reader<T>
+    {
+        public static Func<NetworkReader, T> read;
+    }
+
     // Note: This class is intended to be extremely pedantic, and
     // throw exceptions whenever stuff is going slightly wrong.
     // The exceptions will be handled in NetworkServer/NetworkClient.
@@ -22,6 +36,8 @@ namespace Mirror
     /// </summary>
     public class NetworkReader
     {
+        static readonly ILogger logger = LogFactory.GetLogger<NetworkReader>();
+
         // internal buffer
         // byte[] pointer would work, but we use ArraySegment to also support
         // the ArraySegment constructor
@@ -42,36 +58,47 @@ namespace Mirror
             buffer = segment;
         }
 
-        public byte ReadByte()
+        // ReadBlittable<T> from DOTSNET
+        // this is extremely fast, but only works for blittable types.
+        //
+        // Benchmark: see NetworkWriter.WriteBlittable!
+        //
+        // Note:
+        //   ReadBlittable assumes same endianness for server & client.
+        //   All Unity 2018+ platforms are little endian.
+        public unsafe T ReadBlittable<T>()
+            where T : unmanaged
         {
-            if (Position + 1 > buffer.Count)
+            // check if blittable for safety
+#if UNITY_EDITOR
+            if (!UnsafeUtility.IsBlittable(typeof(T)))
             {
-                throw new EndOfStreamException("ReadByte out of range:" + ToString());
+                throw new ArgumentException(typeof(T) + " is not blittable!");
             }
-            return buffer.Array[buffer.Offset + Position++];
-        }
-        public int ReadInt32() => (int)ReadUInt32();
-        public uint ReadUInt32()
-        {
-            uint value = 0;
-            value |= ReadByte();
-            value |= (uint)(ReadByte() << 8);
-            value |= (uint)(ReadByte() << 16);
-            value |= (uint)(ReadByte() << 24);
-            return value;
-        }
-        public long ReadInt64() => (long)ReadUInt64();
-        public ulong ReadUInt64()
-        {
-            ulong value = 0;
-            value |= ReadByte();
-            value |= ((ulong)ReadByte()) << 8;
-            value |= ((ulong)ReadByte()) << 16;
-            value |= ((ulong)ReadByte()) << 24;
-            value |= ((ulong)ReadByte()) << 32;
-            value |= ((ulong)ReadByte()) << 40;
-            value |= ((ulong)ReadByte()) << 48;
-            value |= ((ulong)ReadByte()) << 56;
+#endif
+
+            // calculate size
+            //   sizeof(T) gets the managed size at compile time.
+            //   Marshal.SizeOf<T> gets the unmanaged size at runtime (slow).
+            // => our 1mio writes benchmark is 6x slower with Marshal.SizeOf<T>
+            // => for blittable types, sizeof(T) is even recommended:
+            // https://docs.microsoft.com/en-us/dotnet/standard/native-interop/best-practices
+            int size = sizeof(T);
+
+            // enough data to read?
+            if (Position + size > buffer.Count)
+            {
+                throw new EndOfStreamException($"ReadBlittable<{typeof(T)}> out of range: {ToString()}");
+            }
+
+            // read blittable
+            T value;
+            fixed (byte* ptr = &buffer.Array[buffer.Offset + Position])
+            {
+                // cast buffer to a T* pointer and then read from it.
+                value = *(T*)ptr;
+            }
+            Position += size;
             return value;
         }
 
@@ -108,6 +135,22 @@ namespace Mirror
         {
             return "NetworkReader pos=" + Position + " len=" + Length + " buffer=" + BitConverter.ToString(buffer.Array, buffer.Offset, buffer.Count);
         }
+
+        /// <summary>
+        /// Reads any data type that mirror supports
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T Read<T>()
+        {
+            Func<NetworkReader, T> readerDelegate = Reader<T>.read;
+            if (readerDelegate == null)
+            {
+                logger.LogError($"No reader found for {typeof(T)}. Use a type supported by Mirror or define a custom reader");
+                return default;
+            }
+            return readerDelegate(this);
+        }
     }
 
     // Mirror's Weaver automatically detects all NetworkReader function types,
@@ -121,61 +164,19 @@ namespace Mirror
         // 1000 readers after: 0.8MB GC, 18ms
         static readonly UTF8Encoding encoding = new UTF8Encoding(false, true);
 
-        public static byte ReadByte(this NetworkReader reader) => reader.ReadByte();
-        public static sbyte ReadSByte(this NetworkReader reader) => (sbyte)reader.ReadByte();
-        public static char ReadChar(this NetworkReader reader) => (char)reader.ReadUInt16();
-        public static bool ReadBoolean(this NetworkReader reader) => reader.ReadByte() != 0;
-        public static short ReadInt16(this NetworkReader reader) => (short)reader.ReadUInt16();
-        public static ushort ReadUInt16(this NetworkReader reader)
-        {
-            ushort value = 0;
-            value |= reader.ReadByte();
-            value |= (ushort)(reader.ReadByte() << 8);
-            return value;
-        }
-        public static int ReadInt32(this NetworkReader reader) => (int)reader.ReadUInt32();
-        public static uint ReadUInt32(this NetworkReader reader)
-        {
-            uint value = 0;
-            value |= reader.ReadByte();
-            value |= (uint)(reader.ReadByte() << 8);
-            value |= (uint)(reader.ReadByte() << 16);
-            value |= (uint)(reader.ReadByte() << 24);
-            return value;
-        }
-        public static long ReadInt64(this NetworkReader reader) => (long)reader.ReadUInt64();
-        public static ulong ReadUInt64(this NetworkReader reader)
-        {
-            ulong value = 0;
-            value |= reader.ReadByte();
-            value |= ((ulong)reader.ReadByte()) << 8;
-            value |= ((ulong)reader.ReadByte()) << 16;
-            value |= ((ulong)reader.ReadByte()) << 24;
-            value |= ((ulong)reader.ReadByte()) << 32;
-            value |= ((ulong)reader.ReadByte()) << 40;
-            value |= ((ulong)reader.ReadByte()) << 48;
-            value |= ((ulong)reader.ReadByte()) << 56;
-            return value;
-        }
-        public static float ReadSingle(this NetworkReader reader)
-        {
-            UIntFloat converter = new UIntFloat();
-            converter.intValue = reader.ReadUInt32();
-            return converter.floatValue;
-        }
-        public static double ReadDouble(this NetworkReader reader)
-        {
-            UIntDouble converter = new UIntDouble();
-            converter.longValue = reader.ReadUInt64();
-            return converter.doubleValue;
-        }
-        public static decimal ReadDecimal(this NetworkReader reader)
-        {
-            UIntDecimal converter = new UIntDecimal();
-            converter.longValue1 = reader.ReadUInt64();
-            converter.longValue2 = reader.ReadUInt64();
-            return converter.decimalValue;
-        }
+        public static byte ReadByte(this NetworkReader reader) => reader.ReadBlittable<byte>();
+        public static sbyte ReadSByte(this NetworkReader reader) => reader.ReadBlittable<sbyte>();
+        public static char ReadChar(this NetworkReader reader) => (char)reader.ReadBlittable<short>(); // char isn't blittable
+        public static bool ReadBoolean(this NetworkReader reader) => reader.ReadBlittable<byte>() != 0; // bool isn't blittable
+        public static short ReadInt16(this NetworkReader reader) => reader.ReadBlittable<short>();
+        public static ushort ReadUInt16(this NetworkReader reader) => reader.ReadBlittable<ushort>();
+        public static int ReadInt32(this NetworkReader reader) =>  reader.ReadBlittable<int>();
+        public static uint ReadUInt32(this NetworkReader reader) => reader.ReadBlittable<uint>();
+        public static long ReadInt64(this NetworkReader reader) => reader.ReadBlittable<long>();
+        public static ulong ReadUInt64(this NetworkReader reader) => reader.ReadBlittable<ulong>();
+        public static float ReadSingle(this NetworkReader reader) => reader.ReadBlittable<float>();
+        public static double ReadDouble(this NetworkReader reader) => reader.ReadBlittable<double>();
+        public static decimal ReadDecimal(this NetworkReader reader) => reader.ReadBlittable<decimal>();
 
         // note: this will throw an ArgumentException if an invalid utf8 string is sent
         // null support, see NetworkWriter
@@ -207,7 +208,7 @@ namespace Mirror
         {
             // count = 0 means the array was null
             // otherwise count -1 is the length of the array
-            uint count = reader.ReadPackedUInt32();
+            uint count = reader.ReadUInt32();
             return count == 0 ? null : reader.ReadBytes(checked((int)(count - 1u)));
         }
 
@@ -215,122 +216,22 @@ namespace Mirror
         {
             // count = 0 means the array was null
             // otherwise count - 1 is the length of the array
-            uint count = reader.ReadPackedUInt32();
+            uint count = reader.ReadUInt32();
             return count == 0 ? default : reader.ReadBytesSegment(checked((int)(count - 1u)));
         }
 
-        // zigzag decoding https://gist.github.com/mfuerstenau/ba870a29e16536fdbaba
-        public static int ReadPackedInt32(this NetworkReader reader)
-        {
-            uint data = reader.ReadPackedUInt32();
-            return (int)((data >> 1) ^ -(data & 1));
-        }
-
-        // http://sqlite.org/src4/doc/trunk/www/varint.wiki
-        // NOTE: big endian.
-        // Use checked() to force it to throw OverflowException if data is invalid
-        public static uint ReadPackedUInt32(this NetworkReader reader) => checked((uint)reader.ReadPackedUInt64());
-
-        // zigzag decoding https://gist.github.com/mfuerstenau/ba870a29e16536fdbaba
-        public static long ReadPackedInt64(this NetworkReader reader)
-        {
-            ulong data = reader.ReadPackedUInt64();
-            return ((long)(data >> 1)) ^ -((long)data & 1);
-        }
-
-        public static ulong ReadPackedUInt64(this NetworkReader reader)
-        {
-            byte a0 = reader.ReadByte();
-            if (a0 < 241)
-            {
-                return a0;
-            }
-
-            byte a1 = reader.ReadByte();
-            if (a0 >= 241 && a0 <= 248)
-            {
-                return 240 + ((a0 - (ulong)241) << 8) + a1;
-            }
-
-            byte a2 = reader.ReadByte();
-            if (a0 == 249)
-            {
-                return 2288 + ((ulong)a1 << 8) + a2;
-            }
-
-            byte a3 = reader.ReadByte();
-            if (a0 == 250)
-            {
-                return a1 + (((ulong)a2) << 8) + (((ulong)a3) << 16);
-            }
-
-            byte a4 = reader.ReadByte();
-            if (a0 == 251)
-            {
-                return a1 + (((ulong)a2) << 8) + (((ulong)a3) << 16) + (((ulong)a4) << 24);
-            }
-
-            byte a5 = reader.ReadByte();
-            if (a0 == 252)
-            {
-                return a1 + (((ulong)a2) << 8) + (((ulong)a3) << 16) + (((ulong)a4) << 24) + (((ulong)a5) << 32);
-            }
-
-            byte a6 = reader.ReadByte();
-            if (a0 == 253)
-            {
-                return a1 + (((ulong)a2) << 8) + (((ulong)a3) << 16) + (((ulong)a4) << 24) + (((ulong)a5) << 32) + (((ulong)a6) << 40);
-            }
-
-            byte a7 = reader.ReadByte();
-            if (a0 == 254)
-            {
-                return a1 + (((ulong)a2) << 8) + (((ulong)a3) << 16) + (((ulong)a4) << 24) + (((ulong)a5) << 32) + (((ulong)a6) << 40) + (((ulong)a7) << 48);
-            }
-
-            byte a8 = reader.ReadByte();
-            if (a0 == 255)
-            {
-                return a1 + (((ulong)a2) << 8) + (((ulong)a3) << 16) + (((ulong)a4) << 24) + (((ulong)a5) << 32) + (((ulong)a6) << 40) + (((ulong)a7) << 48) + (((ulong)a8) << 56);
-            }
-
-            throw new IndexOutOfRangeException("ReadPackedUInt64() failure: " + a0);
-        }
-
-        public static Vector2 ReadVector2(this NetworkReader reader) => new Vector2(reader.ReadSingle(), reader.ReadSingle());
-        public static Vector3 ReadVector3(this NetworkReader reader) => new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-        public static Vector4 ReadVector4(this NetworkReader reader) => new Vector4(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-        public static Vector2Int ReadVector2Int(this NetworkReader reader) => new Vector2Int(reader.ReadPackedInt32(), reader.ReadPackedInt32());
-        public static Vector3Int ReadVector3Int(this NetworkReader reader) => new Vector3Int(reader.ReadPackedInt32(), reader.ReadPackedInt32(), reader.ReadPackedInt32());
-        public static Color ReadColor(this NetworkReader reader) => new Color(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-        public static Color32 ReadColor32(this NetworkReader reader) => new Color32(reader.ReadByte(), reader.ReadByte(), reader.ReadByte(), reader.ReadByte());
-        public static Quaternion ReadQuaternion(this NetworkReader reader) => new Quaternion(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-        public static Rect ReadRect(this NetworkReader reader) => new Rect(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-        public static Plane ReadPlane(this NetworkReader reader) => new Plane(reader.ReadVector3(), reader.ReadSingle());
-        public static Ray ReadRay(this NetworkReader reader) => new Ray(reader.ReadVector3(), reader.ReadVector3());
-
-        public static Matrix4x4 ReadMatrix4x4(this NetworkReader reader)
-        {
-            return new Matrix4x4
-            {
-                m00 = reader.ReadSingle(),
-                m01 = reader.ReadSingle(),
-                m02 = reader.ReadSingle(),
-                m03 = reader.ReadSingle(),
-                m10 = reader.ReadSingle(),
-                m11 = reader.ReadSingle(),
-                m12 = reader.ReadSingle(),
-                m13 = reader.ReadSingle(),
-                m20 = reader.ReadSingle(),
-                m21 = reader.ReadSingle(),
-                m22 = reader.ReadSingle(),
-                m23 = reader.ReadSingle(),
-                m30 = reader.ReadSingle(),
-                m31 = reader.ReadSingle(),
-                m32 = reader.ReadSingle(),
-                m33 = reader.ReadSingle()
-            };
-        }
+        public static Vector2 ReadVector2(this NetworkReader reader) => reader.ReadBlittable<Vector2>();
+        public static Vector3 ReadVector3(this NetworkReader reader) => reader.ReadBlittable<Vector3>();
+        public static Vector4 ReadVector4(this NetworkReader reader) => reader.ReadBlittable<Vector4>();
+        public static Vector2Int ReadVector2Int(this NetworkReader reader) => reader.ReadBlittable<Vector2Int>();
+        public static Vector3Int ReadVector3Int(this NetworkReader reader) => reader.ReadBlittable<Vector3Int>();
+        public static Color ReadColor(this NetworkReader reader) => reader.ReadBlittable<Color>();
+        public static Color32 ReadColor32(this NetworkReader reader) => reader.ReadBlittable<Color32>();
+        public static Quaternion ReadQuaternion(this NetworkReader reader) => reader.ReadBlittable<Quaternion>();
+        public static Rect ReadRect(this NetworkReader reader) => reader.ReadBlittable<Rect>();
+        public static Plane ReadPlane(this NetworkReader reader) => reader.ReadBlittable<Plane>();
+        public static Ray ReadRay(this NetworkReader reader) => reader.ReadBlittable<Ray>();
+        public static Matrix4x4 ReadMatrix4x4(this NetworkReader reader) => reader.ReadBlittable<Matrix4x4>();
 
         public static byte[] ReadBytes(this NetworkReader reader, int count)
         {
@@ -340,12 +241,23 @@ namespace Mirror
         }
 
         public static Guid ReadGuid(this NetworkReader reader) => new Guid(reader.ReadBytes(16));
-        public static Transform ReadTransform(this NetworkReader reader) => reader.ReadNetworkIdentity()?.transform;
-        public static GameObject ReadGameObject(this NetworkReader reader) => reader.ReadNetworkIdentity()?.gameObject;
+        public static Transform ReadTransform(this NetworkReader reader)
+        {
+            // Dont use null propagation here as it could lead to MissingReferenceException
+            NetworkIdentity networkIdentity = reader.ReadNetworkIdentity();
+            return networkIdentity != null ? networkIdentity.transform : null;
+        }
+
+        public static GameObject ReadGameObject(this NetworkReader reader)
+        {
+            // Dont use null propagation here as it could lead to MissingReferenceException
+            NetworkIdentity networkIdentity = reader.ReadNetworkIdentity();
+            return networkIdentity != null ? networkIdentity.gameObject : null;
+        }
 
         public static NetworkIdentity ReadNetworkIdentity(this NetworkReader reader)
         {
-            uint netId = reader.ReadPackedUInt32();
+            uint netId = reader.ReadUInt32();
             if (netId == 0)
                 return null;
 
@@ -358,14 +270,35 @@ namespace Mirror
             return null;
         }
 
+        public static List<T> ReadList<T>(this NetworkReader reader)
+        {
+            int length = reader.ReadInt32();
+            if (length < 0)
+                return null;
+            List<T> result = new List<T>(length);
+            for (int i = 0; i < length; i++)
+            {
+                result.Add(reader.Read<T>());
+            }
+            return result;
+        }
+
+        public static T[] ReadArray<T>(this NetworkReader reader)
+        {
+            int length = reader.ReadInt32();
+            if (length < 0)
+                return null;
+            T[] result = new T[length];
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = reader.Read<T>();
+            }
+            return result;
+        }
+
         public static Uri ReadUri(this NetworkReader reader)
         {
             return new Uri(reader.ReadString());
-        }
-
-        public static void ReadMessage<T>(this NetworkReader reader, T msg) where T : IMessageBase
-        {
-            msg.Deserialize(reader);
         }
     }
 }

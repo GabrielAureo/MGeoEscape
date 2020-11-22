@@ -3,13 +3,26 @@ using Mirror;
 using UnityEngine.Events;
 public abstract class BaseSocket : ARNetInteractable
 {
-    [Server]
+    /// <summary>
+    /// Only available on the Server
+    /// </summary>
+    /// <returns></returns>
     public abstract SocketTransfer TryTake();
-    [Client]
+    /// <summary>
+    /// Only available on the Client. Use it for visuals.
+    /// </summary>
+    /// <returns></returns>
     public abstract Movable ClientGetMovable();
-    [Server]
+    /// <summary>
+    /// Only available on the Server.
+    /// </summary>
+    /// <returns></returns>
     public abstract Movable GetCurrentObject();
-    [Server]
+    /// <summary>
+    /// Only available on the server.
+    /// </summary>
+    /// <param name="movable"></param>
+    /// <returns></returns>
     public abstract bool TryPlaceObject(Movable movable);
     public override void onHold(){}
 
