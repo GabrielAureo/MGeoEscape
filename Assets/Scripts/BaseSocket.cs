@@ -1,40 +1,16 @@
 using UnityEngine;
 using Mirror;
-
-public class BaseSocket : ARNetInteractable
+using UnityEngine.Events;
+public abstract class BaseSocket : ARNetInteractable
 {
-    public Movable currentObject {get{return _currentObject;} private set{_currentObject = value;}}
-    [SerializeField] private Movable _currentObject;
-    /// <summary>
-    /// Only valid on the server
-    /// </summary>
-    private bool busy;
-
-    public interface ITransfer{
-        Movable GetMovable();
-    }
-    private class Transfer: ITransfer{
-        private Movable movable;
-        public Transfer(Movable movable){
-            this.movable = movable;
-        }
-
-        public Movable GetMovable(){
-            return movable;
-        }
-    }
-
     [Server]
-    public ITransfer TryTake(){
-        if(busy || currentObject == null) return null;
-        var obj = currentObject;
-
-        currentTransfer = new Transfer(obj);
-        RpcPlayBusyAnimation();
-        return currentTransfer;
-    }
-
-    protected override 
+    public abstract SocketTransfer TryTake();
+    [Client]
+    public abstract Movable ClientGetMovable();
+    [Server]
+    public abstract Movable GetCurrentObject();
+    [Server]
+    public abstract bool TryPlaceObject(Movable movable);
     public override void onHold(){}
 
     public override void onRelease(){}

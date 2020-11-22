@@ -10,6 +10,7 @@ using Mirror;
 
 [RequireComponent(typeof(Rigidbody),typeof(PlayerVisibility))]
 public class Movable : NetworkBehaviour{
+    public bool exclusiveMode;
     public Vector3 bottomAnchor;
     public Quaternion placementRotation = Quaternion.identity;
     [HideInInspector] public Rigidbody rb;

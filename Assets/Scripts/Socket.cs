@@ -6,12 +6,14 @@ using Mirror;
 
 //Todo: Add Destructive and Supplier modes. Destructive socket destroys the object that it receives. Supplier provides infinite objects. They are mutually exclusive.
 [RequireComponent(typeof(Collider))]
-public class Socket : ARNetInteractable
+public class Socket : BaseSocket
 {
     /// <summary>
     /// Sockets in exclusive mode only allow one kind of object to be placed;
     /// </summary>
     public bool exclusiveMode;
+    public Movable currentObject {get{return _currentObject;} protected set{_currentObject = value;}}
+    [SerializeField] protected Movable _currentObject;
     public GameObject exclusiveObject;
     /// <summary>
     /// Anchor used to place objects in non-exclusive mode;
@@ -19,10 +21,7 @@ public class Socket : ARNetInteractable
     public Vector3 placementAnchor;
     private MeshRenderer previewRenderer = null;
     private MeshFilter previewFilter = null;
-    public Movable currentObject {get{return _currentObject;} private set{_currentObject = value;}}
-    [SerializeField] private Movable _currentObject;
     private Mesh lastMesh;
-    private Transfer currentTransfer;
     [SerializeField] private bool useDefaultTargetAnimation;
     [SerializeField] private bool useDefaultBusyAnimation;
     [SerializeField] private UnityEvent AvailableTargetAnimation;
@@ -34,29 +33,10 @@ public class Socket : ARNetInteractable
     /// Only valid on the server
     /// </summary>
     private bool busy;
-
-    public interface ITransfer{
-        Movable GetMovable();
-    }
-    private class Transfer: ITransfer{
-        private Movable movable;
-        public Transfer(Movable movable){
-            this.movable = movable;
-        }
-
-        public Movable GetMovable(){
-            return movable;
-        }
-    }
-
-    public bool ReturnMovable(ITransfer transfer){
-        Debug.LogError(transfer.GetMovable());
-        if(ReferenceEquals(transfer, currentTransfer)){
-            RpcReturnMovable();
-            return true;
-        }
-        return false;
-    }
+    private SocketTransfer currentTransfer;
+    // public bool ReturnMovable(){
+        
+    // }
     [ClientRpc]
     private void RpcReturnMovable(){
 
@@ -64,13 +44,14 @@ public class Socket : ARNetInteractable
         SetObject(_currentObject);
     }
 
-    public bool EndTransfer(ITransfer transfer){
-        if(ReferenceEquals(transfer, currentTransfer)){
-            currentObject = null;
-            RpcEndTransfer();
-            return true;
-        }
-        return false;
+    public override Movable ClientGetMovable()
+    {
+        return currentObject;
+    }
+
+    public override Movable GetCurrentObject()
+    {
+        return currentObject;
     }
     [ClientRpc]
     private void RpcEndTransfer(){
@@ -99,13 +80,23 @@ public class Socket : ARNetInteractable
         return true;
     }
     [Server]
-    public ITransfer TryTake(){
+    public override SocketTransfer TryTake(){
         if(busy || currentObject == null) return null;
         var obj = currentObject;
 
-        currentTransfer = new Transfer(obj);
+        var callback = new UnityAction<SocketTransfer.Status>(OnTransferFinish);
+
+        currentTransfer = new SocketTransfer(currentObject, callback);
         RpcPlayBusyAnimation();
         return currentTransfer;
+    }
+    private void OnTransferFinish(SocketTransfer.Status status){
+        if(status == SocketTransfer.Status.Success){
+            currentObject = null;
+            RpcEndTransfer();
+        }else{
+            RpcReturnMovable();
+        }
     }
 
     [ClientRpc]
@@ -125,9 +116,10 @@ public class Socket : ARNetInteractable
         previewRenderer.enabled = false;
     }
     [Server]
-    public bool TryPlaceObject(Socket otherSocket){
+    public override bool TryPlaceObject(Movable movable){
         if(currentObject != null) return false;
-        var movable = otherSocket.currentObject;
+        //print(otherSocket);
+        //var movable = otherSocket.GetCurrentObject();
         if(exclusiveMode && movable != exclusiveObject) return false;
         if(busy) return false;
 

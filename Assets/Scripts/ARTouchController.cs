@@ -118,7 +118,7 @@ public class ARTouchController : NetworkBehaviour{
         
 
         var wrldPos = Camera.main.ScreenToWorldPoint(new Vector3(inputPosition.x, inputPosition.y, 1.35f));
-        Debug.Log(wrldPos);
+        //Debug.Log(wrldPos);
         transform.position = new Vector3(wrldPos.x, wrldPos.y, wrldPos.z);
         Ray ray = Camera.main.ScreenPointToRay(inputPosition);
         return ray;
