@@ -5,8 +5,9 @@ using System.Collections.Generic;
 public class PlayerVisibility : NetworkVisibility
 {
     [EnumFlag] [SerializeField]
-    Character characterObservers = (Character)111;
-    
+    Character characterObservers = (Character)visibleFlag;
+
+    public readonly static int visibleFlag = 0b111;
     [Server]
     public void SetObserverFlag(int flag){
         characterObservers = (Character) flag;

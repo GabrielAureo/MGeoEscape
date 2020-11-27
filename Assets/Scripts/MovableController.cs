@@ -5,37 +5,38 @@ using UnityEngine.Networking.Types;
 
 public class MovableController : NetworkBehaviour{
     /// <summary>
-    /// Chached reference to the current movable object being held by the controller. Only available on the client to reduce traffic.
+    /// Cached reference to the current movable object being held by the controller. Only available on the client to reduce traffic.
     /// </summary>
     public Movable currentMovable; 
-    HingeJoint hinge;
+    HingeJoint _hinge;
     //GameObject lastSocketObj; //Sender 
-    IARInteractable targetInteractable;
-    SocketTransfer currentTransfer;
+    private IARInteractable _targetInteractable;
+    private SocketTransfer _currentTransfer;
 
 
     
     public void SetupController(ARTouchController touchController){
-        this.hinge = touchController.hinge;
+        this._hinge = touchController.hinge;
         //touchController.onTouch.AddListener(Touch);
         touchController.onHold.AddListener(Grab);
         touchController.onRelease.AddListener(Release);
 
     }
-    void Grab(ARTouchData touchData){
+
+    private void Grab(ARTouchData touchData){
         if(!(touchData.selectedInteractable is BaseSocket)) return;
         var socket = touchData.selectedInteractable as BaseSocket;
         CmdGrab(socket.netIdentity);
         
     }
     [Command]
-    void CmdGrab(NetworkIdentity socketNetIdentity){
+    private void CmdGrab(NetworkIdentity socketNetIdentity){
         var playerCharacter = connectionToClient.identity.GetComponent<GamePlayer>().character;
 
-        currentTransfer = socketNetIdentity.GetComponent<BaseSocket>().TryTake();
-        if(currentTransfer == null) return;
+        _currentTransfer = socketNetIdentity.GetComponent<BaseSocket>().TryTake();
+        if(_currentTransfer == null) return;
 
-        var movable = currentTransfer.movable;
+        var movable = _currentTransfer.movable;
         
         var vis = movable.GetComponent<PlayerVisibility>();
         vis.SetObserverFlag((int)playerCharacter);
@@ -50,7 +51,7 @@ public class MovableController : NetworkBehaviour{
         
     }
     [TargetRpc]
-    void TargetGrab(int character, NetworkIdentity socketNetIdentity)
+    private void TargetGrab(int character, NetworkIdentity socketNetIdentity)
 	{
         var socket = socketNetIdentity.GetComponent<BaseSocket>();
         var movable = socket.ClientGetMovable();
@@ -76,21 +77,21 @@ public class MovableController : NetworkBehaviour{
                 newTargetInteractable = hit.transform.GetComponent<IARInteractable>();
                 if(newTargetInteractable!= null) break;
             }
-            if(newTargetInteractable != targetInteractable){
-                targetInteractable?.onTarget(currentMovable);
-                targetInteractable?.onUntarget(currentMovable);
-                targetInteractable = newTargetInteractable;
+            if(newTargetInteractable != _targetInteractable){
+                _targetInteractable?.onTarget(currentMovable);
+                _targetInteractable?.onUntarget(currentMovable);
+                _targetInteractable = newTargetInteractable;
             }
             
         }else{
-            targetInteractable?.onUntarget(currentMovable);
-            targetInteractable = null;
+            _targetInteractable?.onUntarget(currentMovable);
+            _targetInteractable = null;
         }
     }
 
     void Release(ARTouchData touchData){
         if(touchData.lastStatus == ARTouchData.Status.HOLDING){
-            targetInteractable?.onUntarget(currentMovable);
+            _targetInteractable?.onUntarget(currentMovable);
         }
         
 
@@ -117,35 +118,22 @@ public class MovableController : NetworkBehaviour{
         //currentMovable = movable;
         movable.transform.parent = null;
         movable.rb.isKinematic = false;
-        hinge.connectedBody = movable.rb;
+        _hinge.connectedBody = movable.rb;
     }
-
-    // [Server]
-    // void ReturnToSourceSocket(Socket lastSocket){
-    //     if(lastSocket.ReturnMovable(currentTransfer)){
-    //         currentTransfer = null;
-    //         lastSocket = null;
-    //     }else{
-    //         Debug.LogError("Could not return object to source");
-    //     }
-        
-        
-    // }
 
     [Command]
     void CmdPlace(NetworkIdentity targetNetIdentity, NetworkIdentity lastSocketNetworkIdentity){
-        print("Here");
-        if(currentTransfer == null) return;
+        if(_currentTransfer == null) return;
         var lastSocket = lastSocketNetworkIdentity.GetComponent<BaseSocket>();
         bool can_place = false;
 
-        var transferCallback = currentTransfer.finishAction;
+        var transferCallback = _currentTransfer.finishAction;
         
         if(targetNetIdentity == null){
             can_place = false;
             //ReturnToSourceSocket(lastSocket);
         }else{
-            var target = targetNetIdentity.GetComponent<Socket>();
+            var target = targetNetIdentity.GetComponent<BaseSocket>();
             if(target != null) can_place = target.TryPlaceObject(lastSocket.GetCurrentObject());
             // if(!can_place){
             //     //ReturnToSourceSocket(lastSocket);
@@ -164,7 +152,7 @@ public class MovableController : NetworkBehaviour{
     void TargetPlace(){
         currentMovable.ReleaseAnimation();
         currentMovable = null;
-        hinge.connectedBody = null;
+        _hinge.connectedBody = null;
     }
 
 

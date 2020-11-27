@@ -47,8 +47,6 @@ public class SupplierSocket : BaseSocket
         var pick = (randomPick)?Random.Range(0, picks.Count):0;
         var movable_idx = picks[pick];
         currentPick = movable_idx;
-        print(pick);
-        foreach( var x in picks) Debug.Log( x.ToString());
 
         return new SocketTransfer(products[movable_idx], DiscardTransfer);
     }

@@ -12,7 +12,20 @@ public class Socket : BaseSocket
     /// Sockets in exclusive mode only allow one kind of object to be placed;
     /// </summary>
     public bool exclusiveMode;
-    public Movable currentObject {get{return _currentObject;} protected set{_currentObject = value;}}
+
+    public Movable currentObject
+    {
+        get
+        {
+            return _currentObject;
+        }
+        protected set
+        {
+            _empty = value == null;
+            _currentObject = value;
+        }
+    }
+
     [SerializeField] protected Movable _currentObject;
     public GameObject exclusiveObject;
     /// <summary>
@@ -32,7 +45,9 @@ public class Socket : BaseSocket
     /// <summary>
     /// Only valid on the server
     /// </summary>
-    private bool busy;
+    private bool _busy;
+
+    private bool _empty;
     private SocketTransfer currentTransfer;
     // public bool ReturnMovable(){
         
@@ -65,12 +80,12 @@ public class Socket : BaseSocket
     }
     public override void OnStartServer(){
         base.OnStartServer();
-        busy = false;
+        _busy = false;
     }
 
-
+    //Change the currentObject comparison to a empty bool
     public virtual bool TryTarget(Movable obj){
-        if(currentObject != null) return false;
+        if(!_empty) return false;
         if(obj.mesh != lastMesh){
             lastMesh = obj.mesh;
             previewFilter.mesh = obj.mesh;
@@ -81,11 +96,11 @@ public class Socket : BaseSocket
     }
     [Server]
     public override SocketTransfer TryTake(){
-        if(busy || currentObject == null) return null;
+        if(_busy || _empty) return null;
         var obj = currentObject;
 
         var callback = new UnityAction<SocketTransfer.Status>(OnTransferFinish);
-
+        _busy = true;
         currentTransfer = new SocketTransfer(currentObject, callback);
         RpcPlayBusyAnimation();
         return currentTransfer;
@@ -97,6 +112,8 @@ public class Socket : BaseSocket
         }else{
             RpcReturnMovable();
         }
+
+        _busy = false;
     }
 
     [ClientRpc]
@@ -121,7 +138,7 @@ public class Socket : BaseSocket
         //print(otherSocket);
         //var movable = otherSocket.GetCurrentObject();
         if(exclusiveMode && movable != exclusiveObject) return false;
-        if(busy) return false;
+        if(_busy) return false;
 
         var flag = GetComponent<PlayerVisibility>().GetObserverFlag();
         movable.GetComponent<PlayerVisibility>().SetObserverFlag(flag);
