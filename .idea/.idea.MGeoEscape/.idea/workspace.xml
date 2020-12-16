@@ -12,30 +12,51 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/fc/4fabb950/Direction.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/SocketNodes/Runtime/NodeLinkData.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/18/225d2e90/Editor.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/63DD8BF9-8CFA-4BA9-85AF-735EF1A56BA9/9e/40bffb1f/Void.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@7.3.1/Editor/Data/Implementation/NodeUtils.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/34/cea804ac/Port.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/SocketNodes/Runtime/SocketNodeData.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/4d/c6f2a4f5/Orientation.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/ae/ff4f5470/ObjectField.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/99/431943fb/EditorGUIUtility.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/63DD8BF9-8CFA-4BA9-85AF-735EF1A56BA9/eb/b07c2374/IEquatable`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FE7EE188-1B52-4B0D-9443-F74417FB598B/96/ccb838f4/GUIStyle.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/526469D5-A48C-43EE-BD9A-F19F8745AFA1/af/437eade7/GameObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@7.3.1/Editor/Data/Graphs/GraphData.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/61/a3efcb4a/Toolbar.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/526469D5-A48C-43EE-BD9A-F19F8745AFA1/31/13bfeec2/Vector3.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/2f/71503731/ObjectPreview.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/d3/c3405592/Node.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/SocketNodes/Runtime/NodeLinkData.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/06214B24-5DBB-4D10-A9CE-FD10639BB04E/26/d0acadd0/VisualElement.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/SocketNodes/Runtime/SocketNodeData.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/12/03ae3ae9/GraphView.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/17/3159f92f/IPreviewable.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/3e/6e0c7929/GlobalObjectId.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/2c/f444e040/EditorUtility.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/06/4908fa67/GameObjectUtility.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/34/cea804ac/Port.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/c0/0696ab30/GameObjectInspector.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/526469D5-A48C-43EE-BD9A-F19F8745AFA1/10/c3862ec6/Object.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/4d/c6f2a4f5/Orientation.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/06214B24-5DBB-4D10-A9CE-FD10639BB04E/00/3c3d07c4/CallbackEventHandler.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Runtime/SocketGraphData.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Runtime/SocketGraphContainer.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Runtime/NodeLinkData.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Runtime/SocketNodeData.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Editor/SocketNodeView.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Editor/SocketGraphEditor.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Editor/GraphSaveUtility.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Editor/SocketGraphView.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Socket.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/SupplierSocket.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/MovableController.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/PlayerVisibility.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketNode.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/MovableCollection.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Runtime/SocketGraphContainer.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Editor/SocketGraphEditor.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Editor/SocketNodeView.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Runtime/SocketNodeData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Editor/SocketGraphView.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketGraph.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Editor/GraphSaveUtility.cs" />
       </list>
     </option>
   </component>
@@ -56,6 +77,8 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.smartKeys_rider" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
@@ -68,10 +91,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="7564">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="7564" />
+      <option name="pid" />
       <option name="selectedOptions">
         <set />
       </option>
@@ -91,7 +114,20 @@
       <workItem from="1606305762593" duration="9866000" />
       <workItem from="1606399811315" duration="8515000" />
       <workItem from="1606484997231" duration="4933000" />
-      <workItem from="1606497429687" duration="6041000" />
+      <workItem from="1606497429687" duration="8107000" />
+      <workItem from="1606562307597" duration="4211000" />
+      <workItem from="1606574392536" duration="14924000" />
+      <workItem from="1606658344939" duration="11450000" />
+      <workItem from="1606829908243" duration="7425000" />
+      <workItem from="1606910431844" duration="6312000" />
+      <workItem from="1607018499668" duration="1064000" />
+      <workItem from="1607086175787" duration="4917000" />
+      <workItem from="1607261731336" duration="8292000" />
+      <workItem from="1607330922100" duration="14274000" />
+      <workItem from="1607426432958" duration="8875000" />
+      <workItem from="1607440018775" duration="5792000" />
+      <workItem from="1607516455749" duration="6645000" />
+      <workItem from="1607591503535" duration="2442000" />
     </task>
     <servers />
   </component>
@@ -104,81 +140,93 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1877" height="375" key="GridCell.Tab.0.bottom" timestamp="1606510786474">
+    <state x="721" y="321" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1607442663990">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786474" />
-    <state width="1877" height="375" key="GridCell.Tab.0.center" timestamp="1606510786474">
+    <state x="721" y="321" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1607442663990" />
+    <state width="424" height="464" key="DebuggerActiveHint" timestamp="1607521515384">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786474" />
-    <state width="1877" height="375" key="GridCell.Tab.0.left" timestamp="1606510786474">
+    <state width="424" height="464" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1607521515384" />
+    <state width="1877" height="374" key="GridCell.Tab.0.bottom" timestamp="1607601824092">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786474" />
-    <state width="1877" height="375" key="GridCell.Tab.0.right" timestamp="1606510786474">
+    <state width="1877" height="374" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824092" />
+    <state width="1877" height="374" key="GridCell.Tab.0.center" timestamp="1607601824092">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786474" />
-    <state width="1877" height="375" key="GridCell.Tab.1.bottom" timestamp="1606510786475">
+    <state width="1877" height="374" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824092" />
+    <state width="1877" height="374" key="GridCell.Tab.0.left" timestamp="1607601824092">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786475" />
-    <state width="1877" height="375" key="GridCell.Tab.1.center" timestamp="1606510786475">
+    <state width="1877" height="374" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824092" />
+    <state width="1877" height="374" key="GridCell.Tab.0.right" timestamp="1607601824092">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786475" />
-    <state width="1877" height="375" key="GridCell.Tab.1.left" timestamp="1606510786475">
+    <state width="1877" height="374" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824092" />
+    <state width="1877" height="374" key="GridCell.Tab.1.bottom" timestamp="1607601824093">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786475" />
-    <state width="1877" height="375" key="GridCell.Tab.1.right" timestamp="1606510786475">
+    <state width="1877" height="374" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824093" />
+    <state width="1877" height="374" key="GridCell.Tab.1.center" timestamp="1607601824093">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786475" />
-    <state width="1877" height="375" key="GridCell.Tab.2.bottom" timestamp="1606510786475">
+    <state width="1877" height="374" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824093" />
+    <state width="1877" height="374" key="GridCell.Tab.1.left" timestamp="1607601824092">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786475" />
-    <state width="1877" height="375" key="GridCell.Tab.2.center" timestamp="1606510786475">
+    <state width="1877" height="374" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824092" />
+    <state width="1877" height="374" key="GridCell.Tab.1.right" timestamp="1607601824093">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786475" />
-    <state width="1877" height="375" key="GridCell.Tab.2.left" timestamp="1606510786475">
+    <state width="1877" height="374" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824093" />
+    <state width="1877" height="374" key="GridCell.Tab.2.bottom" timestamp="1607601824093">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786475" />
-    <state width="1877" height="375" key="GridCell.Tab.2.right" timestamp="1606510786475">
+    <state width="1877" height="374" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824093" />
+    <state width="1877" height="374" key="GridCell.Tab.2.center" timestamp="1607601824093">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786475" />
-    <state width="1877" height="375" key="GridCell.Tab.3.bottom" timestamp="1606510786475">
+    <state width="1877" height="374" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824093" />
+    <state width="1877" height="374" key="GridCell.Tab.2.left" timestamp="1607601824093">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.3.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786475" />
-    <state width="1877" height="375" key="GridCell.Tab.3.center" timestamp="1606510786475">
+    <state width="1877" height="374" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824093" />
+    <state width="1877" height="374" key="GridCell.Tab.2.right" timestamp="1607601824093">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.3.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786475" />
-    <state width="1877" height="375" key="GridCell.Tab.3.left" timestamp="1606510786475">
+    <state width="1877" height="374" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824093" />
+    <state width="1877" height="374" key="GridCell.Tab.3.bottom" timestamp="1607601824093">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.3.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786475" />
-    <state width="1877" height="375" key="GridCell.Tab.3.right" timestamp="1606510786475">
+    <state width="1877" height="374" key="GridCell.Tab.3.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824093" />
+    <state width="1877" height="374" key="GridCell.Tab.3.center" timestamp="1607601824093">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.3.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606510786475" />
+    <state width="1877" height="374" key="GridCell.Tab.3.center/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824093" />
+    <state width="1877" height="374" key="GridCell.Tab.3.left" timestamp="1607601824093">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="374" key="GridCell.Tab.3.left/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824093" />
+    <state width="1877" height="374" key="GridCell.Tab.3.right" timestamp="1607601824093">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="374" key="GridCell.Tab.3.right/0.0.1920.1040@0.0.1920.1040" timestamp="1607601824093" />
     <state x="727" y="244" key="RiderGenerateDialog" timestamp="1606400126621">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="727" y="244" key="RiderGenerateDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606400126621" />
-    <state x="616" y="240" key="run.anything.popup" timestamp="1606219188759">
+    <state x="461" y="164" key="SettingsEditor" timestamp="1606833245202">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606219188759" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1606227947092">
+    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1606833245202" />
+    <state x="616" y="240" key="run.anything.popup" timestamp="1607086385985">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606227947092" />
+    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607086385985" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1607289916723">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607289916723" />
   </component>
 </project>

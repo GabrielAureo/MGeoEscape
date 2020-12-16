@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader Graphs_Graph
+  m_Shader: {fileID: -6465566751694194690, guid: bc43e59f923999c438b6fe71bbbfe78f,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - Vector1_3E66ECE1: 1
+    - Vector1_415B0D9E: 1
+    - Vector1_8B5AF062: 0.28
+    - Vector1_FA7A5609: 1
+    - Vector1_FD83F468: 0.01
+    m_Colors:
+    - Color_2E01C23C: {r: 1, g: 0.9458763, b: 0.75, a: 0}

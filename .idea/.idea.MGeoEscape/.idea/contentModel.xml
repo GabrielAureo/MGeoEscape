@@ -496,6 +496,7 @@
               <e p="SocketGraphView.cs" t="Include" />
               <e p="SocketNodeView.cs" t="Include" />
             </e>
+            <e p="MovableCollection.cs" t="Include" />
             <e p="Runtime" t="Include">
               <e p="NodeLinkData.cs" t="Include" />
               <e p="SocketGraphContainer.cs" t="Include" />

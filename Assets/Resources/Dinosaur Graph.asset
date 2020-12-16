@@ -1,0 +1,184 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccfb41560ca4e7c4a82341694b97b13c, type: 3}
+  m_Name: Dinosaur Graph
+  m_EditorClassIdentifier: 
+  NodeLinks:
+  - BaseNodeGuid: 1eb1ad20-2475-4e93-9898-4cb3cc5f0996
+    PortName: Output
+    TargetNodeGuid: aaa0e079-04ca-42a8-b07a-2dbced011c63
+  - BaseNodeGuid: aaa0e079-04ca-42a8-b07a-2dbced011c63
+    PortName: Output
+    TargetNodeGuid: 66ddfb18-0cf0-4b5b-8419-abae2cb335fd
+  - BaseNodeGuid: 66ddfb18-0cf0-4b5b-8419-abae2cb335fd
+    PortName: Output
+    TargetNodeGuid: 79dee1bc-3311-4425-a736-1b0c30339d92
+  - BaseNodeGuid: 79dee1bc-3311-4425-a736-1b0c30339d92
+    PortName: Output
+    TargetNodeGuid: cf8cf689-491c-45a1-8ea8-a2678ff3152c
+  - BaseNodeGuid: 66ddfb18-0cf0-4b5b-8419-abae2cb335fd
+    PortName: Output
+    TargetNodeGuid: 8fdce206-3cbf-40cc-bd44-2585f43b3c3b
+  - BaseNodeGuid: 8fdce206-3cbf-40cc-bd44-2585f43b3c3b
+    PortName: Output
+    TargetNodeGuid: 387bc0cf-9a9d-4a64-8d41-41c7dc3c6569
+  - BaseNodeGuid: 3719d32a-1c00-4a2c-8811-b25a02734d90
+    PortName: Output
+    TargetNodeGuid: f84172d0-5d2a-474c-b413-827775de1bdb
+  - BaseNodeGuid: eb052612-aa60-4db5-8c08-8743380e89c2
+    PortName: Output
+    TargetNodeGuid: 0ad03552-db99-4aec-966b-b6b09ea1304b
+  - BaseNodeGuid: 387bc0cf-9a9d-4a64-8d41-41c7dc3c6569
+    PortName: Output
+    TargetNodeGuid: adca43ed-0953-47cf-9def-559039558081
+  - BaseNodeGuid: adca43ed-0953-47cf-9def-559039558081
+    PortName: Output
+    TargetNodeGuid: 75a801b1-ba37-4753-998a-46b7ec65825f
+  - BaseNodeGuid: 66ddfb18-0cf0-4b5b-8419-abae2cb335fd
+    PortName: Output
+    TargetNodeGuid: eb052612-aa60-4db5-8c08-8743380e89c2
+  - BaseNodeGuid: 0ad03552-db99-4aec-966b-b6b09ea1304b
+    PortName: Output
+    TargetNodeGuid: fdafbffa-3b0e-473a-879e-b728c3b1ee0d
+  - BaseNodeGuid: 66ddfb18-0cf0-4b5b-8419-abae2cb335fd
+    PortName: Output
+    TargetNodeGuid: c1817a21-1f0e-4d14-abd8-2c1503b8a4f9
+  - BaseNodeGuid: c1817a21-1f0e-4d14-abd8-2c1503b8a4f9
+    PortName: Output
+    TargetNodeGuid: 7dfdbaa7-3744-4878-b8f1-9f16224478c8
+  - BaseNodeGuid: 7dfdbaa7-3744-4878-b8f1-9f16224478c8
+    PortName: Output
+    TargetNodeGuid: 3719d32a-1c00-4a2c-8811-b25a02734d90
+  - BaseNodeGuid: 66ddfb18-0cf0-4b5b-8419-abae2cb335fd
+    PortName: Output
+    TargetNodeGuid: 71a2409c-6747-45c2-a2fe-f00ee6ed0278
+  - BaseNodeGuid: 71a2409c-6747-45c2-a2fe-f00ee6ed0278
+    PortName: Output
+    TargetNodeGuid: 2257239e-2f6e-4fa3-8e84-c9c0298a2bc2
+  - BaseNodeGuid: 2257239e-2f6e-4fa3-8e84-c9c0298a2bc2
+    PortName: Output
+    TargetNodeGuid: edc74b0d-c7bd-48f2-9b29-7aecbf73b8b9
+  SocketNodes:
+  - Guid: 8fdce206-3cbf-40cc-bd44-2585f43b3c3b
+    Title: Right Scapula
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-4219203920096984422-5258685377760839051
+    GraphPosition: {x: 974, y: 438}
+    LocalScenePosition: {x: 0.96192217, y: -0.40514684, z: -0.33257127}
+  - Guid: eb052612-aa60-4db5-8c08-8743380e89c2
+    Title: Right Femur
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-114219616761429940-5258685377760839051
+    GraphPosition: {x: 936, y: 821}
+    LocalScenePosition: {x: 0.053874254, y: -0.4427321, z: -0.2791183}
+  - Guid: 0ad03552-db99-4aec-966b-b6b09ea1304b
+    Title: Right Fibula & Tibia
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-662074882175440474-5258685377760839051
+    GraphPosition: {x: 1288, y: 822}
+    LocalScenePosition: {x: 0.043729305, y: -1.0354167, z: -0.29634762}
+  - Guid: adca43ed-0953-47cf-9def-559039558081
+    Title: Right Radius
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-2785641669099420579-5258685377760839051
+    GraphPosition: {x: 1755, y: 441}
+    LocalScenePosition: {x: 0.8375704, y: -1.3504865, z: -0.31324148}
+  - Guid: 75a801b1-ba37-4753-998a-46b7ec65825f
+    Title: Right Carpal
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-1187759261632286394-5258685377760839051
+    GraphPosition: {x: 2164, y: 451}
+    LocalScenePosition: {x: 0.93439937, y: -1.7244153, z: -0.3041911}
+  - Guid: fdafbffa-3b0e-473a-879e-b728c3b1ee0d
+    Title: Right Tarsal
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-2007895266641062287-5258685377760839051
+    GraphPosition: {x: 1715, y: 819}
+    LocalScenePosition: {x: 0.014358997, y: -1.5888466, z: -0.28559566}
+  - Guid: 387bc0cf-9a9d-4a64-8d41-41c7dc3c6569
+    Title: Right Humerus
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-608410054551268368-5258685377760839051
+    GraphPosition: {x: 1355, y: 435}
+    LocalScenePosition: {x: 0.95446825, y: -0.8277832, z: -0.32763267}
+  - Guid: c1817a21-1f0e-4d14-abd8-2c1503b8a4f9
+    Title: Left Scapula
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-6688642974964625238-5258685377760839051
+    GraphPosition: {x: 1016, y: -245}
+    LocalScenePosition: {x: 0.96192217, y: -0.40514684, z: 0.104135156}
+  - Guid: 7dfdbaa7-3744-4878-b8f1-9f16224478c8
+    Title: Left Humerus
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-9220728841310823627-5258685377760839051
+    GraphPosition: {x: 1455, y: -253}
+    LocalScenePosition: {x: 0.95446825, y: -0.8277832, z: 0.10907352}
+  - Guid: 3719d32a-1c00-4a2c-8811-b25a02734d90
+    Title: Left Radius
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-8228352859812296658-5258685377760839051
+    GraphPosition: {x: 1864, y: -256}
+    LocalScenePosition: {x: 0.8375704, y: -1.3504865, z: 0.12346482}
+  - Guid: f84172d0-5d2a-474c-b413-827775de1bdb
+    Title: Left Carpal
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-8641997997474786541-5258685377760839051
+    GraphPosition: {x: 2288, y: -279}
+    LocalScenePosition: {x: 0.93439937, y: -1.7244153, z: 0.13251543}
+  - Guid: 66ddfb18-0cf0-4b5b-8419-abae2cb335fd
+    Title: Ribs
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-6231320940493375519-5258685377760839051
+    GraphPosition: {x: 636, y: 72}
+    LocalScenePosition: {x: 0.7115598, y: -0.3613397, z: -0.11289477}
+  - Guid: 71a2409c-6747-45c2-a2fe-f00ee6ed0278
+    Title: Left Femur
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-7600938632629498320-5258685377760839051
+    GraphPosition: {x: 1014, y: -614}
+    LocalScenePosition: {x: -0.3937267, y: -0.57994294, z: 0}
+  - Guid: 2257239e-2f6e-4fa3-8e84-c9c0298a2bc2
+    Title: Left Fibula & Tibia
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-5389708517118202971-5258685377760839051
+    GraphPosition: {x: 1462, y: -633}
+    LocalScenePosition: {x: -0.9862286, y: -1.1047425, z: -0.00000011920929}
+  - Guid: edc74b0d-c7bd-48f2-9b29-7aecbf73b8b9
+    Title: Left Tarsal
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-6740959964042075149-5258685377760839051
+    GraphPosition: {x: 1877, y: -623}
+    LocalScenePosition: {x: -1.3357924, y: -1.5435466, z: -0.007270813}
+  - Guid: aaa0e079-04ca-42a8-b07a-2dbced011c63
+    Title: Cervical
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-7268287141306162757-5258685377760839051
+    GraphPosition: {x: 252, y: 67}
+    LocalScenePosition: {x: 1.732568, y: -0.13298488, z: -0.119189024}
+  - Guid: 1eb1ad20-2475-4e93-9898-4cb3cc5f0996
+    Title: Skull
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-4741075969092973755-5258685377760839051
+    GraphPosition: {x: -87, y: 64}
+    LocalScenePosition: {x: 2.2493815, y: -0.14054155, z: -0.11676407}
+  - Guid: 79dee1bc-3311-4425-a736-1b0c30339d92
+    Title: Pelvis
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-6659989218889267443-5258685377760839051
+    GraphPosition: {x: 1096, y: 83}
+    LocalScenePosition: {x: -0.3410957, y: -0.113177896, z: -0.11289501}
+  - Guid: cf8cf689-491c-45a1-8ea8-a2678ff3152c
+    Title: Unfinished Tail
+    HasMovable: 1
+    MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-833845627363363304-5258685377760839051
+    GraphPosition: {x: 1430, y: 92}
+    LocalScenePosition: {x: -2.177627, y: -0.20066297, z: -0.13806295}
