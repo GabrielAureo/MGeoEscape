@@ -1,0 +1,161 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7f28cac6a0a4aa1ad4c2c492183a75e, type: 3}
+  m_Name: GraphConfigurations
+  m_EditorClassIdentifier: 
+  data:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues:
+    - cb197bf1-cdd6-48cf-bfa4-d809685bdd03
+    _keys:
+    - cb197bf1-cdd6-48cf-bfa4-d809685bdd03
+    _values:
+    - NodeLinks:
+      - BaseNodeGuid: 1b799ffe-aa70-4dda-a403-21aafe19ee6b
+        PortName: Output
+        TargetNodeGuid: 5a291bce-ce84-430e-86bb-178fa87e3a1f
+      SocketNodes:
+      - Guid: 51cc8205-1d3b-4260-b7ab-d6454674b2f3
+        Title: Right Scapula(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-827643189-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 0.96192217, y: -0.40514684, z: -0.33257127}
+      - Guid: 9b314684-c669-465c-88b3-160f643f57a0
+        Title: Right Femur(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-1172666364-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 0.053874254, y: -0.4427321, z: -0.2791183}
+      - Guid: db460c47-1b6a-4a8e-8382-e65589300006
+        Title: Right Fibula & Tibia(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-1139283941-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 0.043729305, y: -1.0354167, z: -0.29634762}
+      - Guid: 5fd277a6-19e2-4d25-8d04-ed8daf6b304d
+        Title: Right Radius(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-738954562-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 0.8375704, y: -1.3504865, z: -0.31324148}
+      - Guid: 8fb948dc-b8b8-4490-80ea-6656ac1eb41b
+        Title: Right Carpal(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-420877953-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 0.93439937, y: -1.7244153, z: -0.3041911}
+      - Guid: 8d0bde09-a4e7-4861-957c-0b59f1a24187
+        Title: Right Tarsal(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-2001241008-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 0.014358997, y: -1.5888466, z: -0.28559566}
+      - Guid: 57846f2b-4c1c-4727-bfdc-209a0e670eca
+        Title: Right Humerus(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-1858046554-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 0.95446825, y: -0.8277832, z: -0.32763267}
+      - Guid: ac64ac14-9f34-475a-b1af-a686b9c05b1d
+        Title: Left Scapula(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-1871584391-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 0.96192217, y: -0.40514684, z: 0.104135156}
+      - Guid: fd1390c9-e669-4221-938f-73fcf0dbaab9
+        Title: Left Humerus(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-1675724240-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 0.95446825, y: -0.8277832, z: 0.10907352}
+      - Guid: c14a04d8-bb85-4bf3-b1e5-bf250f585491
+        Title: Left Radius(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-238163854-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 0.8375704, y: -1.3504865, z: 0.12346482}
+      - Guid: 8bee638f-1b42-4093-bd27-fccc6be7c792
+        Title: Left Carpal(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-2075578958-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 0.93439937, y: -1.7244153, z: 0.13251543}
+      - Guid: 04aa3cbe-9d78-4bf9-921a-ae9d5b664056
+        Title: Ribs(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-1252544541-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 0.7115598, y: -0.22, z: -0.11289477}
+      - Guid: 64c28c90-093d-4ead-b886-de0b835ad06c
+        Title: Left Femur(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-930519326-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: -0.3937267, y: -0.57994294, z: 0}
+      - Guid: 08cfdb7a-ddb2-4f67-8757-4aed81149346
+        Title: Left Fibula & Tibia(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-1880878077-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: -0.9862286, y: -1.1047425, z: -0.00000011920929}
+      - Guid: c666a753-8325-4aca-ae28-80173c2ad5cd
+        Title: Left Tarsal(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-781532307-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: -1.3357924, y: -1.5435466, z: -0.007270813}
+      - Guid: 6179fc44-1af9-4638-ad3f-6abb53435035
+        Title: Cervical(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-171455147-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 1.732568, y: -0.13298488, z: -0.119189024}
+      - Guid: f9abd983-148e-4b0f-a13f-a5d244008aae
+        Title: Skull(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-651685042-0
+        GraphPosition: {x: 0, y: 0}
+        LocalScenePosition: {x: 2.2493815, y: -0.14054155, z: -0.11676407}
+      - Guid: 5a291bce-ce84-430e-86bb-178fa87e3a1f
+        Title: Unfinished Tail(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-1366554126-0
+        GraphPosition: {x: 292, y: 286}
+        LocalScenePosition: {x: -2.177627, y: -0.20066297, z: -0.13806295}
+      - Guid: 1b799ffe-aa70-4dda-a403-21aafe19ee6b
+        Title: Pelvis(Clone)
+        HasMovable: 1
+        MovableID: GlobalObjectId_V1-2-c3a6773ce6eeb18449379e9521a6ce0d-600936479-0
+        GraphPosition: {x: -218, y: 302}
+        LocalScenePosition: {x: -0.3410957, y: -0.113177896, z: -0.11289501}

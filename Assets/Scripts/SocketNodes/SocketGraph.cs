@@ -1,34 +1,44 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Mirror;
-public class SocketGraph: NetworkBehaviour
+using UnityEngine.Networking.Types;
+using RotaryHeart.Lib.SerializableDictionary;
+
+public class SocketGraph: MonoBehaviour
 {
     public List<Movable> acceptedMovables = new List<Movable>();
-    public readonly Dictionary<SocketNode, List<SocketNode>> connections = new Dictionary<SocketNode, List<SocketNode>>();
+    public EdgesDictionary connections;
+    [HideInInspector]
+    public string GUID = System.Guid.NewGuid().ToString();
+
+
+    private bool initialized = false;
   
-    public override void OnStartServer()
-    {
-        base.OnStartServer();
-        InitializeNodes();
-    }
+    // public override void OnStartServer()
+    // {
+    //     base.OnStartServer();
+    //     InitializeNodes();
+    // }
 
     private void InitializeNodes()
     {
-        var nodes = GetNodes();
+        var nodes = GetNodesInScene();
         foreach (var node in nodes)
         {
             node.MovableAuth = CompatibleMovable;
             node.Initialize();
         }
+
+        initialized = true;
     }
-    [Server]
-    public void StartGraph(List<SocketNode> startingNodes)
+
+    public void StartGraph(int startNodeIndex)
     {
-        foreach (var node in startingNodes)
-        {
-            RpcTriggerNeighbors(node.netIdentity, true);
-        }
+        if (!initialized) InitializeNodes();
+        var startNode = connections.ElementAt(startNodeIndex).Key;
+        startNode.TryPlaceObject(startNode.exclusiveMovable);
     }
     
 
@@ -37,18 +47,18 @@ public class SocketGraph: NetworkBehaviour
         return acceptedMovables.Contains(movable);
     }
     
-    [ClientRpc]
-    private void RpcTriggerNeighbors(NetworkIdentity nodeNetId, bool activate)
+    public void TriggerNeighbors(int nodeIndex, bool activate)
     {
-        var node = nodeNetId.GetComponent<SocketNode>();
+        var node = connections.ElementAt(nodeIndex).Key;
+
         var neighbors = connections[node];
-        foreach (var neighbor in neighbors)
+        foreach (var neighbor in neighbors.data)
         {
             neighbor.gameObject.SetActive(activate);
         }
     }
 
-    private SocketNode[] GetNodes()
+    private SocketNode[] GetNodesInScene()
     {
         return transform.GetComponentsInChildren<SocketNode>();
     }

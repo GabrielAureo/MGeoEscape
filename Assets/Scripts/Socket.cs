@@ -56,7 +56,7 @@ public class Socket : BaseSocket
     private void RpcReturnMovable(){
 
         if(busyPreviewObject) busyPreviewObject.SetActive(false);
-        SetObject(_currentObject);
+        SetupObject(_currentObject);
     }
 
     public override Movable ClientGetMovable()
@@ -95,15 +95,20 @@ public class Socket : BaseSocket
         return true;
     }
     [Server]
-    public override SocketTransfer TryTake(){
-        if(_busy || _empty) return null;
+    protected override bool TakeOperation(out SocketTransfer transfer){
+        if (_busy || _empty)
+        {
+            transfer = null;
+            return false;
+        }
         var obj = currentObject;
 
         var callback = new UnityAction<SocketTransfer.Status>(OnTransferFinish);
         _busy = true;
         currentTransfer = new SocketTransfer(currentObject, callback);
         RpcPlayBusyAnimation();
-        return currentTransfer;
+        transfer = currentTransfer;
+        return true;
     }
     private void OnTransferFinish(SocketTransfer.Status status){
         if(status == SocketTransfer.Status.Success){
@@ -133,7 +138,7 @@ public class Socket : BaseSocket
         previewRenderer.enabled = false;
     }
     [Server]
-    public override bool TryPlaceObject(Movable movable){
+    protected override bool ShouldPlace(Movable movable){
         if(currentObject != null) return false;
         //print(otherSocket);
         //var movable = otherSocket.GetCurrentObject();
@@ -141,22 +146,29 @@ public class Socket : BaseSocket
         if(_busy) return false;
 
         var flag = GetComponent<PlayerVisibility>().GetObserverFlag();
+        //To change: Reduce RPCs by merging the observer set and clientrpc
         movable.GetComponent<PlayerVisibility>().SetObserverFlag(flag);
         currentObject = movable;
-        movable.transform.parent = transform.parent;
+        //movable.transform.parent = transform.parent;
         Debug.LogError(movable.netIdentity);
-        RpcSetObject(currentObject.netIdentity);
+        //RpcSetObject(currentObject.netIdentity);
         return true;
     }
-    [ClientRpc]
+
+    protected override void OnClientPlace(NetworkIdentity movableIdentity)
+    {
+        RpcSetObject(movableIdentity);
+    }
+
+    //[ClientRpc]
     private void RpcSetObject(NetworkIdentity movableNetworkIdentity){
         var movable = movableNetworkIdentity.GetComponent<Movable>();
         Debug.LogError(movableNetworkIdentity);
         currentObject = movable; 
-        SetObject(movable);
+        SetupObject(movable);
     }
     [Client]
-    private void SetObject(Movable obj){
+    private void SetupObject(Movable obj){
         obj.gameObject.SetActive(true);
         obj.rb.isKinematic = true;
         SetPosition(obj);

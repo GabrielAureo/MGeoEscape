@@ -8,7 +8,7 @@ public class PuzzlesManager : NetworkBehaviour
     [SerializeField] public List<Puzzle> puzzles = null;
     public override void OnStartServer(){
         foreach(var puzzle in puzzles){
-            puzzle.Initialize();
+            puzzle.OnServerInitialize();
         }
     }
     /*[ClientRpc]

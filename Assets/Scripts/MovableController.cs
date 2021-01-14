@@ -33,8 +33,8 @@ public class MovableController : NetworkBehaviour{
     private void CmdGrab(NetworkIdentity socketNetIdentity){
         var playerCharacter = connectionToClient.identity.GetComponent<GamePlayer>().character;
 
-        _currentTransfer = socketNetIdentity.GetComponent<BaseSocket>().TryTake();
-        if(_currentTransfer == null) return;
+        var placed = socketNetIdentity.GetComponent<BaseSocket>().TryTake(out _currentTransfer);
+        if(!placed) return;
 
         var movable = _currentTransfer.movable;
         

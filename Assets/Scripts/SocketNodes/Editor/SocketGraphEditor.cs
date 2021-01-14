@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 
 public class SocketGraphEditor: EditorWindow{
     private SocketGraphView _graphView;
     private string _fileName = "New Socket Graph";
+    private GraphSaveUtility _saveUtility;
+    private TemplateContainer _sidebar;
     
 
     [MenuItem("Graph/Socket Graph")]
@@ -14,19 +17,90 @@ public class SocketGraphEditor: EditorWindow{
         window.titleContent = new GUIContent("Socket Graph");
     }
 
-    private void OnEnable(){
-        ConstructGraphView();
-        ConstructToolbar();
+    private void Init()
+    {
+        _graphView = new SocketGraphView();
+        _graphView.AddToClassList("graphView");
         
+        _saveUtility = GraphSaveUtility.GetInstance(_graphView);
+        _sidebar = new TemplateContainer();
+        _sidebar.AddToClassList("sidebar");
 
     }
 
-    private void ConstructGraphView(){
-        _graphView = new SocketGraphView{
-            name = "Socket Graph"
+    private void ConstructLayout()
+    {
+        rootVisualElement.styleSheets.Add(AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/SocketNodes/SocketGraphEditorStylesheet.uss"));
+        ConstructSidebar();
+        var separator = new VisualElement();
+        separator.AddToClassList("separator");
+        rootVisualElement.Add(separator);
+        ConstructGraphView();
+    }
+    private void OnEnable()
+    {
+        Init();
+        ConstructLayout();
+        
+    }
+
+    private void ConstructSidebar()
+    {
+        _sidebar.Add(new Button() {text = "Load by Graph Asset"});
+        LoadSceneGraphControls();
+        
+        _sidebar.Add(new Button((() => _graphView.CreateNode("Socket Node"))){text = "Create Empty Node"});
+        _sidebar.Add(new Button(() => RequestDataOperation(true)){text="Save Data"});
+        _sidebar.Add(new Button(() => RequestDataOperation(false)){text="Load Data"});
+        rootVisualElement.Add(_sidebar);
+    }
+
+    private void LoadSceneGraphControls()
+    {
+        var loadGraphBtn = new Button() {text = "Load by Scene Graph"};
+        _sidebar.Add(loadGraphBtn);
+        loadGraphBtn.clickable.clicked += () =>
+        {
+            var index = _sidebar.IndexOf(loadGraphBtn);
+            _sidebar.Remove(loadGraphBtn);
+            var objField = new ObjectField()
+            {
+                objectType = typeof(SocketGraph),
+                allowSceneObjects = true,
+            };
+            objField.RegisterCallback<ChangeEvent<Object>>(evt =>
+            {
+                if (evt.newValue == null)
+                {
+                    objField.value = evt.previousValue;
+                    return;
+                }
+
+                var sceneGraph = (SocketGraph) evt.newValue;
+                _graphView.sceneGraph = sceneGraph;
+                _saveUtility.LoadGraph(sceneGraph);
+                _sidebar.Add(new Button(){text = "Export as new"});
+                _sidebar.Add(new Button(() => _saveUtility.UpdateSceneObject((SocketGraph)objField.value)){text = "Update Scene Graph"});
+            });
+            
+            _sidebar.Insert(index, objField);
+            
         };
+
+    }
+
+
+
+    private void ConstructGraphView()
+    {
+        var container = new VisualElement()
+        {
+            name = "graphContainer"
+        };
+        
         _graphView.StretchToParentSize();
-        rootVisualElement.Add(_graphView);
+        container.Add(_graphView);
+        rootVisualElement.Add(container);
     }
 
     private void ConstructToolbar(){
@@ -91,8 +165,8 @@ public class SocketGraphEditor: EditorWindow{
 
         var sg = _graphView.collection = (MovableCollection) obj;
 
-        var saveUtility = GraphSaveUtility.GetInstance(_graphView);
-        saveUtility.LoadGraph(sg);
+        
+        _saveUtility.LoadGraph(sg);
         
     }
 
@@ -106,26 +180,26 @@ public class SocketGraphEditor: EditorWindow{
         //     return;
         // }
 
-        GraphSaveUtility.GetInstance(_graphView).ConvertToSceneObject();
+        _saveUtility.ConvertToSceneObject();
         
     }
 
     private void RequestDataOperation(bool save)
     {
-        if (string.IsNullOrEmpty(_fileName))
-        {
-            EditorUtility.DisplayDialog("Invalid file name!", "Please enter a valid file name.", "Ok");
-            return;
-        }
-        Debug.Log(_graphView.nodes.ToList().Count);
-        var saveUtility = GraphSaveUtility.GetInstance(_graphView);
-        if (save) saveUtility.SaveGraph(_fileName);
-        else saveUtility.LoadGraph(_fileName);
+        // if (string.IsNullOrEmpty(_fileName))
+        // {
+        //     EditorUtility.DisplayDialog("Invalid file name!", "Please enter a valid file name.", "Ok");
+        //     return;
+        // }
+        // Debug.Log(_graphView.nodes.ToList().Count);
+        var guid = (_graphView.sceneGraph != null)?_graphView.sceneGraph.GUID:System.Guid.NewGuid().ToString();
+        if (save) _saveUtility.SaveGraph(guid);
+        else _saveUtility.LoadGraph(guid);
         
         //_objectField.value = _graphView.graphObject;
     }
 
     private void OnDisable(){
-        rootVisualElement.Remove(_graphView);
+        
     }
 }

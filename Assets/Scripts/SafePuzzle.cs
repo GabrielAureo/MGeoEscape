@@ -14,7 +14,7 @@ public class SafePuzzle: Puzzle{
 
     void Awake(){
     }
-    public override void Initialize()
+    public override void OnServerInitialize()
     {
         //Inititaliza Safe open state when the game begins
         GeneratePassword();

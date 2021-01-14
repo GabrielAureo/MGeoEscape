@@ -95,6 +95,11 @@ public class CharacterSelection : NetworkBehaviour{
     public void CmdSelectCharacter(int character){
         GameManager.localLobbyPlayer.SelectCharacter(character);
     }
+
+    public static Character IndexToCharacter(int index)
+    {
+        return (Character) (1 << index);
+    }
 }
 public enum Character {Detective = (1 << 0),  Geologist = (1 << 1), Archeologist = (1 << 2)}
 

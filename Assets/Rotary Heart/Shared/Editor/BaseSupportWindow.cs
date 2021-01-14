@@ -88,7 +88,7 @@ namespace RotaryHeart.Lib
 
         void OnGUI()
         {
-            maxSize = minSize = new Vector2(300, 300);
+            maxSize = minSize = new Vector2(350, 350);
 
             EditorGUILayout.Space();
             GUILayout.Label(m_assetName, m_publisherNameStyle);

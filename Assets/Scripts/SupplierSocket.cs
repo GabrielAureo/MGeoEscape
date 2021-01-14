@@ -26,10 +26,17 @@ public class SupplierSocket : BaseSocket
     {
         return products[currentPick];
     }
-    public override bool TryPlaceObject(Movable movable)
+
+    protected override bool ShouldPlace(Movable movable)
     {
         return false;
     }
+
+    protected override void OnClientPlace(NetworkIdentity movableIdentity)
+    {
+        return;
+    }
+
     private void DiscardTransfer(SocketTransfer.Status status){
         switch(status){
             case SocketTransfer.Status.Success:
@@ -40,14 +47,18 @@ public class SupplierSocket : BaseSocket
                 break;
         }
     }
-    
-    public override SocketTransfer TryTake()
-    {
-        if(picks.Count == 0) return null;
-        var pick = (randomPick)?Random.Range(0, picks.Count):0;
-        var movable_idx = picks[pick];
-        currentPick = movable_idx;
 
-        return new SocketTransfer(products[movable_idx], DiscardTransfer);
+    protected override bool TakeOperation(out SocketTransfer transfer)
+    {
+        if (picks.Count == 0)
+        {
+            transfer = null;
+            return false;
+        }
+        var pick = (randomPick)?Random.Range(0, picks.Count):0;
+        var movableIdx = picks[pick];
+        currentPick = movableIdx;
+        transfer = new SocketTransfer(products[movableIdx], DiscardTransfer);
+        return true;
     }
 }

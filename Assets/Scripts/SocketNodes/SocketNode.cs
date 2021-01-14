@@ -9,6 +9,8 @@ public class SocketNode: BaseSocket{
     private bool _locked;
     private bool _busy;
     private bool _empty;
+    [HideInInspector]
+    public string GUID = System.Guid.NewGuid().ToString();
 
     public Movable currentMovable
     {
@@ -35,11 +37,16 @@ public class SocketNode: BaseSocket{
         _locked = false;
     }
  
-    public override SocketTransfer TryTake()
+    protected override bool TakeOperation(out SocketTransfer transfer)
     {
-        if (_locked || _busy || _empty || _locked) return null;
+        if (_locked || _busy || _empty || _locked)
+        {
+            transfer = null;
+            return false;
+        }
         _busy = true;
-        return new SocketTransfer(currentMovable, OnFinish);
+        transfer = new SocketTransfer(currentMovable, OnFinish);
+        return true;
     }
 
     private void OnFinish(SocketTransfer.Status status)
@@ -73,7 +80,7 @@ public class SocketNode: BaseSocket{
         return currentMovable;
     }
 
-    public override bool TryPlaceObject(Movable movable)
+    protected override bool ShouldPlace(Movable movable)
     {
         var isCompatible = MovableAuth(movable);
 
@@ -92,6 +99,11 @@ public class SocketNode: BaseSocket{
         return true;
     }
 
+    protected override void OnClientPlace(NetworkIdentity movableIdentity)
+    {
+        SetObject(movableIdentity.GetComponent<Movable>());
+    }
+
     [Client]
     private void LockSocket()
     {
@@ -106,7 +118,12 @@ public class SocketNode: BaseSocket{
     {
         currentMovable = movable;
         var shouldLock = movable == exclusiveMovable;
-        RpcSetObject(movable.netIdentity, shouldLock);
+        // RpcSetObject(movable.netIdentity, shouldLock);
+        if(shouldLock) LockSocket();
+        //var movable = movableNetID.GetComponent<Movable>();
+        _currentMovable = movable; 
+        movable.transform.position = transform.position;
+        movable.rb.isKinematic = true;
     }
     
     private void RpcSetObject(NetworkIdentity movableNetID, bool shouldLock)

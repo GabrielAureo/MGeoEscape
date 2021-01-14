@@ -13,6 +13,7 @@ public class SocketGraphView: GraphView{
 
     public MovableCollection collection;
 
+    public SocketGraph sceneGraph;
     public SocketGraphView(){
         
         SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);

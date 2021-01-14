@@ -1,0 +1,15 @@
+﻿:root{
+    flex-direction: row;
+    display: flex;
+}
+#sidebar{
+    flex-shrink: 0;
+}
+.separator{
+    background-color: #646464;
+    width: 1px;
+}
+
+#graphContainer{
+    flex-grow: 1
+}

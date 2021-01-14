@@ -265,6 +265,7 @@ namespace RotaryHeart.Lib.SerializableDictionary
         public void DoList(Rect rect, GUIContent label, bool enablePages, int perPageCount)
         {
             int indent = EditorGUI.indentLevel;
+            rect = EditorGUI.IndentedRect(rect);
             EditorGUI.indentLevel = 0;
 
             Rect headerRect = rect;

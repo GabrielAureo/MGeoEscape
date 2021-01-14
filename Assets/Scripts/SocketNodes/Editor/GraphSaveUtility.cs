@@ -11,6 +11,7 @@ public class GraphSaveUtility
 {
     private SocketGraphView _targetGraphView;
     private SocketGraphContainer _containerCache;
+    private const string CONFIGURATION_ASSET_NAME = "GraphConfigurations";
 
     private List<Edge> Edges => _targetGraphView.edges.ToList();
     private List<SocketNodeView> Nodes => _targetGraphView.nodes.ToList().Cast<SocketNodeView>().ToList();
@@ -22,22 +23,32 @@ public class GraphSaveUtility
         };
     }
 
-    public void SaveGraph(string fileName)
+    private Dictionary<SocketNode, string> sceneNodesTable;
+
+    public void SaveGraph(string guid)
     {
         //if (!Edges.Any()) return;
 
-        var socketGraphContainer = ScriptableObject.CreateInstance<SocketGraphContainer>();
+        //var socketGraphContainer = ScriptableObject.CreateInstance<SocketGraphContainer>();
+        var configurationsFile = Resources.Load<GraphViewConfigurations>(CONFIGURATION_ASSET_NAME);
+        if (configurationsFile == null)
+        {
+            configurationsFile = CreateConfigurationFile();
+        }
+
+        var socketGraphContainer = new SocketGraphContainer();
+        
         var connectedPorts = Edges.Where(edge => edge.input != null && edge.output != null).ToArray();
 
-        for (var i = 0; i < connectedPorts.Length; i++)
+        foreach (var port in connectedPorts)
         {
-            var outputNode = connectedPorts[i].output.node as SocketNodeView;
-            var inputNode = connectedPorts[i].input.node as SocketNodeView;
+            var outputNode = port.output.node as SocketNodeView;
+            var inputNode = port.input.node as SocketNodeView;
             
             socketGraphContainer.NodeLinks.Add(new NodeLinkData
             {
                 BaseNodeGuid = outputNode.GUID,
-                PortName = connectedPorts[i].output.portName,
+                PortName = port.output.portName,
                 TargetNodeGuid = inputNode.GUID
             });
         }
@@ -57,20 +68,48 @@ public class GraphSaveUtility
             socketGraphContainer.SocketNodes.Add(socketData);
         
         }
+
+        if (_targetGraphView.sceneGraph != null)
+        {
+            if (configurationsFile.data.ContainsKey(_targetGraphView.sceneGraph.GUID))
+            {
+                configurationsFile.data[_targetGraphView.sceneGraph.GUID] = socketGraphContainer;
+            }
+            else
+            {
+                configurationsFile.data.Add(_targetGraphView.sceneGraph.GUID, socketGraphContainer);
+            }
+            
+        }
+        
+        // if (!AssetDatabase.IsValidFolder("Assets/Resources"))
+        // {
+        //     AssetDatabase.CreateFolder("Assets","Resources");
+        // }
+        // AssetDatabase.CreateAsset(socketGraphContainer, $"Assets/Resources/{fileName}.asset");
+        // AssetDatabase.SaveAssets();
+    }
+
+    private GraphViewConfigurations CreateConfigurationFile()
+    {
+        var configurationsFile = ScriptableObject.CreateInstance<GraphViewConfigurations>();
+        
         if (!AssetDatabase.IsValidFolder("Assets/Resources"))
         {
             AssetDatabase.CreateFolder("Assets","Resources");
         }
-        AssetDatabase.CreateAsset(socketGraphContainer, $"Assets/Resources/{fileName}.asset");
+        AssetDatabase.CreateAsset(configurationsFile, $"Assets/Resources/{CONFIGURATION_ASSET_NAME}.asset");
         AssetDatabase.SaveAssets();
+        return configurationsFile;
     }
     
-    public void LoadGraph(string fileName)
+    public void LoadGraph(string guid)
     {
-        _containerCache = Resources.Load<SocketGraphContainer>(fileName);
+        var configFile = Resources.Load<GraphViewConfigurations>(CONFIGURATION_ASSET_NAME);
+        _containerCache = configFile.data[guid];
         if (_containerCache == null)
         {
-            EditorUtility.DisplayDialog("File Not Found", "Target Socket Graph file doesn't exist.", "Ok");
+            EditorUtility.DisplayDialog("File Not Found", "Target Socket Graph key doesn't exist.", "Ok");
             return;
         }
 
@@ -87,6 +126,42 @@ public class GraphSaveUtility
         
     }
 
+    public void LoadGraph(SocketGraph sceneGraph)
+    {
+        var configFile = Resources.Load<GraphViewConfigurations>(CONFIGURATION_ASSET_NAME);
+        if (configFile.data.ContainsKey(sceneGraph.GUID))
+        {
+            var loadFromConfigFile = EditorUtility.DisplayDialog("Graph Key Found",
+                "An entry for this scene Socket Graph was found on the " +
+                "configuration file. Would like to load it from there?", "Load from file", "Load from scene");
+            if (loadFromConfigFile)
+            {
+                LoadGraph(sceneGraph.GUID);
+                return;
+            }
+        }
+        var childNodes = sceneGraph.GetComponentsInChildren<SocketNode>();
+        ClearGraph();
+        CreateNodes(childNodes.ToList());
+        ConnectNodes(sceneGraph.connections);
+    }
+    
+    private void CreateNodes(List<SocketNode> nodeList)
+    {
+        sceneNodesTable = new Dictionary<SocketNode, string>();
+        nodeList.ForEach(node =>
+        {
+            var movable = node.exclusiveMovable;
+            var nodeView = _targetGraphView.CreateSocketNode(movable.name, node.transform.localPosition, movable);
+            nodeView.GUID = node.GUID;
+            sceneNodesTable.Add(node, nodeView.GUID);
+            _targetGraphView.AddElement(nodeView);
+        });
+        
+    }
+
+
+
     private void CreateNodes(MovableCollection collection)
     {
         var movables = collection.GetComponentsInChildren<Movable>();
@@ -101,7 +176,18 @@ public class GraphSaveUtility
             _targetGraphView.AddElement(nodeView);
         });
     }
-    
+    private void ConnectNodes(EdgesDictionary connections)
+    {
+        var unpackedConnections = connections.Unpack();
+        foreach (var kvp in unpackedConnections)
+        {
+            var searchGuid = sceneNodesTable[kvp.Key];
+            var baseNodePort = Nodes.First(node => node.GUID == searchGuid).outputContainer.Children().ToArray()[0] as Port;
+            var targetNodePort = Nodes.First(node => node.GUID == searchGuid).inputContainer.Children().ToArray()[0] as Port;
+            var edge = baseNodePort?.ConnectTo(targetNodePort);
+            _targetGraphView.AddElement(edge);
+        }
+    }    
     private void ConnectNodes()
     {
         _containerCache.NodeLinks.ForEach(linkData =>
@@ -156,6 +242,39 @@ public class GraphSaveUtility
         });
     }
 
+    public void UpdateSceneObject(SocketGraph sceneGraph)
+    {
+        var acceptedMovables = new List<Movable>();
+        var connections = new EdgesDictionary();
+
+        var childrenNodes = sceneGraph.GetComponentsInChildren<SocketNode>();
+        Nodes.ForEach(view =>
+        {
+            acceptedMovables.Add(view.movable);
+        });
+        Edges.ForEach(edge =>
+        {
+            var outputNodeView = (SocketNodeView) edge.output.node;
+            var inputNodeView = (SocketNodeView) edge.input.node;
+            var outputNode = childrenNodes.First(node => node.GUID == outputNodeView.GUID);
+            var inputNode = childrenNodes.First(node => node.GUID == inputNodeView.GUID);
+            // var outputNode = sceneNodesTable.First(kvp => kvp.Value == outputNodeView.GUID).Key;
+            // var inputNode = sceneNodesTable.First(kvp => kvp.Value == inputNodeView.GUID).Key;
+            if (inputNode == null || outputNode == null) return;
+            if(!connections.ContainsKey(outputNode)) connections.Add(outputNode, new SocketNodeNeighbors());
+            connections[outputNode].data.Add(inputNode);
+            if(!connections.ContainsKey(inputNode)) connections.Add(inputNode, new SocketNodeNeighbors());
+            connections[inputNode].data.Add(outputNode);
+            
+        });
+        sceneGraph.connections = connections;
+        sceneGraph.acceptedMovables = acceptedMovables;
+    }
+
+    public void ExportAsSceneObject()
+    {
+        
+    }
     public void ConvertToSceneObject()
     {
         // if (_targetGraphView.graphObject == null)
@@ -163,7 +282,7 @@ public class GraphSaveUtility
         //     EditorUtility.DisplayDialog("Graph object is not set", "You need to set a graph object present in the scene.", "Ok");
         //     return;
         // }
-        var data = new Dictionary<SocketNode, List<SocketNode>>();
+        var dict = new Dictionary<SocketNode, SocketNodeNeighbors>();
         
         var instanceDictionary = new Dictionary<SocketNodeView, SocketNode>();
 
@@ -190,7 +309,7 @@ public class GraphSaveUtility
 
             var node = child.AddComponent<SocketNode>();
             node.exclusiveMovable = movableCopy;
-            data.Add(node, new List<SocketNode>());
+            dict.Add(node, new SocketNodeNeighbors());
             instanceDictionary.Add(nodeView,node);
         });
         
@@ -201,22 +320,22 @@ public class GraphSaveUtility
 
             var outputNode = instanceDictionary[outputNodeView];
             var inputNode = instanceDictionary[inputNodeView];
-            data[outputNode].Add(inputNode);
-            data[inputNode].Add(outputNode);
+            dict[outputNode].data.Add(inputNode);
+            dict[inputNode].data.Add(outputNode);
         });
-        DebugDictionary(data);
+        DebugDictionary(dict);
         var field = typeof(SocketGraph).GetField("connections", BindingFlags.Instance | BindingFlags.NonPublic);
-        field?.SetValue(socketGraph, data);
-        DebugDictionary(socketGraph.connections);
+        field?.SetValue(socketGraph, dict);
+        DebugDictionary(socketGraph.connections.Clone());
     }
 
-    void DebugDictionary(Dictionary<SocketNode, List<SocketNode>> data)
+    void DebugDictionary(Dictionary<SocketNode, SocketNodeNeighbors> data)
     {
         var s = "";
         data.ToList().ForEach(pair =>
         {
             var sub = "";
-            pair.Value.ForEach(node =>
+            pair.Value.data.ForEach(node =>
             {
                 sub += $"{node.name},";
             });

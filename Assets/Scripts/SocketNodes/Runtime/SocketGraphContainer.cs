@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 [Serializable]
-public class SocketGraphContainer : ScriptableObject
+public class SocketGraphContainer
 {
     // [FormerlySerializedAs("GraphObjectInstanceId")] public GlobalObjectId GraphObjectId;
     public List<NodeLinkData> NodeLinks = new List<NodeLinkData>();

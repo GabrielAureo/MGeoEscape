@@ -65,6 +65,9 @@ namespace RotaryHeart.Lib.SerializableDictionary
         {
             GetReferences(property);
 
+            if (list == null)
+                return 0;
+            
             //Default header height
             float height = EditorGUIUtility.singleLineHeight;
             //Default space between entires
