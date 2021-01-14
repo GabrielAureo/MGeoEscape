@@ -69,7 +69,6 @@ namespace Mirror.Examples.MultipleAdditiveScenes
         /// </summary>
         public override void OnStartServer()
         {
-            Spawner.rewardPrefab = rewardPrefab;
             StartCoroutine(ServerLoadSubScenes());
         }
 

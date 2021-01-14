@@ -105,7 +105,7 @@ namespace Mirror
     /// </remarks>
     [DisallowMultipleComponent]
     [AddComponentMenu("Network/NetworkIdentity")]
-    [HelpURL("https://mirror-networking.com/docs/Components/NetworkIdentity.html")]
+    [HelpURL("https://mirror-networking.com/docs/Articles/Components/NetworkIdentity.html")]
     public sealed class NetworkIdentity : MonoBehaviour
     {
         static readonly ILogger logger = LogFactory.GetLogger<NetworkIdentity>();
@@ -891,7 +891,7 @@ namespace Mirror
         {
             foreach (NetworkBehaviour comp in NetworkBehaviours)
             {
-                // an exception in OnNetworkDestroy should be caught, so that
+                // an exception in OnStopClient should be caught, so that
                 // one component's exception doesn't stop all other components
                 // from being initialized
                 // => this is what Unity does for Start() etc. too.
@@ -902,7 +902,7 @@ namespace Mirror
                 }
                 catch (Exception e)
                 {
-                    logger.LogError("Exception in OnNetworkDestroy:" + e.Message + " " + e.StackTrace);
+                    logger.LogError("Exception in OnStopClient:" + e.Message + " " + e.StackTrace);
                 }
                 isServer = false;
             }

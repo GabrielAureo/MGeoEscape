@@ -11,6 +11,12 @@ namespace kcp2k
         public Action<ArraySegment<byte>> OnData;
         public Action OnDisconnected;
 
+        // Mirror needs a way to stop kcp message processing while loop
+        // immediately after a scene change message. Mirror can't process any
+        // other messages during a scene change.
+        // (could be useful for others too)
+        public Func<bool> OnCheckEnabled = () => true;
+
         // state
         public KcpClientConnection connection;
         public bool connected;
@@ -52,15 +58,19 @@ namespace kcp2k
                 OnDisconnected.Invoke();
             };
 
+            // setup OnCheckEnabled to safely support Mirror
+            // scene changes (see comments in Awake() above)
+            connection.OnCheckEnabled = OnCheckEnabled;
+
             // connect
             connection.Connect(address, port, noDelay, interval, fastResend, congestionWindow, sendWindowSize, receiveWindowSize);
         }
 
-        public void Send(ArraySegment<byte> segment)
+        public void Send(ArraySegment<byte> segment, KcpChannel channel)
         {
             if (connected)
             {
-                connection.Send(segment);
+                connection.SendData(segment, channel);
             }
             else Log.Warning("KCP: can't send because client not connected!");
         }
