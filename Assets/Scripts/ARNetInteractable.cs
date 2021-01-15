@@ -11,6 +11,5 @@ public abstract class ARNetInteractable : NetworkBehaviour, IARInteractable
     public abstract void onRelease();
 
     public abstract void onTap();
-    public abstract void onTarget(Movable movable);
-    public abstract void onUntarget(Movable movable);
+
 }

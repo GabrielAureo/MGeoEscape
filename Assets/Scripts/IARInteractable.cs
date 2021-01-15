@@ -7,6 +7,4 @@ public interface IARInteractable{
     void onTap();
     void onHold();
     void onRelease();
-    void onTarget(Movable movable);
-    void onUntarget(Movable movable);
 }

@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Mirror;
 
 //Todo: Add Destructive and Supplier modes. Destructive socket destroys the object that it receives. Supplier provides infinite objects. They are mutually exclusive.
-[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Collider),typeof(Targetable))]
 public class Socket : BaseSocket
 {
     /// <summary>
@@ -21,7 +22,6 @@ public class Socket : BaseSocket
         }
         protected set
         {
-            _empty = value == null;
             _currentObject = value;
         }
     }
@@ -45,13 +45,13 @@ public class Socket : BaseSocket
     /// <summary>
     /// Only valid on the server
     /// </summary>
-    private bool _busy;
-
-    private bool _empty;
+    [SyncVar]
+    public bool _busy;
+    [SyncVar]
+    public bool _empty;
     private SocketTransfer currentTransfer;
-    // public bool ReturnMovable(){
-        
-    // }
+    
+
     [ClientRpc]
     private void RpcReturnMovable(){
 
@@ -73,14 +73,40 @@ public class Socket : BaseSocket
         if(busyPreviewObject) busyPreviewObject.SetActive(false);
     }
     void Start(){
-        var preview = GameObject.Instantiate(GameResources.Instance.previewSocketPrefab,transform);
-        previewRenderer = preview.GetComponent<MeshRenderer>();
-        previewFilter = preview.GetComponent<MeshFilter>();
+        // var preview = GameObject.Instantiate(GameResources.Instance.previewSocketPrefab,transform);
+        // previewRenderer = preview.GetComponent<MeshRenderer>();
+        // previewFilter = preview.GetComponent<MeshFilter>();
+        SetTargetable();
 
+    }
+
+    private void SetTargetable()
+    {
+        var targetable = GetComponent<Targetable>();
+        if (targetable == null) return;
+        targetable.TargetCondition = PlacementCondition;
+        targetable.TargetPose = obj =>
+        {
+            var pose = new MovablePlacementPose();
+            if (!exclusiveMode)
+            {
+                pose.position = transform.position - (obj.bottomAnchor - placementAnchor);
+                pose.rotation = obj.placementRotation;
+            }
+            else
+            {
+                pose.position = exclusivePose.position;
+                pose.scale = exclusivePose.scale;
+                pose.rotation = exclusivePose.rotation;
+            }
+
+            return pose;
+        };
     }
     public override void OnStartServer(){
         base.OnStartServer();
         _busy = false;
+        _empty = currentObject == null;
     }
 
     //Change the currentObject comparison to a empty bool
@@ -113,12 +139,14 @@ public class Socket : BaseSocket
     private void OnTransferFinish(SocketTransfer.Status status){
         if(status == SocketTransfer.Status.Success){
             currentObject = null;
+            _empty = true;
             RpcEndTransfer();
         }else{
             RpcReturnMovable();
         }
 
         _busy = false;
+        
     }
 
     [ClientRpc]
@@ -133,25 +161,27 @@ public class Socket : BaseSocket
             
         }
     }
-
-    public virtual void Untarget(){
-        previewRenderer.enabled = false;
-    }
+    
     [Server]
-    protected override bool ShouldPlace(Movable movable){
-        if(currentObject != null) return false;
-        //print(otherSocket);
-        //var movable = otherSocket.GetCurrentObject();
-        if(exclusiveMode && movable != exclusiveObject) return false;
-        if(_busy) return false;
+    protected override bool ShouldPlace(Movable movable)
+    {
+        if (!PlacementCondition(movable)) return false;
 
         var flag = GetComponent<PlayerVisibility>().GetObserverFlag();
         //To change: Reduce RPCs by merging the observer set and clientrpc
         movable.GetComponent<PlayerVisibility>().SetObserverFlag(flag);
         currentObject = movable;
-        //movable.transform.parent = transform.parent;
+        _empty = false;
         Debug.LogError(movable.netIdentity);
-        //RpcSetObject(currentObject.netIdentity);
+        return true;
+    }
+
+    private bool PlacementCondition(Movable movable)
+    {
+        if(!_empty) return false;
+        if(exclusiveMode && movable != exclusiveObject) return false;
+        if(_busy) return false;
+
         return true;
     }
 
@@ -175,13 +205,14 @@ public class Socket : BaseSocket
     }
 
     private void SetPosition(Movable obj){
+        var transform1 = obj.transform;
         if(!exclusiveMode){
-            obj.transform.position = transform.position - (obj.bottomAnchor - placementAnchor);
-            obj.transform.rotation = obj.placementRotation;
+            transform1.position = transform.position - (obj.bottomAnchor - placementAnchor);
+            transform1.rotation = obj.placementRotation;
         }else{
-            obj.transform.localPosition = exclusivePose.position;
-            obj.transform.localScale = exclusivePose.scale;
-            obj.transform.localRotation = exclusivePose.rotation;
+            transform1.localPosition = exclusivePose.position;
+            transform1.localScale = exclusivePose.scale;
+            transform1.localRotation = exclusivePose.rotation;
         }  
     }
 
@@ -195,21 +226,6 @@ public class Socket : BaseSocket
             obj.transform.localRotation = exclusivePose.rotation;
         }
     }
+    
 
-    public override void onTap(){}
-
-    public override void onHold()
-    {
-    }
-
-    public override void onRelease()
-    {
-    }
-    public override void onTarget(Movable movable)
-    {
-        TryTarget(movable);
-    }
-    public override void onUntarget(Movable movable){
-        Untarget();
-    }
 }

@@ -55,13 +55,9 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/Assets/Scripts/MovableController.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/Socket.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/SupplierSocket.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/SocketEvent.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/SocketCallbackController.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Puzzle.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/CharacterSelection.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Runtime/SocketGraphData.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Editor/SocketGraphDataEditor.cs" />
       <option value="$PROJECT_DIR$/Assets/Rotary Heart/SerializableDictionaryLite/References/RequiredReferences.cs" />
@@ -71,15 +67,25 @@
       <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Editor/SocketGraphEditor.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Dictionaries.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Runtime/GraphViewConfigurations.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketGraph.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Editor/SocketGraphView.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketNode.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/Editor/GraphSaveUtility.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/BaseSocket.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Movable.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Editor/DraggablePointDrawer.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/DraggablePoint.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/CharacterSelection.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/DinoPuzzle.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketGraph.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Targetable.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/DebugMenu.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/ARTouchController.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/MovableController.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/BaseSocket.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/ARNetInteractable.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/IARInteractable.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/SupplierSocket.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketNode.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Socket.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1khudGn2VUvV4qQ73jqojjDQ4Ey" />
@@ -114,10 +120,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="29124">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="29124" />
       <option name="selectedOptions">
         <list />
       </option>
@@ -174,7 +180,8 @@
       <workItem from="1610455547805" duration="5957000" />
       <workItem from="1610480462676" duration="3447000" />
       <workItem from="1610534730593" duration="17645000" />
-      <workItem from="1610625618629" duration="1162000" />
+      <workItem from="1610625618629" duration="23602000" />
+      <workItem from="1610709745247" duration="12286000" />
     </task>
     <servers />
   </component>

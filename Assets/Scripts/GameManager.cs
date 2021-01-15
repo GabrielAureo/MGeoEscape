@@ -20,6 +20,7 @@ public class GameManager: NetworkRoomManager{
         characterSelection = m_characterSelection;
         clientDictionary = new Dictionary<byte[], GamePlayer>();
         gameStarted = false;
+        
     }
 
     /*TBD aparentemente, o cliente se conecta automaticamente pra cena que o servidor está. Posso aproveitar isso e verificar se a cena atual não é o Lobby e

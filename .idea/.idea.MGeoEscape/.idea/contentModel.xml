@@ -97,6 +97,7 @@
             <e p="NetworkTransformChild.cs" t="Include" />
           </e>
           <e p="Editor" t="Include">
+            <e p="EditorHelper.cs" t="Include" />
             <e p="EnterPlayModeSettingsCheck.cs" t="Include" />
             <e p="InspectorHelper.cs" t="Include" />
             <e p="Logging" t="Include">
@@ -143,6 +144,7 @@
               <e p="Program.cs" t="Include" />
               <e p="Readers.cs" t="Include" />
               <e p="Resolvers.cs" t="Include" />
+              <e p="TypeReferenceComparer.cs" t="Include" />
               <e p="Weaver.cs" t="Include" />
               <e p="WeaverExceptions.cs" t="Include" />
               <e p="WeaverTypes.cs" t="Include" />
@@ -163,6 +165,7 @@
               <e p="Scripts" t="Include">
                 <e p="BasicNetManager.cs" t="Include" />
                 <e p="Player.cs" t="Include" />
+                <e p="PlayerUI.cs" t="Include" />
               </e>
             </e>
             <e p="Benchmark" t="Include">
@@ -214,6 +217,18 @@
                 <e p="RandomColor.cs" t="Include" />
                 <e p="Reward.cs" t="Include" />
                 <e p="Spawner.cs" t="Include" />
+              </e>
+            </e>
+            <e p="MultipleMatches" t="Include">
+              <e p="Scripts" t="Include">
+                <e p="CanvasController.cs" t="Include" />
+                <e p="CellGUI.cs" t="Include" />
+                <e p="MatchController.cs" t="Include" />
+                <e p="MatchGUI.cs" t="Include" />
+                <e p="MatchMessages.cs" t="Include" />
+                <e p="MatchNetworkManager.cs" t="Include" />
+                <e p="PlayerGUI.cs" t="Include" />
+                <e p="RoomGUI.cs" t="Include" />
               </e>
             </e>
             <e p="Pong" t="Include">
@@ -316,9 +331,11 @@
               <e p="KCP" t="Include">
                 <e p="kcp2k" t="Include">
                   <e p="highlevel" t="Include">
+                    <e p="KcpChannel.cs" t="Include" />
                     <e p="KcpClient.cs" t="Include" />
                     <e p="KcpClientConnection.cs" t="Include" />
                     <e p="KcpConnection.cs" t="Include" />
+                    <e p="KcpHeader.cs" t="Include" />
                     <e p="KcpServer.cs" t="Include" />
                     <e p="KcpServerConnection.cs" t="Include" />
                     <e p="Log.cs" t="Include" />
@@ -515,6 +532,7 @@
           <e p="SocketTransfer.cs" t="Include" />
           <e p="StandaloneWindowBehaviour.cs" t="Include" />
           <e p="SupplierSocket.cs" t="Include" />
+          <e p="Targetable.cs" t="Include" />
         </e>
         <e p="ScriptTemplates" t="Include">
           <e p="50-Mirror__Network Manager-NewNetworkManager.cs.txt" t="Include" />

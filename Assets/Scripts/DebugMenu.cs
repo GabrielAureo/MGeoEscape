@@ -68,6 +68,8 @@ public class DebugMenu: MonoBehaviour{
             var movableName = "Empty";
             if(socket.currentObject) movableName = socket.currentObject.name;
             DrawLabeled("Movable", movableName);
+            DrawLabeled("Empty", socket._empty.ToString());
+            DrawLabeled("Busy", socket._busy.ToString());
         }
     }
 

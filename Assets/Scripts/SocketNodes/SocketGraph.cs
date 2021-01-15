@@ -38,7 +38,7 @@ public class SocketGraph: MonoBehaviour
     {
         if (!initialized) InitializeNodes();
         var startNode = connections.ElementAt(startNodeIndex).Key;
-        startNode.TryPlaceObject(startNode.exclusiveMovable);
+        //startNode.TryPlaceObject(startNode.exclusiveMovable);
     }
     
 

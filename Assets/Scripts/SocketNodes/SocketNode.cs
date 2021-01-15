@@ -5,9 +5,11 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class SocketNode: BaseSocket{
-    
+    [SyncVar]
     private bool _locked;
+    [SyncVar]
     private bool _busy;
+    [SyncVar]
     private bool _empty;
     [HideInInspector]
     public string GUID = System.Guid.NewGuid().ToString();
@@ -30,6 +32,29 @@ public class SocketNode: BaseSocket{
     public Func<Movable, bool> MovableAuth;
 
     public Movable exclusiveMovable;
+
+    private void Start()
+    {
+        SetTargetable();
+    }
+
+    void SetTargetable()
+    {
+        var targetable = GetComponent<Targetable>();
+        if (targetable == null) return;
+        targetable.TargetCondition = PlacementCondition;
+        targetable.TargetPose = movable =>
+        {
+            var transform1 = movable.transform;
+            var pose = new MovablePlacementPose()
+            {
+                position = transform.position,
+                rotation = transform1.rotation,
+                scale = transform1.localScale
+            };
+            return pose;
+        };
+    }
 
     public void Initialize(){
         _busy = false;
@@ -82,9 +107,7 @@ public class SocketNode: BaseSocket{
 
     protected override bool ShouldPlace(Movable movable)
     {
-        var isCompatible = MovableAuth(movable);
-
-        if (!isCompatible || _busy || !_empty || _locked) return false;
+        if (!PlacementCondition(movable)) return false;
 
         var visibility = GetComponent<PlayerVisibility>();
 
@@ -97,6 +120,15 @@ public class SocketNode: BaseSocket{
         
         SetObject(currentMovable);
         return true;
+        
+        
+    }
+
+    private bool PlacementCondition(Movable movable)
+    {
+        var isCompatible = MovableAuth(movable);
+
+        return isCompatible && !_busy && _empty && !_locked;
     }
 
     protected override void OnClientPlace(NetworkIdentity movableIdentity)

@@ -16,8 +16,21 @@ public abstract class BaseSocket : ARNetInteractable
     public bool TryTake(out SocketTransfer transfer)
     {
         var taken = TakeOperation(out transfer);
-        callbackController?.OnClientTake.Invoke(taken);
+        if (callbackController != null) callbackController.OnServerTake.Invoke(taken);
+
+        if(transfer!=null && transfer.movable!=null) RpcTake(transfer.movable.netIdentity,taken);
+        
         return taken;
+    }
+
+    [ClientRpc]
+    private void RpcTake(NetworkIdentity movableIdentity, bool placed)
+    {
+        if (callbackController != null)
+        {
+            callbackController.OnClientTake.Invoke(placed);
+
+        }
     }
 
     protected abstract bool TakeOperation(out SocketTransfer transfer);
@@ -48,7 +61,7 @@ public abstract class BaseSocket : ARNetInteractable
     [ClientRpc]
     private void RpcPlace(NetworkIdentity movableIdentity, bool placed)
     {
-        OnClientPlace(movableIdentity);
+        if(placed) OnClientPlace(movableIdentity);
         callbackController?.OnClientReceive.Invoke(placed);
     }
     protected abstract bool ShouldPlace(Movable movable);
@@ -59,8 +72,5 @@ public abstract class BaseSocket : ARNetInteractable
     public override void onRelease(){}
     
     public override void onTap(){}
-
-    public override void onTarget(Movable movable){}
-
-    public override void onUntarget(Movable movable){}
+    
 }

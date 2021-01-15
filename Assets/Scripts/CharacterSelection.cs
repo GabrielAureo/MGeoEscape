@@ -100,6 +100,11 @@ public class CharacterSelection : NetworkBehaviour{
     {
         return (Character) (1 << index);
     }
+
+    public static int CharacterToIndex(Character character)
+    {
+        return ((int)character) >> 1; 
+    }
 }
 public enum Character {Detective = (1 << 0),  Geologist = (1 << 1), Archeologist = (1 << 2)}
 

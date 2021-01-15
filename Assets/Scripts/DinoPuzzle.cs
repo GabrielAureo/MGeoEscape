@@ -8,29 +8,36 @@ using Random = UnityEngine.Random;
 
 public class DinoPuzzle : Puzzle {
 
-    [SerializeField] private SupplierSocket supplier;
-    [SerializeField] private List<Transform> spawnPoints;
+    [SerializeField] private List<SupplierSocket> suppliers;
     [SerializeField] private SocketGraph graph;
     private SyncList<int> _fillNodes = new SyncList<int>();
 
     private class SupplierWrapper
     {   
         public int spawnIndex;
-        public List<NetworkIdentity> movableDistribution;
+        public List<uint> movableDistribution;
     }
-    private SyncDictionary<int, SupplierWrapper> suppliersDistribution =
-        new SyncDictionary<int, SupplierWrapper>();
+    private SyncDictionary<int, List<uint>> suppliersDistribution =
+        new SyncDictionary<int, List<uint>>();
     public override void OnServerInitialize()
     {
+        StartCoroutine(InitializePuzzle());
+    }
 
+    IEnumerator InitializePuzzle()
+    {
+        var pool = new List<Movable>(graph.acceptedMovables);
+        yield return new WaitUntil(()=>pool.All(movable => movable.isServer));
+        
         var rand = Random.Range(0, graph.connections.Count);
-
         graph.StartGraph(rand);
         _fillNodes.Add(rand);
-        var pool = new List<Movable>(graph.acceptedMovables);
-        Shuffle(pool);
+        
 
-        StartCoroutine(WaitBonesSpawn(pool));
+        
+        Shuffle(pool);
+        yield return new WaitWhile(() => pool.All(bone => bone.isServer));
+        SetDistributionDictionary(pool);
 
     }
 
@@ -42,12 +49,14 @@ public class DinoPuzzle : Puzzle {
         for (int i = 1; i <= 3; i++)
         {
             var bound = Mathf.Clamp(n * i, 0, pool.Count);
-            var l = pool.GetRange(start, bound-start).Select(item => item.netIdentity).ToList();
-            var sw = new SupplierWrapper()
-            {
-                //supplier = suppliers[i - 1].netIdentity,
-                movableDistribution = l
-            };
+            var l = pool.GetRange(start, bound-start).Select(item => item.netIdentity.netId).ToList();
+            // var sw = new SupplierWrapper()
+            // {
+            //     //supplier = suppliers[i - 1].netIdentity,
+            //     movableDistribution = l
+            // };
+
+            var sw = l;
             
             suppliersDistribution.Add((int)CharacterSelection.IndexToCharacter(i-1), sw);
             
@@ -64,12 +73,7 @@ public class DinoPuzzle : Puzzle {
         
         
     }
-
-    IEnumerator WaitBonesSpawn(List<Movable> pool)
-    {
-        yield return new WaitWhile(() => pool.All(bone => bone.isServer));
-        SetDistributionDictionary(pool);
-    }
+    
 
     public override void OnLocalPlayerReady(NetworkIdentity player)
     {
@@ -78,28 +82,26 @@ public class DinoPuzzle : Puzzle {
             graph.TriggerNeighbors(index, true);
         }
         
-        FillSuppliers(player.GetComponent<GamePlayer>().character);
+        StartCoroutine(FillSuppliers(player.GetComponent<GamePlayer>().character));
         
     }
 
-    void Update()
+    IEnumerator FillSuppliers(Character character)
     {
+        yield return new WaitUntil(() => suppliersDistribution.Count > 0);
         Debug.LogError(suppliersDistribution.Count);
-    }
+        var wp = suppliersDistribution[CharacterSelection.CharacterToIndex(character)];
+        var supplier = suppliers[CharacterSelection.CharacterToIndex(character)];
+        //supplier.transform.position = spawnPoints[wp.spawnIndex].position;
 
-    private void FillSuppliers(Character character)
-    {
-        Debug.LogError(suppliersDistribution.Count);
-        var wp = suppliersDistribution[(int)character];
-        supplier.transform.position = spawnPoints[wp.spawnIndex].position;
-
-        supplier.products = wp.movableDistribution.Select(netId =>
+        supplier.products = wp.Select(netId =>
         {
-            var movable = netId.GetComponent<SocketNode>().exclusiveMovable;
+            var identity = NetworkIdentity.spawned[netId];
+            var movable = identity.transform.GetComponent<Movable>();
             movable.transform.position = supplier.transform.position;
             return movable;
         }).ToList();
-
+        Debug.LogError(supplier.products.Count);
     }
    
 

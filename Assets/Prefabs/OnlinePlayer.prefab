@@ -113,6 +113,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   currentMovable: {fileID: 0}
+  isHolding: 0
+  previewer: {fileID: 0}
 --- !u!114 &621098669153585956
 MonoBehaviour:
   m_ObjectHideFlags: 0
