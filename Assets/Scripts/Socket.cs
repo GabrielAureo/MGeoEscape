@@ -168,7 +168,6 @@ public class Socket : BaseSocket
         if (!PlacementCondition(movable)) return false;
 
         var flag = GetComponent<PlayerVisibility>().GetObserverFlag();
-        //To change: Reduce RPCs by merging the observer set and clientrpc
         movable.GetComponent<PlayerVisibility>().SetObserverFlag(flag);
         currentObject = movable;
         _empty = false;

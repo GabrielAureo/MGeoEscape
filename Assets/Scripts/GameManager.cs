@@ -22,45 +22,15 @@ public class GameManager: NetworkRoomManager{
         gameStarted = false;
         
     }
-
-    /*TBD aparentemente, o cliente se conecta automaticamente pra cena que o servidor está. Posso aproveitar isso e verificar se a cena atual não é o Lobby e
-    e já começar a rotina de reconexão*/
-    /*public override void OnClientConnect(NetworkConnection conn){
-        OnRoomClientConnect(conn);
-        base.CallOnClientEnterRoom();
-
-        
-
-        var msg = new GUIDMessage();
-        
-        msg.guid = GetDeviceGUID();
-        NetworkClient.Send<GUIDMessage>(msg);
-    }*/
+    
 
     public override void OnStartClient(){
         base.OnStartClient();
         InitializeDeviceGUID();
     }
+    
 
-   /* public override void OnServerConnect(NetworkConnection conn){
-        if (numPlayers >= maxConnections)
-        {
-            conn.Disconnect();
-            return;
-        }
-        string scene = SceneManager.GetActiveScene().name;
-        if(scene != RoomScene){
-
-        }
-
-    }*/
-
-    public override void OnRoomServerDisconnect(NetworkConnection conn){
-        base.OnRoomServerDisconnect(conn);
-        //conn.
-    }
-
-    public override void OnRoomServerPlayersReady(){
+   public override void OnRoomServerPlayersReady(){
         base.OnRoomServerPlayersReady();
         ServerChangeScene(GameplayScene);
     }
@@ -85,8 +55,15 @@ public class GameManager: NetworkRoomManager{
     }
 
    
-    public override void OnServerDisconnect(NetworkConnection conn){
-        base.OnServerDisconnect(conn);
+    public override void OnServerConnect(NetworkConnection conn){
+        if (numPlayers >= maxConnections)
+        {
+            conn.Disconnect();
+            return;
+        }
+
+        //base.OnServerConnect(conn);
+        OnRoomServerConnect(conn);
     }
 
     //Generate unique indentifier on the first run of the game
@@ -98,14 +75,14 @@ public class GameManager: NetworkRoomManager{
         }
     }
 
-    private byte[] GetDeviceGUID(){
-#if UNITY_STANDALONE
-        var guidString = System.Environment.GetCommandLineArgs()[2];
-        var guid = new System.Guid(guidString);
-        return guid.ToByteArray();
-#elif UNITY_ANDROID && !UNITY_EDITOR
-        return System.IO.File.ReadAllBytes(Application.persistentDataPath + "/PlayerGUID");
-#endif
-    }
+//     private byte[] GetDeviceGUID(){
+// #if UNITY_STANDALONE
+//         var guidString = System.Environment.GetCommandLineArgs()[2];
+//         var guid = new System.Guid(guidString);
+//         return guid.ToByteArray();
+// #elif UNITY_ANDROID && !UNITY_EDITOR
+//         return System.IO.File.ReadAllBytes(Application.persistentDataPath + "/PlayerGUID");
+// #endif
+//     }
 
 }

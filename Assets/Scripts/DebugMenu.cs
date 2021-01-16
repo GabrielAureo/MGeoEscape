@@ -103,6 +103,14 @@ public class DebugMenu: MonoBehaviour{
             var character = ClientScene.localPlayer.GetComponent<GamePlayer>().character;
             DrawLabeled("Character", System.Enum.GetName(typeof(Character), character));
         }
+
+        if (NetworkServer.active)
+        {
+            foreach (var kvp in NetworkServer.connections)
+            {
+                DrawLabeled(kvp.Value.ToString(), kvp.Value.identity.ToString());
+            }
+        }
     }
 
     void DrawLabeled(string label, string content){

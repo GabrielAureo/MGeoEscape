@@ -23,6 +23,19 @@ namespace Mirror.Examples.NetworkRoom
             }
         }
 
+        public override void OnServerConnect(NetworkConnection conn)
+        {
+            if (numPlayers >= maxConnections)
+            {
+                conn.Disconnect();
+                return;
+            }
+
+
+            OnRoomServerConnect(conn);
+
+        }
+
         /// <summary>
         /// Called just after GamePlayer object is instantiated and just before it replaces RoomPlayer object.
         /// This is the ideal point to pass any data like player name, credentials, tokens, colors, etc.

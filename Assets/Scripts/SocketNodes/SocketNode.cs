@@ -14,21 +14,8 @@ public class SocketNode: BaseSocket{
     [HideInInspector]
     public string GUID = System.Guid.NewGuid().ToString();
 
-    public Movable currentMovable
-    {
-        get
-        {
-            return _currentMovable;
-        }
-        set
-        {
-            _empty = value == null;
-            _currentMovable = value;
-        }
-        
-    }
-
     private Movable _currentMovable;
+    [SyncVar(hook=nameof(SetObjectFromNetID))] private uint _currentMovableNetID;
     public Func<Movable, bool> MovableAuth;
 
     public Movable exclusiveMovable;
@@ -38,6 +25,11 @@ public class SocketNode: BaseSocket{
         SetTargetable();
     }
 
+
+    private void SetObjectFromNetID(uint oldValue, uint newValue)
+    {
+        _currentMovable = NetworkIdentity.spawned[newValue].GetComponent<Movable>();
+    }
     void SetTargetable()
     {
         var targetable = GetComponent<Targetable>();
@@ -70,7 +62,7 @@ public class SocketNode: BaseSocket{
             return false;
         }
         _busy = true;
-        transfer = new SocketTransfer(currentMovable, OnFinish);
+        transfer = new SocketTransfer(_currentMovable, OnFinish);
         return true;
     }
 
@@ -79,10 +71,10 @@ public class SocketNode: BaseSocket{
         switch (status)
         {
             case SocketTransfer.Status.Success:
-                currentMovable = null;
+                _currentMovable = null;
                 break;
             case SocketTransfer.Status.Failure:
-                SetObject(currentMovable);
+                SetObject(_currentMovable);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(status), status, null);
@@ -97,12 +89,12 @@ public class SocketNode: BaseSocket{
 
     public override Movable ClientGetMovable()
     {
-        return currentMovable;
+        return _currentMovable;
     }
 
     public override Movable GetCurrentObject()
     {
-        return currentMovable;
+        return _currentMovable;
     }
 
     protected override bool ShouldPlace(Movable movable)
@@ -118,7 +110,7 @@ public class SocketNode: BaseSocket{
         //movable.transform.parent = transform.parent;
         Debug.LogError(movable.netIdentity);
         
-        SetObject(currentMovable);
+        SetObject(_currentMovable);
         return true;
         
         
@@ -148,14 +140,14 @@ public class SocketNode: BaseSocket{
     
     private void SetObject(Movable movable)
     {
-        currentMovable = movable;
+        _currentMovable = movable;
         var shouldLock = movable == exclusiveMovable;
         // RpcSetObject(movable.netIdentity, shouldLock);
         if(shouldLock) LockSocket();
         //var movable = movableNetID.GetComponent<Movable>();
         _currentMovable = movable; 
-        movable.transform.position = transform.position;
-        movable.rb.isKinematic = true;
+        // movable.transform.position = transform.position;
+        // movable.rb.isKinematic = true;
     }
     
     private void RpcSetObject(NetworkIdentity movableNetID, bool shouldLock)

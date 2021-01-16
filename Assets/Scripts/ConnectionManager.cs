@@ -10,6 +10,7 @@ public class ConnectionManager : MonoBehaviour{
         #if !UNITY_EDITOR
             networkDiscovery.StartDiscovery();
         #endif
+        DontDestroyOnLoad(this);
     }
     
     public void Connect(ServerResponse info){
@@ -56,12 +57,4 @@ public class ConnectionManager : MonoBehaviour{
             GUILayout.EndHorizontal();
 
         }
-
-    /*IEnumerator RefreshLAN(){
-        while(true){
-            networkDiscovery.StartDiscovery();
-            print("Searching LAN");
-            yield return true;
-        }
-    }*/
 }

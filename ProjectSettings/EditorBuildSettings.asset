@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Mirror/Examples/Room/Scenes/RoomScene.unity
     guid: 48478f4d522f96945b8396f376299d3a
   - enabled: 0
-    path: Assets/Mirror/Examples/AdditiveScenes/Scenes/AminAdditive.unity
+    path: Assets/Mirror/Examples/AdditiveScenes/Scenes/MainScene.unity
     guid: 7a0eee2f518e9dc4fb628d96dc452faf
   - enabled: 0
     path: Assets/Mirror/Examples/AdditiveScenes/Scenes/SubScene.unity

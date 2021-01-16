@@ -72,20 +72,22 @@
       <option value="$PROJECT_DIR$/Assets/Scripts/Movable.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Editor/DraggablePointDrawer.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/DraggablePoint.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/CharacterSelection.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/DinoPuzzle.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketGraph.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Targetable.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/DebugMenu.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/ARTouchController.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/MovableController.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/BaseSocket.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/ARNetInteractable.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/IARInteractable.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/SupplierSocket.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketNode.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Socket.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketNode.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/ConnectionManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/DebugMenu.cs" />
+      <option value="$PROJECT_DIR$/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1khudGn2VUvV4qQ73jqojjDQ4Ey" />
@@ -181,7 +183,7 @@
       <workItem from="1610480462676" duration="3447000" />
       <workItem from="1610534730593" duration="17645000" />
       <workItem from="1610625618629" duration="23602000" />
-      <workItem from="1610709745247" duration="12286000" />
+      <workItem from="1610709745247" duration="23898000" />
     </task>
     <servers />
   </component>
