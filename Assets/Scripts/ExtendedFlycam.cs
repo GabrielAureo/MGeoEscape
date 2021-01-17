@@ -37,7 +37,7 @@ public class ExtendedFlycam : MonoBehaviour
 		Cursor.visible = true;
 	}
 
-	private bool disabledBehaviour;
+	public bool disabledBehaviour;
  
 	void Update ()
 	{

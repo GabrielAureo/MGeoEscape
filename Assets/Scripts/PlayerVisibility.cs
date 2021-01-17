@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using Mirror;
 using System.Collections.Generic;
@@ -5,9 +6,15 @@ using System.Collections.Generic;
 public class PlayerVisibility : NetworkVisibility
 {
     [EnumFlag] [SerializeField]
-    Character characterObservers = (Character)visibleFlag;
+    Character characterObservers = (Character)VisibleFlag;
 
-    public readonly static int visibleFlag = 0b111;
+    public const int VisibleFlag = 0b111;
+
+    public override void OnStartServer()
+    {
+        var manager = (MainNetworkManager) NetworkManager.singleton;
+        manager.OnServerPlayersSpawn += () => netIdentity.RebuildObservers(false);
+    }
     [Server]
     public void SetObserverFlag(int flag){
         characterObservers = (Character) flag;
@@ -20,17 +27,28 @@ public class PlayerVisibility : NetworkVisibility
 
     public override bool OnCheckObserver(NetworkConnection conn)
     {
-        var character = conn.identity.GetComponent<GamePlayer>().character;
+        if (conn == null) return false;
+        var player = conn.identity.GetComponent<GamePlayer>();
+        if (player == null) return false;
+        var character = player.character;
         return (characterObservers & character) != 0;
     }
 
     public override void OnRebuildObservers(HashSet<NetworkConnection> observers, bool initialize)
     {
-        foreach (NetworkConnectionToClient conn in NetworkServer.connections.Values){
-            var character = conn.identity.GetComponent<GamePlayer>().character;
+        foreach (NetworkConnectionToClient conn in NetworkServer.connections.Values)
+        {
+
+            if (conn == null) continue;
+            var player = conn.identity.GetComponent<GamePlayer>();
+            
+            var character = player.character;
+
             if((characterObservers & character) != 0){
                 observers.Add(conn);
             }
         }
     }
+
+    
 }

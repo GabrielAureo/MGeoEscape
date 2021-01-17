@@ -1,5 +1,7 @@
 using UnityEngine;
 using Mirror;
+using UnityEngine.EventSystems;
+
 public class GamePlayer: NetworkBehaviour{
     [SyncVar(hook=nameof(RenameGameObject))]
     [HideInInspector] public string playerName;

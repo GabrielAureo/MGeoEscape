@@ -25,6 +25,10 @@ public class SocketNode: BaseSocket{
         SetTargetable();
     }
 
+    public override void OnStartServer()
+    {
+        Initialize();
+    }
 
     private void SetObjectFromNetID(uint oldValue, uint newValue)
     {
@@ -103,7 +107,7 @@ public class SocketNode: BaseSocket{
 
         var visibility = GetComponent<PlayerVisibility>();
 
-        var flag = (visibility == null) ? PlayerVisibility.visibleFlag : visibility.GetObserverFlag();
+        var flag = (visibility == null) ? PlayerVisibility.VisibleFlag : visibility.GetObserverFlag();
 
         movable.GetComponent<PlayerVisibility>().SetObserverFlag(flag);
         _currentMovable = movable;

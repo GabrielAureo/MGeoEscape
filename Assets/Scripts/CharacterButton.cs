@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class CharacterButton : UIBehaviour, IPointerClickHandler, IPointerUpHandler, IPointerDownHandler {
     public enum SelectionState{Selected, Normal, Disabled, Pressed}
@@ -12,7 +14,8 @@ public class CharacterButton : UIBehaviour, IPointerClickHandler, IPointerUpHand
 
 
     public Graphic targetGraphic;
-
+    [HideInInspector]
+    public CharacterSelection selection;
     public ColorBlock colors = ColorBlock.defaultColorBlock;
     /*public Color baseColor;
     public Color selectedColor;
@@ -24,6 +27,8 @@ public class CharacterButton : UIBehaviour, IPointerClickHandler, IPointerUpHand
     /// Interaction state of the parent Canvas Group
     /// </summary>
     private bool m_groupInteraction;
+    
+    public UnityAction<int> clickAction;
 
     protected override void Start(){
         targetGraphic = GetComponent<Graphic>();
@@ -57,8 +62,9 @@ public class CharacterButton : UIBehaviour, IPointerClickHandler, IPointerUpHand
     }
 
     public void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData){   
-        //print("Cliquei no "+ gameObject.name);         
-        if(IsInteractable()) GameManager.characterSelection.CmdSelectCharacter((int)character);
+        Debug.LogError("Cliquei no "+ gameObject.name);
+        if(IsInteractable()) selection.CmdSelectCharacter((int)character);
+
     }
     public void OnPointerUp(PointerEventData eventData)
     {

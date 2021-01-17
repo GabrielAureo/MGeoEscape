@@ -5,9 +5,8 @@ using System;
 
 public class LocalPlayerAnnouncer : NetworkBehaviour{
     public static event Action<NetworkIdentity> OnLocalPlayerUpdated;
-
+    
     public static void RunOnLocalPlayer(Action<NetworkIdentity> func){
-       
         func(ClientScene.localPlayer);
         OnLocalPlayerUpdated += func;   
     }
@@ -22,4 +21,5 @@ public class LocalPlayerAnnouncer : NetworkBehaviour{
             OnLocalPlayerUpdated?.Invoke(null);
         }
     }
+
 }

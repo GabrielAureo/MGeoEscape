@@ -32,8 +32,8 @@ public class DebugManager: MonoBehaviour{
 
     void Start(){
         #if UNITY_STANDALONE || UNITY_EDITOR
-        Camera.main.gameObject.AddComponent<ExtendedFlycam>();
-        #endif
+        //Camera.main.gameObject.AddComponent<ExtendedFlycam>();
+#endif
     }
     
 }

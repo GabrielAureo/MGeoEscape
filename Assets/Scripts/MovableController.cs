@@ -77,6 +77,7 @@ public class MovableController : NetworkBehaviour{
         if (!isHolding) return;
         RaycastHit[] hits = new RaycastHit[10];
         var hitSize = Physics.RaycastNonAlloc(touchData.ray, hits);
+        Debug.LogError(hitSize);
         if (hitSize <= 0)
         {
             if (!isTargeting) return;
@@ -95,15 +96,20 @@ public class MovableController : NetworkBehaviour{
 
         }
         Targetable newTargetable = null;
-        foreach (var hit in hits)
+        var foundTargetable = false;
+        for (var i = 0; i < hitSize; i++)
         {
+            var hit = hits[i];
             newTargetable = hit.transform.GetComponent<Targetable>();
             if (newTargetable != null)
             {
+                foundTargetable = true;
                 isTargeting = true;
                 break;
             }
         }
+
+        if (!foundTargetable) return;
 
         if (!newTargetable.ShouldTarget(currentMovable)) return;
 

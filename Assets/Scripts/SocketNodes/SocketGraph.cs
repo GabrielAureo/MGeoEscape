@@ -12,31 +12,24 @@ public class SocketGraph: MonoBehaviour
     public EdgesDictionary connections;
     [HideInInspector]
     public string GUID = System.Guid.NewGuid().ToString();
+    
 
-
-    private bool initialized = false;
-  
-    // public override void OnStartServer()
-    // {
-    //     base.OnStartServer();
-    //     InitializeNodes();
-    // }
-
+    void Start()
+    {
+        InitializeNodes();
+    }
     private void InitializeNodes()
     {
         var nodes = GetNodesInScene();
         foreach (var node in nodes)
         {
             node.MovableAuth = CompatibleMovable;
-            node.Initialize();
         }
-
-        initialized = true;
     }
 
     public void StartGraph(int startNodeIndex)
     {
-        if (!initialized) InitializeNodes();
+        //if (!initialized) InitializeNodes();
         var startNode = connections.ElementAt(startNodeIndex).Key;
         //startNode.TryPlaceObject(startNode.exclusiveMovable);
     }

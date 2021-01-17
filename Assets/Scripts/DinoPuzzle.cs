@@ -26,6 +26,7 @@ public class DinoPuzzle : Puzzle {
 
     IEnumerator InitializePuzzle()
     {
+        
         var pool = new List<Movable>(graph.acceptedMovables);
         yield return new WaitUntil(()=>pool.All(movable => movable.isServer));
         
@@ -36,7 +37,7 @@ public class DinoPuzzle : Puzzle {
 
         
         Shuffle(pool);
-        yield return new WaitWhile(() => pool.All(bone => bone.isServer));
+        yield return new WaitUntil(() => pool.All(bone => bone.isServer));
         SetDistributionDictionary(pool);
 
     }
@@ -77,12 +78,13 @@ public class DinoPuzzle : Puzzle {
 
     public override void OnLocalPlayerReady(NetworkIdentity player)
     {
+        if (player == null) return;
         foreach (var index in _fillNodes)
         {
             graph.TriggerNeighbors(index, true);
         }
         
-        StartCoroutine(FillSuppliers(player.GetComponent<GamePlayer>().character));
+        FillSuppliers(player.GetComponent<GamePlayer>().character);
         
     }
 

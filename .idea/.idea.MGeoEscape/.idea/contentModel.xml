@@ -494,6 +494,7 @@
           <e p="LobbyPlayer.cs" t="Include" />
           <e p="LocalPlayerAnnouncer.cs" t="Include" />
           <e p="MainManager.cs" t="Include" />
+          <e p="MainNetworkManager.cs" t="Include" />
           <e p="Movable.cs" t="Include" />
           <e p="MovableController.cs" t="Include" />
           <e p="MovablePlacementPose.cs" t="Include" />

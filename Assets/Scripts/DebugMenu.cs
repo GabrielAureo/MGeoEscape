@@ -86,7 +86,6 @@ public class DebugMenu: MonoBehaviour{
     }
     void SafePuzzleDebug(){
         SafePuzzle sp = MainManager.Instance.puzzlesManager.puzzles.Find((x) => x.GetType() == typeof(SafePuzzle)) as SafePuzzle;
-        Debug.Log(sp.generatedPassword.Count);
         //sp.generatedPassword.Add(100);
         var password = "";
 

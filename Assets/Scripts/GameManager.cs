@@ -45,10 +45,10 @@ public class GameManager: NetworkRoomManager{
         // }   
         player.playerName = _lobbyPlayer.playerName;
         foreach(var kvp in characterSelection.playerDictionary){
-            if(kvp.Value?.GetComponent<LobbyPlayer>() == _lobbyPlayer){
-                player.character = (Character)kvp.Key;
-                break;
-            }
+            // if(kvp.Value?.GetComponent<LobbyPlayer>() == _lobbyPlayer){
+            //     player.character = (Character)kvp.Key;
+            //     break;
+            // }
         }
         gameStarted = true;
         return true;
@@ -64,6 +64,16 @@ public class GameManager: NetworkRoomManager{
 
         //base.OnServerConnect(conn);
         OnRoomServerConnect(conn);
+    }
+
+    public override void OnServerDisconnect(NetworkConnection conn)
+    {
+        if (IsSceneActive(GameplayScene))
+        {
+            NetworkServer.RemovePlayerForConnection(conn,true);
+        }
+        
+        base.OnServerDisconnect(conn);
     }
 
     //Generate unique indentifier on the first run of the game

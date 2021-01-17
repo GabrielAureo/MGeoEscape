@@ -21,6 +21,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/ae/ff4f5470/ObjectField.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/12/03ae3ae9/GraphView.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/MainNetworkManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/61/a3efcb4a/Toolbar.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/06/4908fa67/GameObjectUtility.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A8E33794-C006-4F2A-A201-ADE069162226/99/431943fb/EditorGUIUtility.cs" root0="SKIP_HIGHLIGHTING" />
@@ -72,22 +73,33 @@
       <option value="$PROJECT_DIR$/Assets/Scripts/Movable.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Editor/DraggablePointDrawer.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/DraggablePoint.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/CharacterSelection.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/DinoPuzzle.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketGraph.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Targetable.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/ARTouchController.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/MovableController.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/BaseSocket.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/ARNetInteractable.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/IARInteractable.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/SupplierSocket.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Socket.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketNode.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/ConnectionManager.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/DebugMenu.cs" />
       <option value="$PROJECT_DIR$/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Editor/BuildScript.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/ExtendedFlycam.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/DebugManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/LobbyPlayer.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/CharacterButton.cs" />
+      <option value="$PROJECT_DIR$/Assets/Mirror/Components/NetworkRoomManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/CharacterSelection.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/PlayerSpawnMessageTarget.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/GamePlayer.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/LocalPlayerAnnouncer.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/PlayerVisibility.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/MainNetworkManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/DebugMenu.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/MovableController.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/DinoPuzzle.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketNode.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketGraph.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1khudGn2VUvV4qQ73jqojjDQ4Ey" />
@@ -122,10 +134,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="29124">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="29124" />
+      <option name="pid" />
       <option name="selectedOptions">
         <list />
       </option>
@@ -184,6 +196,9 @@
       <workItem from="1610534730593" duration="17645000" />
       <workItem from="1610625618629" duration="23602000" />
       <workItem from="1610709745247" duration="23898000" />
+      <workItem from="1610784971505" duration="35112000" />
+      <workItem from="1610881918014" duration="12090000" />
+      <workItem from="1610901134848" duration="3539000" />
     </task>
     <servers />
   </component>

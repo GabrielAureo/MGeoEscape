@@ -20,23 +20,63 @@ public class CharacterSelection : NetworkBehaviour{
     
 
     Tween fade;
-
-    public Dictionary<Character, LobbyPlayer> playerDictionary;
+    
+    public SyncDictionary<int, uint> playerDictionary = new SyncDictionary<int, uint>();
     
     public override void OnStartServer(){
         base.OnStartServer();
+
+        playerDictionary.Add((int)Character.Archeologist, 0);
+        playerDictionary.Add((int)Character.Detective, 0);
+        playerDictionary.Add((int)Character.Geologist, 0);
         
-        playerDictionary = new Dictionary<Character, LobbyPlayer>(){
-            {Character.Archeologist, null},
-            {Character.Detective, null},
-            {Character.Geologist, null}
-        };
+        
+    }
+    
+    
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        detectiveButton.selection = this;
+        archeologistButton.selection = this;
+        geologistButton.selection = this;
+
+        playerDictionary.Callback += UpdateUI;
+        UpdateUI();
+    }
+
+    private void UpdateUI(SyncDictionary<int, uint>.Operation op, int key, uint value)
+    {
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        foreach (var kvp in playerDictionary)
+        {
+            var button = getCharacterButton(kvp.Key);
+            if (ClientScene.localPlayer != null && kvp.Value == ClientScene.localPlayer.netId)
+            {
+                button.Select();
+                continue;
+            }
+            if (kvp.Value != 0)
+            {
+                button.Disable();
+            }
+            else
+            {
+                button.Enable();
+            }
+        }
+
     }
 
 
     public void Awake(){
-        GameManager.characterSelection = this;
-        GetComponent<CanvasGroup>().interactable = false;
+        // GameManager.characterSelection = this;
+        // GetComponent<CanvasGroup>().interactable = true;
     }
     public CharacterButton getCharacterButton(Character character){
         switch(character){
@@ -92,8 +132,16 @@ public class CharacterSelection : NetworkBehaviour{
         var character = (Character)characterIndex;
         return getCharacterButton(character);
     }
-    public void CmdSelectCharacter(int character){
-        GameManager.localLobbyPlayer.SelectCharacter(character);
+    [Command(ignoreAuthority = true)]
+    public void CmdSelectCharacter(int character, NetworkConnectionToClient sender = null){
+        var conn = playerDictionary[character];
+        if (conn == sender.identity.netId)
+        {
+            playerDictionary[character] = 0;
+            return;
+        }
+        playerDictionary[character] = sender.identity.netId;
+        
     }
 
     public static Character IndexToCharacter(int index)

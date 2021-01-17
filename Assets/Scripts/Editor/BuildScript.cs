@@ -28,7 +28,7 @@ public class BuildScript{
         RunPlayerThree();
 
         EditorSceneManager.SaveOpenScenes();
-        EditorSceneManager.OpenScene("Assets/Scenes/Lobby.unity");
+        EditorSceneManager.OpenScene("Assets/Scenes/Main.unity");
 
         EditorApplication.EnterPlaymode();
     }
