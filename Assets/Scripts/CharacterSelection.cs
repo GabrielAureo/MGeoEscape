@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using Mirror;
 using System.Collections.Generic;
 using DG.Tweening;
+using Telepathy;
 
 public class CharacterSelection : NetworkBehaviour{
     Character chosenCharacter;

@@ -515,8 +515,8 @@
           <e p="SocketNodes" t="Include">
             <e p="Editor" t="Include">
               <e p="GraphSaveUtility.cs" t="Include" />
-              <e p="SocketGraphEditor.cs" t="Include" />
               <e p="SocketGraphView.cs" t="Include" />
+              <e p="SocketGraphWindow.cs" t="Include" />
               <e p="SocketNodeView.cs" t="Include" />
             </e>
             <e p="MovableCollection.cs" t="Include" />

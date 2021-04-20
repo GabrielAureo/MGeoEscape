@@ -9,6 +9,17 @@ public abstract class BaseSocket : ARNetInteractable
     [SerializeField]
     public SocketCallbackController callbackController;
 
+    private bool hasCallbackController;
+
+    private void OnValidate()
+    {
+        callbackController = GetComponent<SocketCallbackController>();
+        hasCallbackController = callbackController != null;
+        OnSocketValidate();
+    }
+
+    protected virtual void OnSocketValidate(){}
+
     /// <summary>
     /// Only available on the Server
     /// </summary>
@@ -59,7 +70,7 @@ public abstract class BaseSocket : ARNetInteractable
         return placed;
     }
     [ClientRpc]
-    private void RpcPlace(NetworkIdentity movableIdentity, bool placed)
+    protected void RpcPlace(NetworkIdentity movableIdentity, bool placed)
     {
         if(placed) OnClientPlace(movableIdentity);
         callbackController?.OnClientReceive.Invoke(placed);

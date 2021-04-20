@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager: NetworkRoomManager{
 
-    public static LobbyPlayer localLobbyPlayer;
+
     public static CharacterSelection characterSelection;
     [SerializeField] CharacterSelection m_characterSelection = null;
 

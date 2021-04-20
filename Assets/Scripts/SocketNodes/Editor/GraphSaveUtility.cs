@@ -118,10 +118,11 @@ public class GraphSaveUtility
         ConnectNodes();
     }
 
-    public void LoadGraph(MovableCollection collection)
+    public void CreateGraph(GameObject collection)
     {
+        var movables = collection.GetComponentsInChildren<Movable>();
         ClearGraph();
-        CreateNodes(collection);
+        CreateNodes(movables.ToList());
         //ConnectNodes(graphObj);
         
     }
@@ -143,7 +144,7 @@ public class GraphSaveUtility
         var childNodes = sceneGraph.GetComponentsInChildren<SocketNode>();
         ClearGraph();
         CreateNodes(childNodes.ToList());
-        ConnectNodes(sceneGraph.connections);
+        //ConnectNodes(sceneGraph.connections);
     }
     
     private void CreateNodes(List<SocketNode> nodeList)
@@ -162,9 +163,8 @@ public class GraphSaveUtility
 
 
 
-    private void CreateNodes(MovableCollection collection)
+    private void CreateNodes(List<Movable> movables)
     {
-        var movables = collection.GetComponentsInChildren<Movable>();
         movables.ToList().ForEach(movable =>
         {
             var visualBounds = movable.GetComponent<MeshRenderer>().bounds;
@@ -267,7 +267,7 @@ public class GraphSaveUtility
             connections[inputNode].data.Add(outputNode);
             
         });
-        sceneGraph.connections = connections;
+        //sceneGraph.connections = connections;
         sceneGraph.acceptedMovables = acceptedMovables;
     }
 
@@ -326,7 +326,7 @@ public class GraphSaveUtility
         DebugDictionary(dict);
         var field = typeof(SocketGraph).GetField("connections", BindingFlags.Instance | BindingFlags.NonPublic);
         field?.SetValue(socketGraph, dict);
-        DebugDictionary(socketGraph.connections.Clone());
+        //DebugDictionary(socketGraph.connections.Clone());
     }
 
     void DebugDictionary(Dictionary<SocketNode, SocketNodeNeighbors> data)

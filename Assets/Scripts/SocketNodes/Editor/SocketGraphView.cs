@@ -11,8 +11,6 @@ public class SocketGraphView: GraphView{
 
     public static readonly Vector2 defaultNodeSize = new Vector2(150,200);
 
-    public MovableCollection collection;
-
     public SocketGraph sceneGraph;
     public SocketGraphView(){
         

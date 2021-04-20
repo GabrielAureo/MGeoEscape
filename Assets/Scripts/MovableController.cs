@@ -44,11 +44,12 @@ public class MovableController : NetworkBehaviour{
         var movable = _currentTransfer.movable;
         
         var vis = movable.GetComponent<PlayerVisibility>();
-        vis.SetObserverFlag((int)playerCharacter);
-        Debug.LogError(movable);
-
+        if (vis != null)
+        {
+            vis.SetObserverFlag((int)playerCharacter);
+        }
+        
         if(movable){
-            Debug.LogError(socketNetIdentity.name);
             //lastSocketObj = socketObj;                        
             //RpcEmptySocket(socketObj);
             TargetGrab((int)playerCharacter, socketNetIdentity);
@@ -77,7 +78,6 @@ public class MovableController : NetworkBehaviour{
         if (!isHolding) return;
         RaycastHit[] hits = new RaycastHit[10];
         var hitSize = Physics.RaycastNonAlloc(touchData.ray, hits);
-        Debug.LogError(hitSize);
         if (hitSize <= 0)
         {
             if (!isTargeting) return;

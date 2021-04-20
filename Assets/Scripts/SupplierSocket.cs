@@ -2,23 +2,19 @@ using System;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class SupplierSocket : BaseSocket
 {
     public List<Movable> products;
     public bool randomPick;
-    [SyncVar]
-    private int _currentPick;
-    readonly SyncList<int> _picks = new SyncList<int>();
+    [FormerlySerializedAs("_currentPickIndex")] [SyncVar]
+    public int currentPickIndex;
+    private int movableIndex => _picks[currentPickIndex];
+    public SyncList<int> _picks = new SyncList<int>();
 
-    private void OnValidate()
-    {
-        // foreach (var product in products)
-        // {
-        //     product.transform.position = transform.position;
-        // }
-    }
+
     
 
     public override void OnStartServer()
@@ -34,11 +30,11 @@ public class SupplierSocket : BaseSocket
     
     public override Movable ClientGetMovable()
     {
-        return products[_currentPick];
+        return products[movableIndex];
     }
     public override Movable GetCurrentObject()
     {
-        return products[_currentPick];
+        return products[movableIndex];
     }
 
     protected override bool ShouldPlace(Movable movable)
@@ -54,12 +50,20 @@ public class SupplierSocket : BaseSocket
     private void DiscardTransfer(SocketTransfer.Status status){
         switch(status){
             case SocketTransfer.Status.Success:
-                _picks.Remove(_currentPick);
+                _picks.RemoveAt(currentPickIndex);
                 break;
             case SocketTransfer.Status.Failure:
-                products[_currentPick].GetComponent<PlayerVisibility>().SetObserverFlag(0);
+                RpcReturnToSupplier();
+                // products[_currentPick].GetComponent<PlayerVisibility>().SetObserverFlag(0);
                 break;
         }
+    }
+
+    [ClientRpc]
+    private void RpcReturnToSupplier()
+    {
+        
+        products[movableIndex].transform.position = transform.position;
     }
 
     protected override bool TakeOperation(out SocketTransfer transfer)
@@ -69,11 +73,10 @@ public class SupplierSocket : BaseSocket
             transfer = null;
             return false;
         }
-        var pick = (randomPick)?Random.Range(0, _picks.Count):0;
-        var movableIdx = _picks[pick];
-        _currentPick = movableIdx;
-        Debug.Log(products[movableIdx]);
-        transfer = new SocketTransfer(products[movableIdx], DiscardTransfer);
+        currentPickIndex = (randomPick)?Random.Range(0, _picks.Count):0;
+        Debug.Log(products[movableIndex]);
+        products[movableIndex].gameObject.SetActive(true);
+        transfer = new SocketTransfer(products[movableIndex], DiscardTransfer);
         return true;
     }
 }

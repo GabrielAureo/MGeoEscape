@@ -5,54 +5,76 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.Networking.Types;
 using RotaryHeart.Lib.SerializableDictionary;
+using UnityEditor;
 
 public class SocketGraph: MonoBehaviour
 {
     public List<Movable> acceptedMovables = new List<Movable>();
-    public EdgesDictionary connections;
+    //public EdgesDictionary connections;
     [HideInInspector]
     public string GUID = System.Guid.NewGuid().ToString();
-    
 
-    void Start()
+    private static readonly int Opacity = Shader.PropertyToID("Opacity");
+
+#if UNITY_EDITOR
+    private void OnValidate()
     {
-        InitializeNodes();
-    }
-    private void InitializeNodes()
-    {
-        var nodes = GetNodesInScene();
-        foreach (var node in nodes)
+        var nodes = GetComponentsInChildren<SocketNode>().ToList();
+        acceptedMovables = nodes.Select(node =>
         {
-            node.MovableAuth = CompatibleMovable;
-        }
+            node.graph = this;
+            return node.exclusiveMovable;
+        }).ToList();
+        
     }
+#endif
 
-    public void StartGraph(int startNodeIndex)
+    // private void InitializeNodes()
+    // {
+    //     var nodes = GetNodesInScene();
+    //     foreach (var node in nodes)
+    //     {
+    //         node.MovableAuth = CompatibleMovable;
+    //     }
+    // }
+
+    public void StartGraph()
     {
-        //if (!initialized) InitializeNodes();
-        var startNode = connections.ElementAt(startNodeIndex).Key;
-        //startNode.TryPlaceObject(startNode.exclusiveMovable);
+        
     }
     
 
-    private bool CompatibleMovable(Movable movable)
+    public bool CompatibleMovable(Movable movable)
     {
         return acceptedMovables.Contains(movable);
-    }
-    
-    public void TriggerNeighbors(int nodeIndex, bool activate)
-    {
-        var node = connections.ElementAt(nodeIndex).Key;
-
-        var neighbors = connections[node];
-        foreach (var neighbor in neighbors.data)
-        {
-            neighbor.gameObject.SetActive(activate);
-        }
     }
 
     private SocketNode[] GetNodesInScene()
     {
         return transform.GetComponentsInChildren<SocketNode>();
     }
+
+//     private void OnDrawGizmos()
+//     {
+// #if UNITY_EDITOR
+//         // if (Selection.activeGameObject != gameObject &&
+//         //     Selection.activeGameObject.transform.parent != transform) return;
+//
+//         GetComponentsInChildren<SocketNode>().ToList().ForEach(node =>
+//         {
+//             var movable = node.exclusiveMovable;
+//             var meshRenderer = movable.GetComponent<MeshRenderer>();
+//             var filter = movable.GetComponent<MeshFilter>();
+//
+//             var material = new Material(meshRenderer.sharedMaterial)
+//             {
+//                 enableInstancing = true
+//             };
+//             material.SetFloat(Opacity, .5f);
+//             //Graphics.DrawMesh(filter.sharedMesh, node.transform.localToWorldMatrix, material, 1);
+//             Graphics.DrawMeshInstanced(filter.sharedMesh,0,material,new Matrix4x4[]{node.transform.localToWorldMatrix},1);
+//         });
+// #endif
+//     }
+
 }

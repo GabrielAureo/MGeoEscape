@@ -24,15 +24,17 @@ public class DinoPuzzle : Puzzle {
         StartCoroutine(InitializePuzzle());
     }
 
+
+
     IEnumerator InitializePuzzle()
     {
         
         var pool = new List<Movable>(graph.acceptedMovables);
         yield return new WaitUntil(()=>pool.All(movable => movable.isServer));
         
-        var rand = Random.Range(0, graph.connections.Count);
-        graph.StartGraph(rand);
-        _fillNodes.Add(rand);
+        //var rand = Random.Range(0, graph.connections.Count);
+        graph.StartGraph();
+        //_fillNodes.Add(rand);
         
 
         
@@ -79,10 +81,10 @@ public class DinoPuzzle : Puzzle {
     public override void OnLocalPlayerReady(NetworkIdentity player)
     {
         if (player == null) return;
-        foreach (var index in _fillNodes)
-        {
-            graph.TriggerNeighbors(index, true);
-        }
+        // foreach (var index in _fillNodes)
+        // {
+        //     graph.TriggerNeighbors(index, true);
+        // }
         
         FillSuppliers(player.GetComponent<GamePlayer>().character);
         
@@ -101,6 +103,7 @@ public class DinoPuzzle : Puzzle {
             var identity = NetworkIdentity.spawned[netId];
             var movable = identity.transform.GetComponent<Movable>();
             movable.transform.position = supplier.transform.position;
+            movable.gameObject.SetActive(false);
             return movable;
         }).ToList();
         Debug.LogError(supplier.products.Count);

@@ -33,14 +33,15 @@ public class MainNetworkManager : NetworkManager
 		NetworkClient.RegisterHandler<PlayerSpawnMessage>(OnPlayerSpawn);
 		
 	}
+	
 
 	public override void OnStartServer()
 	{
 		base.OnStartServer();
-		characterSelection.playerDictionary.Callback += (op, key, item) => CheckReady();
+		characterSelection.playerDictionary.Callback += (op, key, item) => SpawnIfReady();
 	}
 
-	private void CheckReady()
+	private void SpawnIfReady()
 	{
 		var count = characterSelection.playerDictionary.Count(kvp => kvp.Value != 0);
 		if (count != 3) return;
@@ -78,8 +79,14 @@ public class MainNetworkManager : NetworkManager
 
 	public override void OnServerAddPlayer(NetworkConnection conn)
 	{
+		
 		var player = Instantiate(roomPlayerPrefab.gameObject);
 		NetworkServer.AddPlayerForConnection(conn, player);
+#if UNITY_EDITOR
+		if (mode != NetworkManagerMode.Host) return;
+		characterSelection.playerDictionary[CharacterSelection.CharacterToIndex(Character.Archeologist)] = conn.identity.netId;
+		SpawnGamePlayer(conn);
+#endif
 	}
 
 	public override void OnServerDisconnect(NetworkConnection conn)

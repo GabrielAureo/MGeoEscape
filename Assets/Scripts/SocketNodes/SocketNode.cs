@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.VFX;
 
 public class SocketNode: BaseSocket{
     [SyncVar]
@@ -16,14 +16,16 @@ public class SocketNode: BaseSocket{
 
     private Movable _currentMovable;
     [SyncVar(hook=nameof(SetObjectFromNetID))] private uint _currentMovableNetID;
-    public Func<Movable, bool> MovableAuth;
+    public SocketGraph graph;
 
     public Movable exclusiveMovable;
+    [SerializeField] private VisualEffect vfx;
 
     private void Start()
     {
         SetTargetable();
     }
+    
 
     public override void OnStartServer()
     {
@@ -32,7 +34,7 @@ public class SocketNode: BaseSocket{
 
     private void SetObjectFromNetID(uint oldValue, uint newValue)
     {
-        _currentMovable = NetworkIdentity.spawned[newValue].GetComponent<Movable>();
+        _currentMovable = (newValue == 0) ? null : NetworkIdentity.spawned[newValue].GetComponent<Movable>();
     }
     void SetTargetable()
     {
@@ -41,10 +43,10 @@ public class SocketNode: BaseSocket{
         targetable.TargetCondition = PlacementCondition;
         targetable.TargetPose = movable =>
         {
-            var transform1 = movable.transform;
+            var transform1 = transform;
             var pose = new MovablePlacementPose()
             {
-                position = transform.position,
+                position = transform1.position,
                 rotation = transform1.rotation,
                 scale = transform1.localScale
             };
@@ -52,7 +54,7 @@ public class SocketNode: BaseSocket{
         };
     }
 
-    public void Initialize(){
+    private void Initialize(){
         _busy = false;
         _empty = true;
         _locked = false;
@@ -60,7 +62,7 @@ public class SocketNode: BaseSocket{
  
     protected override bool TakeOperation(out SocketTransfer transfer)
     {
-        if (_locked || _busy || _empty || _locked)
+        if (_locked || _busy || _empty)
         {
             transfer = null;
             return false;
@@ -75,10 +77,11 @@ public class SocketNode: BaseSocket{
         switch (status)
         {
             case SocketTransfer.Status.Success:
-                _currentMovable = null;
+                _currentMovableNetID = 0;
+                _empty = true;
                 break;
             case SocketTransfer.Status.Failure:
-                SetObject(_currentMovable);
+                RpcReturnToSocket();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(status), status, null);
@@ -87,9 +90,7 @@ public class SocketNode: BaseSocket{
         _busy = false;
     }
 
-
-
-
+   
 
     public override Movable ClientGetMovable()
     {
@@ -108,13 +109,10 @@ public class SocketNode: BaseSocket{
         var visibility = GetComponent<PlayerVisibility>();
 
         var flag = (visibility == null) ? PlayerVisibility.VisibleFlag : visibility.GetObserverFlag();
-
+        _currentMovableNetID = movable.netId;
         movable.GetComponent<PlayerVisibility>().SetObserverFlag(flag);
-        _currentMovable = movable;
-        //movable.transform.parent = transform.parent;
+        _empty = false;
         Debug.LogError(movable.netIdentity);
-        
-        SetObject(_currentMovable);
         return true;
         
         
@@ -122,14 +120,31 @@ public class SocketNode: BaseSocket{
 
     private bool PlacementCondition(Movable movable)
     {
-        var isCompatible = MovableAuth(movable);
+
+        var isCompatible = graph.CompatibleMovable(movable);
 
         return isCompatible && !_busy && _empty && !_locked;
     }
 
+    public void PlayPlacementAnimation(bool placed)
+    {
+        Debug.Log($"placed {placed}, locked {_locked}");
+        if (!placed || !_locked) return;
+       
+        vfx.SendEvent("OnExclusivePlace");
+
+    }
+
     protected override void OnClientPlace(NetworkIdentity movableIdentity)
     {
-        SetObject(movableIdentity.GetComponent<Movable>());
+        var movable = movableIdentity.GetComponent<Movable>();
+        SetObject(movable);
+    }
+
+    [ClientRpc]
+    private void RpcReturnToSocket()
+    {
+        SetObject(_currentMovable);
     }
 
     [Client]
@@ -144,22 +159,19 @@ public class SocketNode: BaseSocket{
     
     private void SetObject(Movable movable)
     {
-        _currentMovable = movable;
         var shouldLock = movable == exclusiveMovable;
-        // RpcSetObject(movable.netIdentity, shouldLock);
+        SetTransform(movable);
         if(shouldLock) LockSocket();
-        //var movable = movableNetID.GetComponent<Movable>();
-        _currentMovable = movable; 
-        // movable.transform.position = transform.position;
-        // movable.rb.isKinematic = true;
     }
     
-    private void RpcSetObject(NetworkIdentity movableNetID, bool shouldLock)
+    private void SetTransform(Movable movable)
     {
-        if(shouldLock) LockSocket();
-        var movable = movableNetID.GetComponent<Movable>();
-        _currentMovable = movable; 
-        movable.transform.position = transform.position;
+        _currentMovable = movable;
+        var movableTransform = movable.transform;
+        var socketTransform = transform;
         movable.rb.isKinematic = true;
+        movableTransform.position = socketTransform.position;
+        movableTransform.rotation = socketTransform.rotation;
+        
     }
 }

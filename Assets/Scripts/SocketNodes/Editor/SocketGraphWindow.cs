@@ -4,7 +4,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 
-public class SocketGraphEditor: EditorWindow{
+public class SocketGraphWindow: EditorWindow{
     private SocketGraphView _graphView;
     private string _fileName = "New Socket Graph";
     private GraphSaveUtility _saveUtility;
@@ -13,7 +13,7 @@ public class SocketGraphEditor: EditorWindow{
 
     [MenuItem("Graph/Socket Graph")]
     public static void OpenSocketGraphWindow(){
-        var window = GetWindow<SocketGraphEditor>();
+        var window = GetWindow<SocketGraphWindow>();
         window.titleContent = new GUIContent("Socket Graph");
     }
 
@@ -46,6 +46,7 @@ public class SocketGraphEditor: EditorWindow{
 
     private void ConstructSidebar()
     {
+        CreateGraphFromGameObjectControls();
         _sidebar.Add(new Button() {text = "Load by Graph Asset"});
         LoadSceneGraphControls();
         
@@ -88,8 +89,7 @@ public class SocketGraphEditor: EditorWindow{
         };
 
     }
-
-
+    
 
     private void ConstructGraphView()
     {
@@ -102,73 +102,45 @@ public class SocketGraphEditor: EditorWindow{
         container.Add(_graphView);
         rootVisualElement.Add(container);
     }
-
-    private void ConstructToolbar(){
-        var toolbar = new Toolbar();
-        
-        var fileNameTextField = new TextField("File Name");
-        fileNameTextField.SetValueWithoutNotify(_fileName);
-        fileNameTextField.MarkDirtyRepaint();
-        fileNameTextField.RegisterValueChangedCallback(evt =>_fileName = evt.newValue);
-        toolbar.Add(fileNameTextField);
-        
-        toolbar.Add(new Button(() => RequestDataOperation(true)){text="Save Data"});
-        toolbar.Add(new Button(() => RequestDataOperation(false)){text="Load Data"});
-        
-        var nodeCreateBtn = new Button(clickEvent: () =>{
-            _graphView.CreateNode("Socket Node");
-        });
-        
-        GraphObjectControls(toolbar);
-        nodeCreateBtn.text = "Create Node";
-        toolbar.Add(nodeCreateBtn);
-        rootVisualElement.Add(toolbar);
-    }
-
-    private ObjectField _objectField;
-    private void GraphObjectControls(Toolbar toolbar)
-    {
-        _objectField = new ObjectField
+    
+    
+    private void CreateGraphFromGameObjectControls() {
+        var creatBtn = new Button() {text = "Create new"};
+        _sidebar.Add(creatBtn);
+        creatBtn.clickable.clicked += () =>
         {
-            objectType = typeof(MovableCollection),
-            allowSceneObjects = true,
+            var index = _sidebar.IndexOf(creatBtn);
+            _sidebar.Remove(creatBtn);
+            var objField = new ObjectField()
+            {
+                objectType = typeof(GameObject),
+                allowSceneObjects = true,
+                
+            };
+            objField.RegisterCallback<ChangeEvent<Object>>(evt =>
+            {
+                if (evt.newValue == null)
+                {
+                    objField.value = evt.previousValue;
+                    return;
+                }
+
+                var parentCollection = (GameObject) evt.newValue;
+                
+                _saveUtility.CreateGraph(parentCollection);
+                
+            });
+            
+            _sidebar.Insert(index, objField);
         };
-        
-        var loadBtn = new Button(() =>
-        {
-            LoadGraphObject(_objectField.value);
-        }){text = "Add Graph Object"};
-        
-        var exportBtn = new Button(ExportGraphObject){text = "Export Graph Object"};
-
-        _objectField.RegisterCallback<ChangeEvent<Object>>(evt =>
-        {
-            loadBtn.SetEnabled(evt.newValue != null);
-        });
-        
-        loadBtn.SetEnabled(_objectField.value != null);
-        toolbar.Add(_objectField);
-        toolbar.Add(loadBtn);
-        toolbar.Add(exportBtn);
     }
 
-    private void LoadGraphObject(Object obj)
+    private void SetGraphAsLoaded()
     {
-        if (_graphView.collection != null || _graphView.nodes.ToList().Count > 0)
-        {
-            var proceed = EditorUtility.DisplayDialog("Graph View not empty",
-                "The Graph View already has a serialized graph object.\n" +
-                "Would you like to wipe the current graph?", "Yes", "No");
-            if (!proceed) return;
-        }
-
-
-        var sg = _graphView.collection = (MovableCollection) obj;
-
-        
-        _saveUtility.LoadGraph(sg);
-        
+        _sidebar.Add(new Button(){text = "Export as new"});
+        //_sidebar.Add(new Button(() => _saveUtility.UpdateSceneObject((SocketGraph)objField.value)){text = "Update Scene Graph"});
     }
+    
 
     private void ExportGraphObject()
     {
