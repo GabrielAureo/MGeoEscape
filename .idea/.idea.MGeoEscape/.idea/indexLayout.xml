@@ -29,6 +29,8 @@
       <Path>Library</Path>
       <Path>Logs</Path>
       <Path>QCAR</Path>
+      <Path>Temp</Path>
+      <Path>demo</Path>
       <Path>obj</Path>
     </explicitExcludes>
   </component>

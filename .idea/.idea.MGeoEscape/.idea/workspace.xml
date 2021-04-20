@@ -78,7 +78,6 @@
       <option value="$PROJECT_DIR$/Assets/Scripts/Socket.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/ConnectionManager.cs" />
       <option value="$PROJECT_DIR$/Assets/Mirror/Examples/Room/Scripts/NetworkRoomManagerExt.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/Editor/BuildScript.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/ExtendedFlycam.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/DebugManager.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/LobbyPlayer.cs" />
@@ -102,6 +101,7 @@
       <option value="$PROJECT_DIR$/Assets/Scripts/SupplierSocket.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/SocketNodes/SocketNode.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/MovableController.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Editor/BuildScript.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1khudGn2VUvV4qQ73jqojjDQ4Ey" />
@@ -214,6 +214,7 @@
       <workItem from="1614433849471" duration="1366000" />
       <workItem from="1614554117613" duration="2936000" />
       <workItem from="1614606599992" duration="1741000" />
+      <workItem from="1618912532405" duration="1470000" />
     </task>
     <servers />
   </component>

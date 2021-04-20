@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using System.Diagnostics;
 using UnityEditor.SceneManagement;
@@ -14,7 +15,17 @@ public class BuildScript{
     }
     [MenuItem("File/Build Standalone",false,1000)]
     public static void PerformWindowsBuild(){
-        var report = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, "./Builds/MGeoEscape.exe", BuildTarget.StandaloneWindows64,  BuildOptions.Development);
+        BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
+        var scenes = new List<string>();
+        foreach (var scene in EditorBuildSettings.scenes)
+        {
+            scenes.Add(scene.path);
+        }
+        
+        buildPlayerOptions.scenes = scenes.ToArray();
+        buildPlayerOptions.locationPathName = "./Builds/MGeoEscape.exe";
+        buildPlayerOptions.target = BuildTarget.StandaloneWindows64;
+        var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
         while(BuildPipeline.isBuildingPlayer){} 
         if(report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded){
             Run();

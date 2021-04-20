@@ -4726,17 +4726,24 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Voc\xEA j\xE1 ouviu a trag\xE9dia de Darth Plagueis O S\xE1bio? Eu imaginei
-    que n\xE3o. N\xE3o \xE9 uma hist\xF3ria que os Jedis te contariam. \xC9 uma lenda
-    Sith. Darth Plagueis foi um Lorde Sombrio dos Sith, t\xE3o poderoso e t\xE3o
-    s\xE1bio que ele podia usar a For\xE7a para influenciar as midichlorians para
-    criar vida... Ele tinha tanto conhecimento do lado nehro que ele podia at\xE9
-    evitar aqueles de que ele gostava de morrer. O lado negro da For\xE7a \xE9 um
-    caminho para muitas habilidades que alguns consideram sobrenatural. Ele se tornou
-    t\xE3o poderoso... a \xFAnica coisa que ele tinha medo era perder seu poder,
-    que eventualmente, aconteceu. Infelizmente, ele ensinou ao seu aprendiz tudo
-    que ele sabia, ent\xE3o seu aprendiz o matou em seu sono. Ir\xF4nico. Ele podia
-    salvar outros da morte, mas n\xE3o ele mesmo."
+  m_text: ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam varius
+    massa quis orci placerat blandit. Pellentesque cursus sit amet justo at tristique.
+    Nunc ut maximus mi. Nam commodo mattis ornare. Sed ac sapien magna. Phasellus
+    eu lectus vehicula, pellentesque neque in, auctor mauris. Morbi quis eros imperdiet,
+    luctus dolor vitae, imperdiet nisi. Phasellus quis sagittis sem. Vivamus at eleifend
+    nisl, scelerisque venenatis nulla. Morbi id fringilla dui. Integer nec orci justo.
+    Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus
+    mus. Nullam viverra risus id lorem venenatis, a vehicula nulla consequat. Nulla
+    lorem dolor, pulvinar quis fermentum et, bibendum sed nunc. Curabitur lobortis
+    quam non arcu rutrum, et tristique ligula condimentum.
+
+
+
+    Suspendisse potenti.
+    Phasellus turpis ipsum, interdum eu lorem eu, rutrum aliquet ante. Phasellus
+    quis laoreet est. Etiam quis mollis dolor. Nulla a pretium tortor. Donec non
+    sapien a ligula feugiat eleifend. Praesent ac sapien consequat, fringilla justo
+    mollis, consectetur neque. Morbi pulvinar placerat neque ut molestie. '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4764,7 +4771,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 7.1
+  m_fontSize: 5.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4805,12 +4812,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1791489262}
-    characterCount: 767
+    characterCount: 1109
     spriteCount: 0
-    spaceCount: 134
-    wordCount: 135
+    spaceCount: 162
+    wordCount: 160
     linkCount: 0
-    lineCount: 16
+    lineCount: 20
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
