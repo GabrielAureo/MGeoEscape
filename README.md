@@ -4,7 +4,7 @@ O MGeoEscape é um escape game em realidade aumentada feito em conjunto pelo Mus
 ## Funcionalidades
 
 ### Multiplayer em LAN
-Afim de estimular o trabalho em equipe dos jogadores, as partidas foram pensadas em grupos de 3 jogadores sincronizados pela rede local do Museu da Geodiversidade. A API utilizada para o networking foi o Mirror Networking.
+Afim de estimular o trabalho em equipe dos jogadores, as partidas foram pensadas em grupos de 3 jogadores sincronizados pela rede local do Museu da Geodiversidade. O framework utilizado para o network foi o Mirror Networking.
 
 ![Seleção de Jogador](/demo/mainmenu.gif)
 
@@ -16,7 +16,7 @@ Devido a falta de suporte ao ARCore nos aparelhos do MGeo, tomamos a decisão de
 ![Cofre em AR](/demo/safeAR.jpg)
 
 ### Movables e Sockets
-A principal mecânica do jogo se dá pelo encaixe de objetos movíveis (chamados movables) em sockets. Os jogadores controlar os movables com o toque na tela do aparelho e ao soltá-lo em um objeto socket, ele se acomoda na posição.
+A principal mecânica do jogo se dá pelo encaixe de objetos movíveis (chamados movables) em sockets. Os jogadores controlam os movables com o toque na tela do aparelho e ao soltá-lo em um objeto socket, ele se acomoda na posição.
 
 ![Gameplay do Dinossauro](/demo/dino_gameplay.gif)
 
